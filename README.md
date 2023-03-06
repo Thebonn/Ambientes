@@ -4,7 +4,7 @@ Relaxing to looping sounds
 ---
 
 Caso apenas queira baixar logo:
-[DOWNLOAD](https://github.com/Thebonn/Ambientes/releases/tag/publish)
+[DOWNLOAD](https://github.com/Thebonn/Ambientes/releases/tag/master)
 
 ## **PT/BR**
 
@@ -16,7 +16,7 @@ Ao instalar, você poderá selecionar o setup que você instalou e tocar. Você 
 
 Você pode mudar as cores do fundo na aba "Fundo". E se, caso selecionar as cores especiais, você pode configurar elas na aba "Cores especiais".
 
-Há interação com o Discord RPC com ícone interativo [tanto para o desktop, tanto para o discord]
+Há interação com o Discord RPC com ícone interativo [para o desktop também]
 
 Mais updates em breve!
 
@@ -32,7 +32,7 @@ When installing, you will be able to select the setup that you just downloaded a
 
 You can change background colors in the "Fundo" tab. And if you select the special colors [cores especiais], you can configure them in the "Cores especiais" tab.
 
-There is interaction with the Discord RPC with an interactive icon [both for the desktop and for the discord]
+There is interaction with the Discord RPC with an interactive icon [for desktop too]
 
 More updates soon!
 
