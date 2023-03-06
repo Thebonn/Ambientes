@@ -126,7 +126,7 @@ public class Splash extends javax.swing.JFrame {
                     ex.printStackTrace();
                 }
             }
-        }, "TAD").start();
+        }, "FUNCIONAR").start();
     }
 
     public void selecionarTexto() {
@@ -147,10 +147,10 @@ public class Splash extends javax.swing.JFrame {
                 if (opc == 0) {
                     try {
                         if (Desktop.isDesktopSupported() && Desktop.getDesktop().isSupported(Desktop.Action.BROWSE)) {
-                            Desktop.getDesktop().browse(new URI("https://github.com/Thebonn/Ambientes"));
+                            Desktop.getDesktop().browse(new URI("https://github.com/Thebonn/Ambientes/releases/tag/publish"));
                         }
                     } catch (Exception ex) {
-                        JOptionPane.showConfirmDialog(null, "Não foi possível abrir o seu navegador padrão. Você terá que instalar na página https://github.com/Thebonn/Ambientes manualmente.", "Ambientes", JOptionPane.YES_NO_OPTION, JOptionPane.ERROR_MESSAGE);
+                        JOptionPane.showConfirmDialog(null, "Não foi possível abrir o seu navegador padrão. Você terá que instalar na página https://github.com/Thebonn/Ambientes/releases/tag/publish manualmente.", "Ambientes", JOptionPane.YES_NO_OPTION, JOptionPane.ERROR_MESSAGE);
                     }
 
                 }
@@ -282,7 +282,7 @@ public class Splash extends javax.swing.JFrame {
                     ex.printStackTrace();
                 }
             }
-        }, "TAD").start();
+        }, "MUDATEXTO").start();
     }
 
     /**

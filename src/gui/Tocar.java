@@ -2,7 +2,6 @@ package gui;
 
 import sistema.Configs;
 import com.formdev.flatlaf.FlatDarkLaf;
-import java.awt.AWTException;
 import java.awt.Color;
 import java.awt.MenuItem;
 import java.awt.PopupMenu;
@@ -23,8 +22,6 @@ import javax.sound.sampled.AudioInputStream;
 import javax.sound.sampled.AudioSystem;
 import javax.sound.sampled.*;
 import javax.sound.sampled.FloatControl;
-import javax.sound.sampled.LineListener;
-import javax.sound.sampled.Mixer;
 import javax.swing.AbstractAction;
 import javax.swing.ActionMap;
 import javax.swing.ImageIcon;
@@ -33,7 +30,6 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.KeyStroke;
 import java.io.InputStream;
-import javax.sound.sampled.DataLine;
 import sistema.Info;
 import static sistema.Rpc.presence;
 
@@ -41,16 +37,13 @@ import static sistema.Rpc.presence;
  *
  * @author Thebonn
  */
-public final class Tocar extends javax.swing.JFrame { //lembrar-se desse final aqui hein
+public final class Tocar extends javax.swing.JFrame {
 
     /**
      * Creates new form Tocar
      */
     Clip clips[] = new Clip[20];
     static Clip playlists[] = new Clip[20];
-//    String playlistInfo[] = new String[20];
-
-//    String clipinfo[] = new String[20];
     String clipname[] = new String[20];
     public static String setup = "nenhum";
     public static String config[] = new String[200];
@@ -111,15 +104,15 @@ public final class Tocar extends javax.swing.JFrame { //lembrar-se desse final a
         escolherCor();
         this.requestFocus();
 
-        kGradientPanel1.requestFocus();
+        pnlFundo.requestFocus();
         //meu deus isso é mt complexo, aprendi isso hoje
 
-        ActionMap actionMap = kGradientPanel1.getActionMap();
-        BotaoNumericoAction ppppp = new BotaoNumericoAction();
-        actionMap.put("mudar", ppppp);
-        kGradientPanel1.setActionMap(actionMap);
+        ActionMap actionMap = pnlFundo.getActionMap();
+        BotaoNumericoAction ngc = new BotaoNumericoAction();
+        actionMap.put("mudar", ngc);
+        pnlFundo.setActionMap(actionMap);
 
-        InputMap imap = kGradientPanel1.getInputMap(JPanel.WHEN_IN_FOCUSED_WINDOW);
+        InputMap imap = pnlFundo.getInputMap(JPanel.WHEN_IN_FOCUSED_WINDOW);
         imap.put(KeyStroke.getKeyStroke(' '), "mudar");
 
         sistema.Rpc.iniciarRPC();
@@ -128,10 +121,6 @@ public final class Tocar extends javax.swing.JFrame { //lembrar-se desse final a
     }
 
     private class BotaoNumericoAction extends AbstractAction {
-
-        public BotaoNumericoAction() {
-        }
-
         @Override
         public void actionPerformed(ActionEvent e) {
             escolherCor();
@@ -579,7 +568,7 @@ public final class Tocar extends javax.swing.JFrame { //lembrar-se desse final a
                                             cicloAnterior = (byte) cores.length;
                                         }
 
-                                        sist.acender(cores[ciclo], cores[cicloAnterior], kGradientPanel1, (float) (mudancaVel * sistema.Info.velocidade), 15);
+                                        sist.acender(cores[ciclo], cores[cicloAnterior], pnlFundo, (float) (mudancaVel * sistema.Info.velocidade), 15);
                                     }
                                     break;
                                 case 6:
@@ -594,14 +583,14 @@ public final class Tocar extends javax.swing.JFrame { //lembrar-se desse final a
 //                                negocio = 0;
 //                            }
                             if (sistema.Info.animTipo != 5) {
-                                kGradientPanel1.setkStartColor(ini);
-                                kGradientPanel1.setkEndColor(fin);
+                                pnlFundo.setkStartColor(ini);
+                                pnlFundo.setkEndColor(fin);
 
-                                sist.escurecerFundo(kGradientPanel1);
+                                sist.escurecerFundo(pnlFundo);
 
                             }
-                            kGradientPanel1.setkGradientFocus(foco);
-                            kGradientPanel1.updateUI();
+                            pnlFundo.setkGradientFocus(foco);
+                            pnlFundo.updateUI();
 
                             Thread.sleep(tempo);
 
@@ -901,7 +890,7 @@ public final class Tocar extends javax.swing.JFrame { //lembrar-se desse final a
 
             pararTudo();
 
-            sist.acender(Color.darkGray, kGradientPanel1.getkStartColor(), kGradientPanel1, 0.04f, 10);
+            sist.acender(Color.darkGray, pnlFundo.getkStartColor(), pnlFundo, 0.04f, 10);
             if (Info.iconeInterativo) {
                 this.setIconImage(new ImageIcon(icones[1]).getImage());
             }
@@ -945,9 +934,9 @@ public final class Tocar extends javax.swing.JFrame { //lembrar-se desse final a
     void escolherCor() {
         if (play == true) {
             Color cor[] = sist.escolherCor();
-            kGradientPanel1.setkStartColor(cor[0]);
-            kGradientPanel1.setkEndColor(cor[1]);
-            kGradientPanel1.updateUI();
+            pnlFundo.setkStartColor(cor[0]);
+            pnlFundo.setkEndColor(cor[1]);
+            pnlFundo.updateUI();
         }
     }
 
@@ -960,7 +949,7 @@ public final class Tocar extends javax.swing.JFrame { //lembrar-se desse final a
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        kGradientPanel1 = new com.k33ptoo.components.KGradientPanel();
+        pnlFundo = new com.k33ptoo.components.KGradientPanel();
         jPanel1 = new javax.swing.JPanel();
         cbbSetups = new javax.swing.JComboBox<>();
         jLabel1 = new javax.swing.JLabel();
@@ -980,13 +969,13 @@ public final class Tocar extends javax.swing.JFrame { //lembrar-se desse final a
             }
         });
 
-        kGradientPanel1.setkBorderRadius(0);
-        kGradientPanel1.setkEndColor(new java.awt.Color(106, 142, 179));
-        kGradientPanel1.setkGradientFocus(0);
-        kGradientPanel1.setkStartColor(new java.awt.Color(49, 32, 53));
-        kGradientPanel1.addMouseMotionListener(new java.awt.event.MouseMotionAdapter() {
+        pnlFundo.setkBorderRadius(0);
+        pnlFundo.setkEndColor(new java.awt.Color(106, 142, 179));
+        pnlFundo.setkGradientFocus(0);
+        pnlFundo.setkStartColor(new java.awt.Color(49, 32, 53));
+        pnlFundo.addMouseMotionListener(new java.awt.event.MouseMotionAdapter() {
             public void mouseMoved(java.awt.event.MouseEvent evt) {
-                kGradientPanel1MouseMoved(evt);
+                pnlFundoMouseMoved(evt);
             }
         });
 
@@ -1117,18 +1106,18 @@ public final class Tocar extends javax.swing.JFrame { //lembrar-se desse final a
                 .addComponent(pgbSumir, javax.swing.GroupLayout.PREFERRED_SIZE, 2, javax.swing.GroupLayout.PREFERRED_SIZE))
         );
 
-        javax.swing.GroupLayout kGradientPanel1Layout = new javax.swing.GroupLayout(kGradientPanel1);
-        kGradientPanel1.setLayout(kGradientPanel1Layout);
-        kGradientPanel1Layout.setHorizontalGroup(
-            kGradientPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, kGradientPanel1Layout.createSequentialGroup()
+        javax.swing.GroupLayout pnlFundoLayout = new javax.swing.GroupLayout(pnlFundo);
+        pnlFundo.setLayout(pnlFundoLayout);
+        pnlFundoLayout.setHorizontalGroup(
+            pnlFundoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, pnlFundoLayout.createSequentialGroup()
                 .addContainerGap(11, Short.MAX_VALUE)
                 .addComponent(jPanel1, 278, 278, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap(11, Short.MAX_VALUE))
         );
-        kGradientPanel1Layout.setVerticalGroup(
-            kGradientPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(kGradientPanel1Layout.createSequentialGroup()
+        pnlFundoLayout.setVerticalGroup(
+            pnlFundoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(pnlFundoLayout.createSequentialGroup()
                 .addContainerGap(11, Short.MAX_VALUE)
                 .addComponent(jPanel1, 274, 274, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap(11, Short.MAX_VALUE))
@@ -1138,11 +1127,11 @@ public final class Tocar extends javax.swing.JFrame { //lembrar-se desse final a
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(kGradientPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addComponent(pnlFundo, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(kGradientPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addComponent(pnlFundo, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
 
         pack();
@@ -1179,11 +1168,11 @@ public final class Tocar extends javax.swing.JFrame { //lembrar-se desse final a
 
     }//GEN-LAST:event_jButton4ActionPerformed
 
-    private void kGradientPanel1MouseMoved(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_kGradientPanel1MouseMoved
+    private void pnlFundoMouseMoved(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_pnlFundoMouseMoved
         if (contagem < 1) {
             contagem = 2;
         }
-    }//GEN-LAST:event_kGradientPanel1MouseMoved
+    }//GEN-LAST:event_pnlFundoMouseMoved
 
     private void jPanel1MouseMoved(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jPanel1MouseMoved
         contagem = sistema.Info.maximo + 1;
@@ -1259,9 +1248,9 @@ public final class Tocar extends javax.swing.JFrame { //lembrar-se desse final a
     private javax.swing.JLabel jLabel2;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JSlider jSlider1;
-    private com.k33ptoo.components.KGradientPanel kGradientPanel1;
     private javax.swing.JLabel lblStatus;
     private javax.swing.JLabel lblVolume;
     private javax.swing.JProgressBar pgbSumir;
+    private com.k33ptoo.components.KGradientPanel pnlFundo;
     // End of variables declaration//GEN-END:variables
 }
