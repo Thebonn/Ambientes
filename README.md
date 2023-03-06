@@ -4,7 +4,7 @@ Relaxing to looping sounds
 ---
 
 Caso apenas queira baixar logo:
-[DOWNLOAD](https://github.com/Thebonn/Ambientes/releases/tag/master)
+[DOWNLOAD](https://github.com/Thebonn/Ambientes/releases/download/master/Ambientes.jar)
 
 ## **PT/BR**
 
