@@ -1,6 +1,11 @@
 # Ambientes
 Relaxing to looping sounds
 
+---
+
+Caso apenas queira baixar logo:
+[DOWNLOAD](https://github.com/Thebonn/Ambientes/releases/tag/publish)
+
 ## **PT/BR**
 
 OLÁ!
