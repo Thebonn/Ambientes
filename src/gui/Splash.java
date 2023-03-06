@@ -143,11 +143,11 @@ public class Splash extends javax.swing.JFrame {
 
             sistema.Info.versaoReal = Double.parseDouble(ar[0]);
             if (sistema.Info.versaoReal > sistema.Info.VERSAO_ATUAL) {
-                int opc = JOptionPane.showConfirmDialog(null, "Atenção! Há uma nova versão do Ambientes disponível para download. Você deseja abrir a página do github e instalar a versão nova?", "Ambientes", JOptionPane.YES_NO_OPTION, JOptionPane.WARNING_MESSAGE);
+                int opc = JOptionPane.showConfirmDialog(null, "Atenção! Há uma nova versão do Ambientes disponível para download. Você deseja abrir a página do Github e instalar a versão nova?", "Ambientes", JOptionPane.YES_NO_OPTION, JOptionPane.WARNING_MESSAGE);
                 if (opc == 0) {
                     try {
                         if (Desktop.isDesktopSupported() && Desktop.getDesktop().isSupported(Desktop.Action.BROWSE)) {
-                            Desktop.getDesktop().browse(new URI("https://github.com/Thebonn/Ambientes/releases/tag/master"));
+                            Desktop.getDesktop().browse(new URI("https://github.com/Thebonn/Ambientes/releases"));
                         }
                     } catch (Exception ex) {
                         JOptionPane.showConfirmDialog(null, "Não foi possível abrir o seu navegador padrão. Você terá que instalar na página https://github.com/Thebonn/Ambientes/releases/tag/master manualmente.", "Ambientes", JOptionPane.YES_NO_OPTION, JOptionPane.ERROR_MESSAGE);

@@ -121,6 +121,7 @@ public final class Tocar extends javax.swing.JFrame {
     }
 
     private class BotaoNumericoAction extends AbstractAction {
+
         @Override
         public void actionPerformed(ActionEvent e) {
             escolherCor();
@@ -379,13 +380,9 @@ public final class Tocar extends javax.swing.JFrame {
                                     float porcentagemC = random.nextInt(1000000) / 10000f; //gerando um int mt grande para dividir por um numero grande e formar um float
 
                                     if (porcentagemC <= porcentagemA) {
-
-//                                        forzinho:
                                         for (int j = 0; j < clipname.length; j++) {
                                             if (clipname[j].equals(nome)) {
                                                 achou = true;
-//                                                j = clipname.length;
-//                                                break forzinho;
                                                 break;
                                             }
                                         }
@@ -518,14 +515,12 @@ public final class Tocar extends javax.swing.JFrame {
 
                                 case 3:
                                     countup++;
-                                    ini = new Color(0x141516); //era Color.black
+                                    ini = new Color(0x141516);
                                     fin = new Color(0x1b1c1f);
 
                                     boolean deNovo = ((countup - ultimo > 1 && countup - ultimo < 10) && r.nextInt(1000) < 200);
-//                                    System.out.println(countup - ultimo);
                                     if (r.nextInt(1000) / 10f < 0.3f || deNovo) {
                                         float valor = (r.nextInt(6) + 3) / 10f;
-//                                        System.out.println(deNovo);
                                         if (deNovo == false) {
                                             ultimo = countup;
                                         }
@@ -579,9 +574,6 @@ public final class Tocar extends javax.swing.JFrame {
                                     break;
                             }
 
-//                            if (negocio > 1) {
-//                                negocio = 0;
-//                            }
                             if (sistema.Info.animTipo != 5) {
                                 pnlFundo.setkStartColor(ini);
                                 pnlFundo.setkEndColor(fin);
@@ -686,9 +678,7 @@ public final class Tocar extends javax.swing.JFrame {
 
             (new Thread(new Runnable() {
                 public void run() {
-//                    File arquivoTemp;
                     Clip clipTemp;
-//                    AudioInputStream audioStream;
                     FloatControl volume;
 
                     int pos = 0;
@@ -711,16 +701,10 @@ public final class Tocar extends javax.swing.JFrame {
                                 volume = (FloatControl) playlists[pos].getControl(FloatControl.Type.MASTER_GAIN);
                                 volume.setValue(volumeGlobal);
 
-                                FloatControl volumeControl = (FloatControl) playlists[pos].getControl(FloatControl.Type.MASTER_GAIN);
-
-//                                float volumeDB = volumeControl.getValue();
-//                                
-//                                System.out.println(Math.pow(10, volumeDB / 20));
                                 if (playlists[pos].isRunning()) {
                                     System.out.println(playlists[pos].getLevel());
                                 }
 
-//                                AudioSystem.
                                 if (playlists[pos].getMicrosecondPosition() >= playlists[pos].getMicrosecondLength() - TimeUnit.MILLISECONDS.toMicros((sistema.Info.preDelay + playlistPreDelay))) {
                                     if (pos + 1 >= arquivos.length) {
 
@@ -797,14 +781,11 @@ public final class Tocar extends javax.swing.JFrame {
     public void terminarPlaylist(int pos) {
         playlists[pos].stop();
         playlists[pos].setMicrosecondPosition(0);
-//        playlists[pos].close();
-//        playlists[pos].flush();
     }
 
     public void pararPlaylist(int pos) {
 
         try {
-//            playlistInfo[pos] = null;
             playlists[pos].stop();
             playlists[pos].flush();
             playlists[pos].close();
@@ -828,23 +809,29 @@ public final class Tocar extends javax.swing.JFrame {
                     pararPlaylist(i);
                 }
             }
-            setarBotao(false);
+            setarIcones(false);
             tocandoPlaylist = false;
         } catch (Exception ex) {
             ex.printStackTrace();
         }
     }
 
-    public void setarBotao(boolean tocando) {
-        URL iconURL;
+    public void setarIcones(boolean tocando) {
+        URL botaoURL;
+        URL logoURL = getClass().getResource("/imagens/ambientes logo 2.png");
 
         if (tocando) {
-            iconURL = getClass().getResource("/imagens/pausegp.png");
+            botaoURL = getClass().getResource("/imagens/pausegp.png");
+            logoURL = getClass().getResource("/imagens/ambientes logo.png");
         } else {
-            iconURL = getClass().getResource("/imagens/playgp.png");
+            botaoURL = getClass().getResource("/imagens/playgp.png");
         }
-        ImageIcon icon = new ImageIcon(iconURL);
-        btnTocar.setIcon(icon);
+
+        btnTocar.setIcon(new ImageIcon(botaoURL));
+        if (Info.iconeInterativo) {
+            this.setIconImage(new ImageIcon(logoURL).getImage());
+        }
+
     }
 
     public void esperarAcabar(boolean parar) {
@@ -862,7 +849,6 @@ public final class Tocar extends javax.swing.JFrame {
                         Thread.sleep(1000);
                     }
 
-//                    Thread.sleep(1000);
                     btnTocar.setEnabled(true);
                     Thread.currentThread().interrupt();
                 } catch (Exception ex) {
@@ -873,27 +859,19 @@ public final class Tocar extends javax.swing.JFrame {
     }
 
     public void tocarParar() {
-
-        URL icones[] = {getClass().getResource("/imagens/ambientes logo.png"), getClass().getResource("/imagens/ambientes logo 2.png")};
-        this.setIconImage(new ImageIcon(icones[0]).getImage());
         if (play) {
             play = false;
             rodar(cbbSetups.getSelectedItem().toString());
-            setarBotao(!play);
+            setarIcones(!play);
         } else {
             play = true;
 
-            setarBotao(!play);
+            setarIcones(!play);
 
             terminar = true;
             sist.ratio = 1;
-
             pararTudo();
-
             sist.acender(Color.darkGray, pnlFundo.getkStartColor(), pnlFundo, 0.04f, 10);
-            if (Info.iconeInterativo) {
-                this.setIconImage(new ImageIcon(icones[1]).getImage());
-            }
             System.gc();
         }
         esperarAcabar(play);
@@ -1186,10 +1164,8 @@ public final class Tocar extends javax.swing.JFrame {
         if (suportaSystemTray) {
             if (avisoFechar == false) {
                 avisoFechar = true;
-//            JOptionPane.showConfirmDialog(null, "O programa ainda está rodando! Caso queria fechá-lo totalmente, vá nos seus ícones de bandeja, clique com o botão direito no ícone do Ambientes e clique em fechar.", "Ambientes", JOptionPane.DEFAULT_OPTION, JOptionPane.INFORMATION_MESSAGE);
                 trayIcon.displayMessage("Ambientes", "O programa ainda está rodando! Caso queria fechá-lo totalmente, vá nos seus ícones de bandeja, clique com o botão direito no ícone do Ambientes e clique em fechar.", TrayIcon.MessageType.INFO);
             }
-
             this.setVisible(false);
         } else {
             System.exit(0);
