@@ -150,7 +150,7 @@ public class Splash extends javax.swing.JFrame {
                             Desktop.getDesktop().browse(new URI("https://github.com/Thebonn/Ambientes/releases"));
                         }
                     } catch (Exception ex) {
-                        JOptionPane.showConfirmDialog(null, "Não foi possível abrir o seu navegador padrão. Você terá que instalar na página https://github.com/Thebonn/Ambientes/releases/tag/master manualmente.", "Ambientes", JOptionPane.YES_NO_OPTION, JOptionPane.ERROR_MESSAGE);
+                        JOptionPane.showConfirmDialog(null, "Não foi possível abrir o seu navegador padrão. Você terá que instalar na página https://github.com/Thebonn/Ambientes/releases manualmente.", "Ambientes", JOptionPane.YES_NO_OPTION, JOptionPane.ERROR_MESSAGE);
                     }
 
                 }
