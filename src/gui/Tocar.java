@@ -142,15 +142,8 @@ public final class Tocar extends javax.swing.JFrame {
             @Override
             public void run() {
                 Thread.currentThread().setPriority(Thread.MIN_PRIORITY);
-//                int iter = 0;
                 try {
                     while (true) {
-//                        iter++;
-//
-//                        if (iter == 10) {
-//                            System.gc();
-//                            iter = 0;
-//                        }
                         atualizarRpc();
                         Thread.sleep(10000);
                     }
@@ -486,8 +479,10 @@ public final class Tocar extends javax.swing.JFrame {
                 try {
                     if (play) {
                         play = false;
+                        btnTocar.setEnabled(false);
                         lblStatus.setText("Carregando...");
                         boolean res = gerenciadorDeSom.carregarERodarSetup(cbbSetups.getSelectedItem().toString());
+                        btnTocar.setEnabled(true);
                         if (res) {
                             setTitle("Ambientes - " + gerenciadorDeSom.setup);
                             lblStatus.setText("Tocando agora: " + gerenciadorDeSom.setup);
