@@ -6,7 +6,7 @@ Relaxing to looping sounds
 Caso apenas queira baixar logo:
 [DOWNLOAD](https://github.com/Thebonn/Ambientes/releases/download/v1.1/Ambientes.jar)
 
-## **PT/BR**
+# **PT/BR**
 
 OLÁ!
 Esse é um programa focado em relaxar ouvindo sons em loops que podem ter toques adicionais dependendo do setup.
@@ -20,9 +20,17 @@ Há interação com o Discord RPC com ícone interativo [para o desktop também]
 
 Mais updates em breve!
 
+### BIBLIOTECAS
+
+Ambientes usa de 3 bibliotecas externas para funcionar:
+- Flatlaf (Biblioteca de interface)
+- KControls (Biblioteca de interface)
+- java-discord-rpc (Biblioteca para o RPC)
+- jsoup (Biblioteca de conexão)
+
 ---
 
-## **EN**
+# **EN**
 
 HELLO!
 This is a program focused in relax listening to looping sounds that can have additional touches depending on the setup
