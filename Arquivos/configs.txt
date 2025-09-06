@@ -1,0 +1,13 @@
+animTipo: 1
+velocidade: 1.0
+preDelay: 30
+podeColorir: true
+maximo: 4
+tipo: 0
+atualizacao: 800
+intensidade: 1.0
+escurecerFundo: 0
+rpcTipo: 0
+mostrarSetups: true
+animacaoIntroducao: true
+iconeInterativo: true
