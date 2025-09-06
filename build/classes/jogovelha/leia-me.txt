@@ -1,0 +1,3 @@
+O código foi originalmente feito no netbeans.
+
+Lembre-se de renomear o "package jogovelha" no topo para o nome do pacote onde a classe "Principal" e "Tabuleiro" vai estar.
