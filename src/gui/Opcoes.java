@@ -21,10 +21,10 @@ public class Opcoes extends javax.swing.JFrame {
 
     public void add() {
         model.removeAllElements();
-        for (int i = 0; i < Tocar.config.length; i++) {
-            if (Tocar.config[i] != null) {
-                if (!Tocar.config[i].split(", ")[0].startsWith("p - ")) {
-                    model.addElement(Tocar.config[i].split(", ")[0]);
+        for (int i = 0; i < Tocar.gerenciadorDeSom.config.length; i++) {
+            if (Tocar.gerenciadorDeSom.config[i] != null) {
+                if (!Tocar.gerenciadorDeSom.config[i].split(", ")[0].startsWith("p - ")) {
+                    model.addElement(Tocar.gerenciadorDeSom.config[i].split(", ")[0]);
                 }
             }
         }

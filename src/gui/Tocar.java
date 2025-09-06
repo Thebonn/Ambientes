@@ -106,8 +106,8 @@ public final class Tocar extends javax.swing.JFrame {
         this.requestFocus();
         
         pnlFundo.requestFocus();
+        
         //meu deus isso é mt complexo, aprendi isso hoje
-
         ActionMap actionMap = pnlFundo.getActionMap();
         BotaoNumericoAction ngc = new BotaoNumericoAction();
         actionMap.put("mudar", ngc);
