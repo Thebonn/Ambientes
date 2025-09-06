@@ -35,7 +35,7 @@ public class GerenciadorDeSom {
     public Som sons[] = new Som[0];
     public Som[] pl = new Som[0];
 
-    public String setup = "nenhum";
+    public String setup = "Nenhum";
     public String config[] = new String[200];
 
     public static boolean tocando = false;
@@ -49,7 +49,6 @@ public class GerenciadorDeSom {
     //lembrar de adicionar o ngc de rodar I:
     private void tocarPlaylist(final File[] arquivos, final String tipo, long preDelay, final boolean temPrimeira) {
         try {
-
             pl = new Som[arquivos.length];
             for (int i = 0; i < pl.length; i++) {
                 pl[i] = new Som();
@@ -65,10 +64,11 @@ public class GerenciadorDeSom {
                         int sel = -1;
 
                         while (tocando) {
+                            
+                            System.out.println("cu");
 
                             if (tipo.equals("a")) {
                                 int aleatorio = random.nextInt(arquivos.length);
-//                                System.out.println("seria o " + aleatorio);
                                 //parece horrivel e é mesmo. isso tudo para evitar selecionar o mesmo som quando for um aleatorio
                                 sel = aleatorio == sel ? (aleatorio + 1 > arquivos.length - 1 ? (aleatorio - 1 < 0 ? aleatorio : aleatorio - 1) : aleatorio + 1) : aleatorio;
                             } else {
@@ -86,7 +86,6 @@ public class GerenciadorDeSom {
                             while (pl[sel].posDoSomMS() < pl[sel].tamDoSomMS - preDelay - sistema.Info.preDelay) {
                                 if ((double) (pl[sel].posDoSomMS()) / (double) (pl[sel].tamDoSomMS) < 0.9d) {
                                     long valor = Math.min(Math.max((pl[sel].tamDoSomMS - pl[sel].posDoSomMS() + 5) / 5, 10), 25000);
-//                                    System.out.println("no aguardo longo. vai esperar " + (valor/1000) + "s.");
                                     Thread.sleep(valor);
 
                                 } else {
@@ -104,76 +103,78 @@ public class GerenciadorDeSom {
             }, "TOCAR").start();
         } catch (Exception ex) {
             ex.printStackTrace();
-        } finally {
         }
-//        this.tocandoPlaylist = false;
     }
 
-    public void rodar(String setup) {
+    public boolean carregarERodarSetup(String setup) throws Exception {
+        
+        File lugar = new File("Arquivos/setups/" + setup + "/mestre.txt");
+
+        String linha = Files.readString(lugar.toPath()).replaceAll(sistema.Info.FILTRO, "");
+        config = linha.replace("\r", "").split("\n"); //tirar aquele caractere do mal
+        tocando = true;
+        //configurar playlist [fazer em um lugar separado para economizar recursos]
+        for (int i = 0; i < config.length; i++) {
+            if (config[i].startsWith("p - ")) {
+
+                String l[] = config[i].split(" - ");
+                //pegar cada som que está separado por ,
+                String sons[] = l[1].split(", ");
+                //criar um array de arquivos que tem todos os locais dos sons
+                File coisos[] = new File[sons.length];
+
+                long playlistPreDelay = Integer.parseInt(l[3]);
+
+                //pesquisa para saber se a playlist tem um som que tocará primeiro
+                boolean temPrimeira = false;
+                for (int j = 0; j < sons.length; j++) {
+
+                    if (j == 0 && sons[j].startsWith("i: ")) {
+                        temPrimeira = true;
+                        sons[j] = sons[j].substring(3); //se tiver, tirar o "i: " do nome
+                    }
+
+                    sons[j] = "Arquivos/setups/" + setup + "/" + sons[j] + ".wav";
+                    coisos[j] = new File(sons[j]);
+                }
+                tocarPlaylist(coisos, l[2], playlistPreDelay, temPrimeira);
+                break;
+            }
+        }
+
+        //configurar sons
+        //acaba que o tamanho pode ser um pouco maior que o necessário, ver sobre isso depois
+        sons = new Som[config.length];
+
+        for (int i = 0; i < config.length; i++) {
+            if (config[i].startsWith("#") || config[i].startsWith("p - ")) {
+//                            t--;
+                continue;
+            }
+
+            String l[] = config[i].split(", ");
+            if (l.length != 3) {
+                continue;
+            }
+
+            String nome = l[0];
+
+            File arquivo = new File("Arquivos/setups/" + setup + "/" + nome + ".wav");
+            sons[i] = new Som();
+            sons[i].carregarSom(arquivo, nome, Tocar.volumeGlobal);
+        }
+        this.setup = setup;
+        rodar();
+        return true;
+    }
+
+    public void rodar() {
         new Thread(new Runnable() {
             @Override
             public void run() {
                 try {
                     Thread.currentThread().setPriority(7);
-                    Arrays.fill(config, null);
-
-                    File lugar = new File("Arquivos/setups/" + setup + "/mestre.txt");
-
-                    String linha = Files.readString(lugar.toPath()).replaceAll(sistema.Info.FILTRO, "");
-                    config = linha.replace("\r", "").split("\n"); //tirar aquele caractere do mal
-
-                    //configurar playlist [fazer em um lugar separado para economizar recursos]
-                    for (int i = 0; i < config.length; i++) {
-                        if (config[i].startsWith("p - ")) {
-
-                            String l[] = config[i].split(" - ");
-                            //pegar cada som que está separado por ,
-                            String sons[] = l[1].split(", ");
-                            //criar um array de arquivos que tem todos os locais dos sons
-                            File coisos[] = new File[sons.length];
-
-                            long playlistPreDelay = Integer.parseInt(l[3]);
-
-                            //pesquisa para saber se a playlist tem um som que tocará primeiro
-                            boolean temPrimeira = false;
-                            for (int j = 0; j < sons.length; j++) {
-
-                                if (j == 0 && sons[j].startsWith("i: ")) {
-                                    temPrimeira = true;
-                                    sons[j] = sons[j].substring(3); //se tiver, tirar o "i: " do nome
-                                }
-
-                                sons[j] = "Arquivos/setups/" + setup + "/" + sons[j] + ".wav";
-                                coisos[j] = new File(sons[j]);
-                            }
-                            tocarPlaylist(coisos, l[2], playlistPreDelay, temPrimeira);
-                            break;
-                        }
-                    }
-
-                    //configurar sons
-                    //acaba que o tamanho pode ser um pouco maior que o necessário, ver sobre isso depois
-                    sons = new Som[config.length];
-
-                    for (int i = 0; i < config.length; i++) {
-                        if (config[i].startsWith("#") || config[i].startsWith("p - ")) {
-//                            t--;
-                            continue;
-                        }
-
-                        String l[] = config[i].split(", ");
-                        if (l.length != 3) {
-                            continue;
-                        }
-
-                        String nome = l[0];
-
-                        File arquivo = new File("Arquivos/setups/" + setup + "/" + nome + ".wav");
-                        sons[i] = new Som();
-                        sons[i].carregarSom(arquivo, nome, Tocar.volumeGlobal);
-                    }
                     //loop principal de tocar o setup
-                    tocando = true;
                     while (tocando) {
                         for (int i = 0; i < config.length; i++) {
 
@@ -239,7 +240,6 @@ public class GerenciadorDeSom {
         }
         return -1;
     }
-
 
     public Som encontrarSomPeloNome(String nome) {
         for (int i = 0; i < sons.length; i++) {

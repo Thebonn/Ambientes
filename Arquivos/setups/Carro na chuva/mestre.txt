@@ -1,5 +1,0 @@
-p - carro neutro, carro na chuva, carro rapido - a - 15000
-#lombada, 70, 0
-#lombada 2, 10, 0
-#seta, 1, 0
-#chuva, 50, 0

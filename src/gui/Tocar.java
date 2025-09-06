@@ -45,38 +45,38 @@ public final class Tocar extends javax.swing.JFrame {
      */
     public static String desativados[] = new String[50];
     public static boolean podeAbrir = true;
-    
+
     float contagem = 10;
-    
+
     int selecionadoAnter = 0;
-    
+
     public byte setupsInstalados = 0;
-    
+
     public static Color cores[] = new Color[20];
     public static String coresLegiveis = "";
     public static byte coresEspSel = 0;
     public static float mudancaVel = 0.002f;
-    
+
     public static byte volumeGlobal = -3;
     boolean tocandoPlaylist = false;
     boolean tocouPrimeira = false;
 //    public static int playlistPreDelay = 0;
     public static int esperaDelay = 5;
-    
+
     boolean avisoPlaylist = false;
     boolean avisoFechar = false;
     boolean play = true;
     public static boolean lojaaberta = false;
-    
+
     boolean suportaSystemTray = false;
     TrayIcon trayIcon;
-    
+
     public Thread animThread = new Thread();
-    
+
     sistema.Sistema sist;
     Configuracoes configs;
     public static GerenciadorDeSom gerenciadorDeSom;
-    
+
     public Tocar() {
         FlatDarkLaf.install();
         initComponents();
@@ -92,43 +92,43 @@ public final class Tocar extends javax.swing.JFrame {
         animar();
         adicionarSetups();
         gerenciadorDeSom = new GerenciadorDeSom();
-        
+
         URL iconURL = getClass().getResource("/imagens/ambientes logo 2.png");
         ImageIcon icon = new ImageIcon(iconURL);
         this.setIconImage(icon.getImage());
-        
+
         contagemInatividade();
         bandeja();
         sist = new sistema.Sistema();
         cores = sist.converterCor("ABDEE6, CBAACB, FFFFB5, FFCCB6, F3B0C3");
-        
+
         escolherCor();
         this.requestFocus();
-        
+
         pnlFundo.requestFocus();
-        
+
         //meu deus isso é mt complexo, aprendi isso hoje
         ActionMap actionMap = pnlFundo.getActionMap();
         BotaoNumericoAction ngc = new BotaoNumericoAction();
         actionMap.put("mudar", ngc);
         pnlFundo.setActionMap(actionMap);
-        
+
         InputMap imap = pnlFundo.getInputMap(JPanel.WHEN_IN_FOCUSED_WINDOW);
         imap.put(KeyStroke.getKeyStroke(' '), "mudar");
-        
+
         sistema.Rpc.iniciarRPC();
         atualizacaoBaixaFrequencia();
-        
+
     }
-    
+
     private class BotaoNumericoAction extends AbstractAction {
-        
+
         @Override
         public void actionPerformed(ActionEvent e) {
             escolherCor();
         }
     }
-    
+
     public void subir() {
         setLocation(getLocation().x, getLocation().y + 130);
         new Thread(new Runnable() {
@@ -136,22 +136,22 @@ public final class Tocar extends javax.swing.JFrame {
             public void run() {
                 try {
                     float velocidade = 10;
-                    
+
                     for (int i = 0; i < 35; i++) {
-                        
+
                         setLocation(getLocation().x, (int) (getLocation().y - velocidade));
                         velocidade = velocidade * 0.9f;
                         Thread.sleep(10);
-                        
+
                     }
                 } catch (Exception ex) {
                     ex.printStackTrace();
                 }
-                
+
             }
         }, "SubirJFrame").start();
     }
-    
+
     void atualizacaoBaixaFrequencia() {
         new Thread(new Runnable() {
             @Override
@@ -172,42 +172,42 @@ public final class Tocar extends javax.swing.JFrame {
                 } catch (Exception ex) {
                     ex.printStackTrace();
                 }
-                
+
             }
         }, "ATTBaixaFrequencia").start();
     }
-    
+
     public void bandeja() {
         if (!SystemTray.isSupported()) {
             System.out.println("Sem suporte para SystemTray");
             return;
         }
-        
+
         try {
             suportaSystemTray = true;
-            
+
             final PopupMenu popup = new PopupMenu();
-            
+
             InputStream is = getClass().getResource("/imagens/ambientes logo.png").openStream();
             ImageIcon icon = new ImageIcon(ImageIO.read(is).getScaledInstance(15, 15, BufferedImage.SCALE_SMOOTH));
             is.close();
-            
+
             trayIcon = new TrayIcon(icon.getImage());
             final SystemTray tray = SystemTray.getSystemTray();
-            
+
             MenuItem abrirItem = new MenuItem("Abrir");
             MenuItem sairItem = new MenuItem("Fechar");
             MenuItem tocarpararItem = new MenuItem("Tocar/Parar");
             MenuItem configurarItem = new MenuItem("Configurar");
-            
+
             popup.add(abrirItem);
             popup.add(tocarpararItem);
             popup.add(configurarItem);
             popup.addSeparator();
             popup.add(sairItem);
-            
+
             trayIcon.setPopupMenu(popup);
-            
+
             sairItem.addActionListener((e) -> {
                 System.exit(0);
             });
@@ -217,37 +217,37 @@ public final class Tocar extends javax.swing.JFrame {
             tocarpararItem.addActionListener((e) -> {
                 tocarParar();
             });
-            
+
             configurarItem.addActionListener((e) -> {
                 abrirConfigs();
             });
-            
+
             tray.add(trayIcon);
-            
+
         } catch (Exception ex) {
             ex.printStackTrace();
         }
-        
+
     }
-    
+
     void atualizarRpc() {
-        
+
         if (sistema.Info.rpcTipo == 2) {
             sistema.Rpc.atualizarDetalhes("Usando o Ambientes");
             return;
         }
-        
+
         if (sistema.Info.mostrarSetups) {
             sistema.Rpc.atualizarEstado(setupsInstalados + " setups instalados");
         } else {
             sistema.Rpc.atualizarEstado("");
         }
-        
+
         if (lojaaberta) {
             sistema.Rpc.atualizarDetalhes("Na loja de setups");
             return;
         }
-        
+
         if (!play) {
             presence.largeImageKey = "logo";
             if (sistema.Info.rpcTipo == 0) {
@@ -263,7 +263,7 @@ public final class Tocar extends javax.swing.JFrame {
             presence.largeImageKey = "logoparado";
         }
     }
-    
+
     public void adicionarSetups() {
         String atual = cbbSetups.getSelectedItem().toString();
         File pasta = new File("Arquivos/setups/");
@@ -272,13 +272,13 @@ public final class Tocar extends javax.swing.JFrame {
         for (int i = 0; i < setups.length; i++) {
             cbbSetups.addItem(setups[i]);
         }
-        
+
         setupsInstalados = (byte) setups.length;
         cbbSetups.setSelectedItem(atual);
         cbbSetups.addItem("Obter mais setups");
-        
+
     }
-    
+
     public void contagemInatividade() {
         new Thread(new Runnable() {
             @Override
@@ -286,7 +286,7 @@ public final class Tocar extends javax.swing.JFrame {
                 try {
                     while (true) {
                         if (sistema.Info.podeColorir) {
-                            
+
                             pgbSumir.setValue((int) (contagem));
                             pgbSumir.setMaximum(sistema.Info.maximo);
                             if (contagem <= 0) {
@@ -298,14 +298,14 @@ public final class Tocar extends javax.swing.JFrame {
                             contagem = 0;
                             jPanel1.setVisible(true);
                         }
-                        
+
                         contagem -= 0.1;
                         Thread.sleep(100);
                     }
                 } catch (Exception ex) {
                     ex.printStackTrace();
                 }
-                
+
             }
         }, "ContagemInatividade").start();
     }
@@ -319,7 +319,7 @@ public final class Tocar extends javax.swing.JFrame {
 //        return false;
 //    }
     public void animar() {
-        
+
         animThread = new Thread(new Runnable() {
             @Override
             public void run() {
@@ -350,26 +350,26 @@ public final class Tocar extends javax.swing.JFrame {
 
                     //para easing
                     double negocio = 0.0d;
-                    
+
                     sistema.Easings easings = new sistema.Easings();
-                    
+
                     while (true) {
-                        
+
                         if ((play == false) && isActive() && isFocused()) {
-                            
+
                             if (descendo) {
                                 negocio -= 0.001d * sistema.Info.velocidade / 2;
                             } else {
                                 negocio += 0.001d * sistema.Info.velocidade / 2;
                             }
                             foco = (short) (easings.easeInOutCirc(negocio) * 700);
-                            
+
                             if (negocio >= 1) {
                                 descendo = true;
                             } else if (negocio <= 0) {
                                 descendo = false;
                             }
-                            
+
                             switch (sistema.Info.animTipo) {
                                 case 0:
                                     luz += ((r.nextInt(10) - 5f) / 200f);
@@ -393,36 +393,36 @@ public final class Tocar extends javax.swing.JFrame {
                                     }
                                     break;
                                 case 2:
-                                    
+
                                     luz = 0.8f + ((r.nextInt(2) - 1f) / 700f);
                                     hue = 0.56f + ((r.nextInt(10) - 5f) / 650f);
                                     ini = new Color(Color.HSBtoRGB(hue, 1f, luz));
                                     fin = new Color(Color.HSBtoRGB(hue + ((r.nextInt(10) - 5) / 100), 1f, luz - 0.1f));
-                                    
+
                                     break;
-                                
+
                                 case 3:
                                     countup++;
                                     ini = new Color(0x141516);
                                     fin = new Color(0x1b1c1f);
-                                    
+
                                     boolean deNovo = ((countup - ultimo > 1 && countup - ultimo < 10) && r.nextInt(1000) < 200);
                                     if (r.nextInt(1000) / 10f < 0.3f || deNovo) {
                                         float valor = (r.nextInt(6) + 3) / 10f;
                                         if (deNovo == false) {
                                             ultimo = countup;
                                         }
-                                        
+
                                         Color cor = Color.getHSBColor(0.5f, 0.1f, valor);
                                         ini = cor;
                                         fin = cor;
                                     }
-                                    
+
                                     if (countup > 3000) {
                                         countup -= 3000;
                                         ultimo -= 3000;
                                     }
-                                    
+
                                     break;
                                 case 4:
                                     ini = new Color(Color.HSBtoRGB(1, 0f, (float) ((foco + 700) / 1400f / 2)));
@@ -434,7 +434,7 @@ public final class Tocar extends javax.swing.JFrame {
                                         espera = 500;
                                         ciclo++;
                                         cicloAnterior = (byte) (ciclo - 1);
-                                        
+
                                         while (cores[ciclo] == null) {
                                             ciclo++;
                                             if (ciclo >= cores.length) {
@@ -442,15 +442,15 @@ public final class Tocar extends javax.swing.JFrame {
                                                 break;
                                             }
                                         }
-                                        
+
                                         if (ciclo >= cores.length) {
                                             ciclo = 0;
                                         }
-                                        
+
                                         if (cicloAnterior < 0) {
                                             cicloAnterior = (byte) cores.length;
                                         }
-                                        
+
                                         sist.acender(cores[ciclo], cores[cicloAnterior], pnlFundo, (float) (mudancaVel * sistema.Info.velocidade), 15);
                                     }
                                     break;
@@ -461,21 +461,21 @@ public final class Tocar extends javax.swing.JFrame {
                                 default:
                                     break;
                             }
-                            
+
                             if (sistema.Info.animTipo != 5) {
                                 pnlFundo.setkStartColor(ini);
                                 pnlFundo.setkEndColor(fin);
-                                
+
                                 sist.escurecerFundo(pnlFundo);
-                                
+
                             }
                             pnlFundo.setkGradientFocus(foco);
                             pnlFundo.updateUI();
-                            
+
                             Thread.sleep(tempo);
-                            
+
                         }
-                        
+
                         Thread.sleep(10);
                     }
                 } catch (Exception ex) {
@@ -483,89 +483,91 @@ public final class Tocar extends javax.swing.JFrame {
                 }
             }
         });
-        
+
         animThread.setPriority(1);
         animThread.start();
     }
-    
+
     public void setarIcones(boolean tocando) {
         URL botaoURL;
         URL logoURL = getClass().getResource("/imagens/ambientes logo 2.png");
-        
+
         if (tocando) {
             botaoURL = getClass().getResource("/imagens/pausegp.png");
             logoURL = getClass().getResource("/imagens/ambientes logo.png");
         } else {
             botaoURL = getClass().getResource("/imagens/playgp.png");
         }
-        
+
         btnTocar.setIcon(new ImageIcon(botaoURL));
         if (Info.iconeInterativo) {
             this.setIconImage(new ImageIcon(logoURL).getImage());
         }
-        
+
     }
-    
-    public void esperarAcabar(boolean parar) {
+
+//    public void esperarAcabar(boolean parar) {
+//        new Thread(new Runnable() {
+//            @Override
+//            public void run() {
+//                Thread.currentThread().setPriority(Thread.MIN_PRIORITY);
+//                try {
+//                    btnTocar.setEnabled(false);
+//                    if (parar) {
+//                        while (!lblStatus.getText().equals("Parado...")) {
+//                            Thread.sleep(100);
+//                        }
+//                    } else {
+//                        Thread.sleep(1000);
+//                    }
+//
+//                    btnTocar.setEnabled(true);
+//                    Thread.currentThread().interrupt();
+//                } catch (Exception ex) {
+//                    ex.printStackTrace();
+//                }
+//            }
+//        }, "EsperarAcabar").start();
+//    }
+    public void tocarParar() {
         new Thread(new Runnable() {
             @Override
             public void run() {
-                Thread.currentThread().setPriority(Thread.MIN_PRIORITY);
                 try {
-                    btnTocar.setEnabled(false);
-                    if (parar) {
-                        while (!lblStatus.getText().equals("Parado...")) {
-                            Thread.sleep(100);
+                    if (play) {
+                        play = false;
+                        lblStatus.setText("Carregando...");
+                        boolean res = gerenciadorDeSom.carregarERodarSetup(cbbSetups.getSelectedItem().toString());
+                        if (res) {
+                            setTitle("Ambientes - " + gerenciadorDeSom.setup);
+                            lblStatus.setText("Tocando agora: " + gerenciadorDeSom.setup);
+                            btnOpcoes.setEnabled(podeAbrir);
+                            setarIcones(!play);
                         }
+
                     } else {
-                        Thread.sleep(1000);
+                        play = true;
+                        setarIcones(!play);
+                        sist.ratio = 1;
+                        gerenciadorDeSom.pararTudo();
+                        setTitle("Ambientes " + sistema.Info.VERSAO_ATUAL);
+                        lblStatus.setText("Parado...");
+                        sist.acender(Color.darkGray, pnlFundo.getkStartColor(), pnlFundo, 0.04f, 10);
                     }
-                    
-                    btnTocar.setEnabled(true);
-                    Thread.currentThread().interrupt();
                 } catch (Exception ex) {
                     ex.printStackTrace();
                 }
             }
-        }, "EsperarAcabar").start();
+        }, "tocar parar").start();
     }
-    
-    public void tocarParar() {
-        if (play) {
-            play = false;
-//            rodar(cbbSetups.getSelectedItem().toString());
-//            rodar(gerenciadorDeSom.rodar(cbbSetups.getSelectedItem().toString()));
-            gerenciadorDeSom.rodar(cbbSetups.getSelectedItem().toString());
-            setarIcones(!play);
-        } else {
-            play = true;
-            
-            setarIcones(!play);
 
-//            terminar = true;
-            sist.ratio = 1;
-            gerenciadorDeSom.pararTudo();
-            sist.acender(Color.darkGray, pnlFundo.getkStartColor(), pnlFundo, 0.04f, 10);
-            System.gc();
-        }
-        esperarAcabar(play);
-    }
-    
-    public void setarVolume(int quantidade) {
-        try {
-//            for (int i = 0; i < clips.length; i++) {
-//                if (clips[i] != null) {
-//                    FloatControl volume = (FloatControl) clips[i].getControl(FloatControl.Type.MASTER_GAIN);
-//                    volume.setValue(quantidade);
-//                }
-//            }
-            gerenciadorDeSom.setarVolune(quantidade);
-            
-        } catch (Exception ex) {
-            ex.printStackTrace();
-        }
-    }
-    
+//    public void setarVolume(int quantidade) {
+//        try {
+//            gerenciadorDeSom.setarVolune(quantidade);
+//        } catch (Exception ex) {
+//            ex.printStackTrace();
+//        }
+//    }
     void abrirConfigs() {
         if (configs == null || !configs.isVisible()) {
             jButton3.setText("Abrindo...");
@@ -575,7 +577,7 @@ public final class Tocar extends javax.swing.JFrame {
                 public void run() {
                     configs = new Configuracoes();
                     configs.setVisible(true);
-                    
+
                     jButton3.setText("Configurações");
                     jButton3.setEnabled(true);
                 }
@@ -584,7 +586,7 @@ public final class Tocar extends javax.swing.JFrame {
             jButton3.setText("Já tá aberto!!");
         }
     }
-    
+
     void escolherCor() {
         if (play == true) {
             Color cor[] = sist.escolherCor();
@@ -607,12 +609,12 @@ public final class Tocar extends javax.swing.JFrame {
         jPanel1 = new javax.swing.JPanel();
         cbbSetups = new javax.swing.JComboBox<>();
         jLabel1 = new javax.swing.JLabel();
-        jSlider1 = new javax.swing.JSlider();
+        sldVolume = new javax.swing.JSlider();
         jLabel2 = new javax.swing.JLabel();
         btnTocar = new javax.swing.JButton();
         lblStatus = new javax.swing.JLabel();
         jButton3 = new javax.swing.JButton();
-        jButton4 = new javax.swing.JButton();
+        btnOpcoes = new javax.swing.JButton();
         lblVolume = new javax.swing.JLabel();
         pgbSumir = new javax.swing.JProgressBar();
 
@@ -656,13 +658,13 @@ public final class Tocar extends javax.swing.JFrame {
         jLabel1.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         jLabel1.setText("Setup:");
 
-        jSlider1.setMajorTickSpacing(100);
-        jSlider1.setMinorTickSpacing(5);
-        jSlider1.setToolTipText("");
-        jSlider1.setValue(90);
-        jSlider1.addChangeListener(new javax.swing.event.ChangeListener() {
+        sldVolume.setMajorTickSpacing(100);
+        sldVolume.setMinorTickSpacing(5);
+        sldVolume.setToolTipText("");
+        sldVolume.setValue(90);
+        sldVolume.addChangeListener(new javax.swing.event.ChangeListener() {
             public void stateChanged(javax.swing.event.ChangeEvent evt) {
-                jSlider1StateChanged(evt);
+                sldVolumeStateChanged(evt);
             }
         });
 
@@ -690,11 +692,11 @@ public final class Tocar extends javax.swing.JFrame {
             }
         });
 
-        jButton4.setText("Opções");
-        jButton4.setEnabled(false);
-        jButton4.addActionListener(new java.awt.event.ActionListener() {
+        btnOpcoes.setText("Opções");
+        btnOpcoes.setEnabled(false);
+        btnOpcoes.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton4ActionPerformed(evt);
+                btnOpcoesActionPerformed(evt);
             }
         });
 
@@ -711,7 +713,7 @@ public final class Tocar extends javax.swing.JFrame {
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(jSlider1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(sldVolume, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addContainerGap()
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
@@ -719,7 +721,7 @@ public final class Tocar extends javax.swing.JFrame {
                             .addGroup(javax.swing.GroupLayout.Alignment.LEADING, jPanel1Layout.createSequentialGroup()
                                 .addComponent(cbbSetups, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(jButton4))
+                                .addComponent(btnOpcoes))
                             .addComponent(lblStatus, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.PREFERRED_SIZE, 264, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addGroup(javax.swing.GroupLayout.Alignment.LEADING, jPanel1Layout.createSequentialGroup()
                                 .addGap(0, 0, Short.MAX_VALUE)
@@ -743,20 +745,20 @@ public final class Tocar extends javax.swing.JFrame {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(cbbSetups, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jButton4))
+                    .addComponent(btnOpcoes))
                 .addGap(18, 18, 18)
                 .addComponent(jLabel2)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jSlider1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(sldVolume, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(lblVolume)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 19, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 18, Short.MAX_VALUE)
                 .addComponent(jButton3)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(lblStatus)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 17, Short.MAX_VALUE)
-                .addComponent(btnTocar, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 16, Short.MAX_VALUE)
+                .addComponent(btnTocar, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 15, Short.MAX_VALUE)
                 .addComponent(pgbSumir, javax.swing.GroupLayout.PREFERRED_SIZE, 2, javax.swing.GroupLayout.PREFERRED_SIZE))
         );
 
@@ -796,31 +798,32 @@ public final class Tocar extends javax.swing.JFrame {
         if (cbbSetups.getSelectedIndex() + 1 == cbbSetups.getItemCount()) {
             cbbSetups.setSelectedIndex(0);
         }
-        
+
         tocarParar();
     }//GEN-LAST:event_btnTocarActionPerformed
 
-    private void jSlider1StateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_jSlider1StateChanged
+    private void sldVolumeStateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_sldVolumeStateChanged
         if (contagem < 1) {
             contagem = 2;
         }
-        
-        volumeGlobal = (byte) ((jSlider1.getValue() * 86 / 100) - 80);
-        lblVolume.setText(jSlider1.getValue() + "%");
-        setarVolume(volumeGlobal);
-    }//GEN-LAST:event_jSlider1StateChanged
+
+        volumeGlobal = (byte) ((sldVolume.getValue() * 86 / 100) - 80);
+        lblVolume.setText(sldVolume.getValue() + "%");
+//        setarVolume(volumeGlobal);
+        gerenciadorDeSom.setarVolune(volumeGlobal);
+    }//GEN-LAST:event_sldVolumeStateChanged
 
     private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
         abrirConfigs();
     }//GEN-LAST:event_jButton3ActionPerformed
 
-    private void jButton4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton4ActionPerformed
+    private void btnOpcoesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnOpcoesActionPerformed
         if (podeAbrir) {
             podeAbrir = false;
             new Opcoes().setVisible(true);
         }
 
-    }//GEN-LAST:event_jButton4ActionPerformed
+    }//GEN-LAST:event_btnOpcoesActionPerformed
 
     private void pnlFundoMouseMoved(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_pnlFundoMouseMoved
         if (contagem < 1) {
@@ -864,7 +867,7 @@ public final class Tocar extends javax.swing.JFrame {
         /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
          * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html 
          */
-        
+
         try {
             for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
                 if ("Nimbus".equals(info.getName())) {
@@ -892,17 +895,17 @@ public final class Tocar extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton btnOpcoes;
     private javax.swing.JButton btnTocar;
     private javax.swing.JComboBox<String> cbbSetups;
     private javax.swing.JButton jButton3;
-    private javax.swing.JButton jButton4;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JPanel jPanel1;
-    private javax.swing.JSlider jSlider1;
     private javax.swing.JLabel lblStatus;
     private javax.swing.JLabel lblVolume;
     private javax.swing.JProgressBar pgbSumir;
     private com.k33ptoo.components.KGradientPanel pnlFundo;
+    private javax.swing.JSlider sldVolume;
     // End of variables declaration//GEN-END:variables
 }
