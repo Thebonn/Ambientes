@@ -1,1 +1,0 @@
-ventilador, 100, -1
