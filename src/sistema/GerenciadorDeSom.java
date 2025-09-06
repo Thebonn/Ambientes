@@ -45,9 +45,6 @@ public class GerenciadorDeSom {
                         int sel = -1;
 
                         while (tocando) {
-                            
-                            System.out.println("cu");
-
                             if (tipo.equals("a")) {
                                 int aleatorio = random.nextInt(arquivos.length);
                                 //parece horrivel e é mesmo. isso tudo para evitar selecionar o mesmo som quando for um aleatorio
