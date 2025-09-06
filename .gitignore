@@ -1,2 +1,6 @@
 Arquivos/
 dist/
+nbproject/
+nbbuild/
+
+*.class
