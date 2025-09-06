@@ -471,13 +471,13 @@ public final class Tocar extends javax.swing.JFrame {
 
     public void setarIcones(boolean tocando) {
         URL botaoURL;
-        URL logoURL = getClass().getResource("/imagens/ambientes logo 2.png");
+        URL logoURL = getClass().getResource("/recursos/imagens/ambientes logo 2.png");
 
         if (tocando) {
-            botaoURL = getClass().getResource("/imagens/pausegp.png");
-            logoURL = getClass().getResource("/imagens/ambientes logo.png");
+            botaoURL = getClass().getResource("/recursos/imagens/pausegp.png");
+            logoURL = getClass().getResource("/recursos/imagens/ambientes logo.png");
         } else {
-            botaoURL = getClass().getResource("/imagens/playgp.png");
+            botaoURL = getClass().getResource("/recursos/imagens/playgp.png");
         }
 
         btnTocar.setIcon(new ImageIcon(botaoURL));
