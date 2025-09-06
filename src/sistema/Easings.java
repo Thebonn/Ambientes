@@ -7,7 +7,7 @@ package sistema;
 
 /**
  *
- * @author Thebonn
+ * @author Bonn
  */
 public class Easings {
 

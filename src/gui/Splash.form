@@ -61,8 +61,8 @@
                       <Component id="jLabel1" max="32767" attributes="0"/>
                       <Component id="lblNegocio" alignment="1" min="-2" pref="150" max="-2" attributes="0"/>
                   </Group>
-                  <EmptySpace pref="20" max="32767" attributes="0"/>
-                  <Component id="pgbProgresso" min="-2" max="-2" attributes="0"/>
+                  <EmptySpace type="separate" max="-2" attributes="0"/>
+                  <Component id="pgbProgresso" pref="22" max="32767" attributes="0"/>
                   <EmptySpace max="-2" attributes="0"/>
               </Group>
           </Group>
@@ -72,7 +72,7 @@
         <Component class="javax.swing.JLabel" name="jLabel1">
           <Properties>
             <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
-              <Image iconType="3" name="/imagens/ambientes logo.gif"/>
+              <Image iconType="3" name="/recursos/imagens/ambientes logo.gif"/>
             </Property>
           </Properties>
         </Component>

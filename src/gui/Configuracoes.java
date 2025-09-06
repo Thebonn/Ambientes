@@ -25,9 +25,7 @@ public class Configuracoes extends javax.swing.JFrame {
         corExemplo = new Color(0xFF00FF);
         atualizarExemplo();
 
-        URL iconURL = getClass().getResource("/imagens/ambientes logo.png");
-        ImageIcon icon = new ImageIcon(iconURL);
-        this.setIconImage(icon.getImage());
+        this.setIconImage(new ImageIcon(getClass().getResource("/recursos/imagens/ambientes logo 2.png")).getImage());
         atualizarSelecionados();
     }
 

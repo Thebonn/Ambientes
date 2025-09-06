@@ -8,6 +8,7 @@ package gui;
 import com.formdev.flatlaf.FlatDarkLaf;
 import java.awt.Desktop;
 import java.awt.Font;
+import java.awt.GraphicsEnvironment;
 import java.io.File;
 import java.net.URI;
 import java.net.URL;
@@ -31,11 +32,8 @@ public class Splash extends javax.swing.JFrame {
     public Splash() {
         FlatDarkLaf.install();
         initComponents();
-        
-        URL iconURL = getClass().getResource("/imagens/ambientes logo 2.png");
-        ImageIcon icon = new ImageIcon(iconURL);
-        this.setIconImage(icon.getImage());
-        
+
+        this.setIconImage(new ImageIcon(getClass().getResource("/recursos/imagens/ambientes logo 2.png")).getImage());
         funcionar();
 
     }
@@ -64,8 +62,16 @@ public class Splash extends javax.swing.JFrame {
                     Thread.sleep(100);
 
 //                    sistema.Configs configs = new sistema.Configs();
+                    pgbProgresso.setString("Carregando fontes...");
+                    boolean res = recursos.fontes.Fonte.carregarFontes();
+                    if (res) {
+                        lblNegocio.setFont(new Font("Open Sauce One Black", 0, 25));
+                        pgbProgresso.setFont(new Font("Open Sauce One", 0, 13));
 
-                    pgbProgresso.setString("Verificando as pastas...");
+                        pgbProgresso.setString("Verificando as pastas...");
+                    } else {
+                        JOptionPane.showConfirmDialog(null, "Não foi possível carregar as fontes, o programa funcionará usando a fonte de fallback.", "Ambientes", JOptionPane.DEFAULT_OPTION, JOptionPane.ERROR_MESSAGE);
+                    }
 
                     File file = new File("Arquivos/setups");
                     if (!file.exists()) {
@@ -108,10 +114,9 @@ public class Splash extends javax.swing.JFrame {
                     pgbProgresso.setString("Criando negócios...");
                     pgbProgresso.setIndeterminate(true);
 
-                    
                     pgbProgresso.setString("Fazendo as coisas acontecerem...");
                     tocar = new Tocar();
-                    
+
                     pgbProgresso.setString("Verificando atualizações...");
                     selecionarTexto();
                     mudatexto();
@@ -121,7 +126,6 @@ public class Splash extends javax.swing.JFrame {
 
                     cair();
 
-                    
                 } catch (Exception ex) {
                     ex.printStackTrace();
                 }
@@ -263,7 +267,7 @@ public class Splash extends javax.swing.JFrame {
 //                    if (div <= 0) {
 //                        div = 1;
 //                    }
-                    Font fonte = new Font("Gadugi", Font.BOLD, calcularTamanho(40, escolhido));
+                    Font fonte = new Font("Open Sauce One Black", Font.BOLD, calcularTamanho(40, escolhido));
 
                     lblNegocio.setFont(fonte);
 
@@ -302,7 +306,7 @@ public class Splash extends javax.swing.JFrame {
         setDefaultCloseOperation(javax.swing.WindowConstants.DO_NOTHING_ON_CLOSE);
         setUndecorated(true);
 
-        jLabel1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagens/ambientes logo.gif"))); // NOI18N
+        jLabel1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/recursos/imagens/ambientes logo.gif"))); // NOI18N
 
         lblNegocio.setFont(new java.awt.Font("Gadugi", 1, 24)); // NOI18N
         lblNegocio.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
@@ -335,8 +339,8 @@ public class Splash extends javax.swing.JFrame {
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addComponent(jLabel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(lblNegocio, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 150, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 20, Short.MAX_VALUE)
-                .addComponent(pgbProgresso, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(18, 18, 18)
+                .addComponent(pgbProgresso, javax.swing.GroupLayout.DEFAULT_SIZE, 22, Short.MAX_VALUE)
                 .addContainerGap())
         );
 
