@@ -291,14 +291,6 @@ public final class Tocar extends javax.swing.JFrame {
         }, "ContagemInatividade").start();
     }
 
-//    public boolean tocando() {
-//        for (int i = 0; i < playlists.length; i++) {
-//            if (playlists[i] != null) {
-//                return true;
-//            }
-//        }
-//        return false;
-//    }
     public void animar() {
 
         animThread = new Thread(new Runnable() {
