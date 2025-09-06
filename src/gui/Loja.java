@@ -43,17 +43,13 @@ public class Loja extends javax.swing.JFrame {
 
         this.setTitle("Loja de setups");
 
-        URL iconURL = getClass().getResource("/imagens/ambientes logo.png");
-        ImageIcon icon = new ImageIcon(iconURL);
-        this.setIconImage(icon.getImage());
+        this.setIconImage(new ImageIcon(getClass().getResource("/recursos/imagens/ambientes logo 2.png")).getImage());
 
     }
 
-    sistema.Sistema sist = new sistema.Sistema();
     int pag = 0;
-
     int max = 12;
-
+    
     String links = "";
 
     String ar[] = null;
@@ -310,7 +306,7 @@ public class Loja extends javax.swing.JFrame {
         painel1.setPreferredSize(new java.awt.Dimension(150, 150));
 
         img1.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        img1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagens/carregando.gif"))); // NOI18N
+        img1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/recursos/imagens/carregando.gif"))); // NOI18N
 
         titulo1.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
         titulo1.setText("Carregando...");
@@ -375,7 +371,7 @@ public class Loja extends javax.swing.JFrame {
         painel2.setPreferredSize(new java.awt.Dimension(150, 150));
 
         img2.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        img2.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagens/carregando.gif"))); // NOI18N
+        img2.setIcon(new javax.swing.ImageIcon(getClass().getResource("/recursos/imagens/carregando.gif"))); // NOI18N
 
         titulo2.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
         titulo2.setText("Carregando...");
@@ -440,7 +436,7 @@ public class Loja extends javax.swing.JFrame {
         painel3.setPreferredSize(new java.awt.Dimension(150, 150));
 
         img3.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        img3.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagens/carregando.gif"))); // NOI18N
+        img3.setIcon(new javax.swing.ImageIcon(getClass().getResource("/recursos/imagens/carregando.gif"))); // NOI18N
 
         titulo3.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
         titulo3.setText("Carregando...");

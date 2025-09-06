@@ -1,29 +1,10 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
 package sistema;
 
-//import static gui.Tocar.config;
 import gui.Tocar;
 import static gui.Tocar.desativados;
-import static gui.Tocar.esperaDelay;
-//import static gui.Tocar.playlistPreDelay;
-import static gui.Tocar.podeAbrir;
-//import static gui.Tocar.terminar;
-//import static gui.Tocar.volumeGlobal;
-import java.io.BufferedReader;
 import java.io.File;
-import java.io.FileReader;
 import java.nio.file.Files;
-import java.util.Arrays;
-import java.util.Date;
 import java.util.Random;
-import java.util.concurrent.TimeUnit;
-import javax.sound.sampled.AudioInputStream;
-import javax.sound.sampled.AudioSystem;
-import javax.sound.sampled.Clip;
-import javax.sound.sampled.FloatControl;
 import javax.swing.JOptionPane;
 
 /**

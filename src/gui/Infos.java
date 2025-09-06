@@ -69,6 +69,7 @@ public class Infos extends javax.swing.JFrame {
                     addTexto("\tNome do runtime: " + System.getProperty("java.runtime.name"), txtDetalhes);
                     addTexto("\tVersão do runtime: " + System.getProperty("java.runtime.version"), txtDetalhes);
                     addTexto("\tVersão do java: " + System.getProperty("java.version"), txtDetalhes);
+                    addTexto("\tSistema suporta ícones de bandeja: " + Tocar.suportaSystemTray, txtDetalhes);
                     addTexto("\nInfos do programa", txtDetalhes);
                     addTexto("\tSetup: " + Tocar.gerenciadorDeSom.setup, txtDetalhes);
                     addTexto("\tConfig. do setup: " + conversao(Tocar.gerenciadorDeSom.config), txtDetalhes);

@@ -1,32 +1,23 @@
 package gui;
 
-import sistema.Configs;
 import com.formdev.flatlaf.FlatDarkLaf;
 import java.awt.Color;
+import java.awt.Font;
+import java.awt.Image;
 import java.awt.MenuItem;
 import java.awt.PopupMenu;
 import java.awt.SystemTray;
 import java.awt.TrayIcon;
 import java.awt.event.ActionEvent;
 import java.awt.image.BufferedImage;
-import java.io.BufferedReader;
 import java.io.File;
-import java.io.FileReader;
 import java.net.URL;
-import java.util.Arrays;
-import java.util.Date;
 import java.util.Random;
-import java.util.concurrent.TimeUnit;
 import javax.imageio.ImageIO;
-import javax.sound.sampled.AudioInputStream;
-import javax.sound.sampled.AudioSystem;
-import javax.sound.sampled.*;
-import javax.sound.sampled.FloatControl;
 import javax.swing.AbstractAction;
 import javax.swing.ActionMap;
 import javax.swing.ImageIcon;
 import javax.swing.InputMap;
-import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.KeyStroke;
 import java.io.InputStream;
@@ -36,7 +27,7 @@ import static sistema.Rpc.presence;
 
 /**
  *
- * @author Thebonn
+ * @author Bonn
  */
 public final class Tocar extends javax.swing.JFrame {
 
@@ -58,9 +49,7 @@ public final class Tocar extends javax.swing.JFrame {
     public static float mudancaVel = 0.002f;
 
     public static byte volumeGlobal = -3;
-    boolean tocandoPlaylist = false;
-    boolean tocouPrimeira = false;
-//    public static int playlistPreDelay = 0;
+
     public static int esperaDelay = 5;
 
     boolean avisoPlaylist = false;
@@ -68,7 +57,7 @@ public final class Tocar extends javax.swing.JFrame {
     boolean play = true;
     public static boolean lojaaberta = false;
 
-    boolean suportaSystemTray = false;
+    public static boolean suportaSystemTray = false;
     TrayIcon trayIcon;
 
     public Thread animThread = new Thread();
@@ -81,21 +70,17 @@ public final class Tocar extends javax.swing.JFrame {
         FlatDarkLaf.install();
         initComponents();
         this.setTitle("Ambientes " + sistema.Info.VERSAO_ATUAL);
-//        Configs configs = new Configs();
+        
         try {
             sistema.Configs.carregar();
         } catch (Exception ex) {
             ex.printStackTrace();
         }
-
-//        Arrays.fill(clipname, "");
         animar();
         adicionarSetups();
         gerenciadorDeSom = new GerenciadorDeSom();
 
-        URL iconURL = getClass().getResource("/imagens/ambientes logo 2.png");
-        ImageIcon icon = new ImageIcon(iconURL);
-        this.setIconImage(icon.getImage());
+        this.setIconImage(new ImageIcon(getClass().getResource("/recursos/imagens/ambientes logo 2.png")).getImage());
 
         contagemInatividade();
         bandeja();
@@ -188,11 +173,7 @@ public final class Tocar extends javax.swing.JFrame {
 
             final PopupMenu popup = new PopupMenu();
 
-            InputStream is = getClass().getResource("/imagens/ambientes logo.png").openStream();
-            ImageIcon icon = new ImageIcon(ImageIO.read(is).getScaledInstance(15, 15, BufferedImage.SCALE_SMOOTH));
-            is.close();
-
-            trayIcon = new TrayIcon(icon.getImage());
+            trayIcon = new TrayIcon(new ImageIcon(getClass().getResource("/recursos/imagens/ambientes logo.png")).getImage().getScaledInstance(15, 15, BufferedImage.SCALE_SMOOTH));
             final SystemTray tray = SystemTray.getSystemTray();
 
             MenuItem abrirItem = new MenuItem("Abrir");
@@ -505,30 +486,7 @@ public final class Tocar extends javax.swing.JFrame {
         }
 
     }
-
-//    public void esperarAcabar(boolean parar) {
-//        new Thread(new Runnable() {
-//            @Override
-//            public void run() {
-//                Thread.currentThread().setPriority(Thread.MIN_PRIORITY);
-//                try {
-//                    btnTocar.setEnabled(false);
-//                    if (parar) {
-//                        while (!lblStatus.getText().equals("Parado...")) {
-//                            Thread.sleep(100);
-//                        }
-//                    } else {
-//                        Thread.sleep(1000);
-//                    }
-//
-//                    btnTocar.setEnabled(true);
-//                    Thread.currentThread().interrupt();
-//                } catch (Exception ex) {
-//                    ex.printStackTrace();
-//                }
-//            }
-//        }, "EsperarAcabar").start();
-//    }
+    
     public void tocarParar() {
         new Thread(new Runnable() {
             @Override
@@ -561,13 +519,6 @@ public final class Tocar extends javax.swing.JFrame {
         }, "tocar parar").start();
     }
 
-//    public void setarVolume(int quantidade) {
-//        try {
-//            gerenciadorDeSom.setarVolune(quantidade);
-//        } catch (Exception ex) {
-//            ex.printStackTrace();
-//        }
-//    }
     void abrirConfigs() {
         if (configs == null || !configs.isVisible()) {
             jButton3.setText("Abrindo...");
@@ -643,6 +594,7 @@ public final class Tocar extends javax.swing.JFrame {
             }
         });
 
+        cbbSetups.setFont(new java.awt.Font("Open Sauce One", 0, 12)); // NOI18N
         cbbSetups.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Modificado", "quando", "executado" }));
         cbbSetups.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseEntered(java.awt.event.MouseEvent evt) {
@@ -655,6 +607,7 @@ public final class Tocar extends javax.swing.JFrame {
             }
         });
 
+        jLabel1.setFont(new java.awt.Font("Open Sauce One", 0, 12)); // NOI18N
         jLabel1.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         jLabel1.setText("Setup:");
 
@@ -668,10 +621,11 @@ public final class Tocar extends javax.swing.JFrame {
             }
         });
 
+        jLabel2.setFont(new java.awt.Font("Open Sauce One", 0, 12)); // NOI18N
         jLabel2.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         jLabel2.setText("Volume");
 
-        btnTocar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagens/playgp.png"))); // NOI18N
+        btnTocar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/recursos/imagens/playgp.png"))); // NOI18N
         btnTocar.setBorderPainted(false);
         btnTocar.setIconTextGap(0);
         btnTocar.setMaximumSize(new java.awt.Dimension(30, 30));
@@ -682,9 +636,11 @@ public final class Tocar extends javax.swing.JFrame {
             }
         });
 
+        lblStatus.setFont(new java.awt.Font("Open Sauce One", 0, 12)); // NOI18N
         lblStatus.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         lblStatus.setText("Parado...");
 
+        jButton3.setFont(new java.awt.Font("Open Sauce One", 0, 12)); // NOI18N
         jButton3.setText("Configurações");
         jButton3.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -692,6 +648,7 @@ public final class Tocar extends javax.swing.JFrame {
             }
         });
 
+        btnOpcoes.setFont(new java.awt.Font("Open Sauce One", 0, 12)); // NOI18N
         btnOpcoes.setText("Opções");
         btnOpcoes.setEnabled(false);
         btnOpcoes.addActionListener(new java.awt.event.ActionListener() {
@@ -700,6 +657,7 @@ public final class Tocar extends javax.swing.JFrame {
             }
         });
 
+        lblVolume.setFont(new java.awt.Font("Open Sauce One", 1, 18)); // NOI18N
         lblVolume.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         lblVolume.setText("90%");
 
@@ -752,13 +710,13 @@ public final class Tocar extends javax.swing.JFrame {
                 .addComponent(sldVolume, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(lblVolume)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 18, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 16, Short.MAX_VALUE)
                 .addComponent(jButton3)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(lblStatus)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 16, Short.MAX_VALUE)
-                .addComponent(btnTocar, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 15, Short.MAX_VALUE)
+                .addComponent(btnTocar, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 16, Short.MAX_VALUE)
                 .addComponent(pgbSumir, javax.swing.GroupLayout.PREFERRED_SIZE, 2, javax.swing.GroupLayout.PREFERRED_SIZE))
         );
 
