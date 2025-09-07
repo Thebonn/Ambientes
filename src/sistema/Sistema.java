@@ -6,17 +6,9 @@ package sistema;
 
 import com.k33ptoo.components.KGradientPanel;
 import java.awt.Color;
-import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.net.URL;
-import java.nio.file.CopyOption;
-import java.nio.file.Files;
-import java.nio.file.Paths;
-import java.nio.file.StandardCopyOption;
 import java.util.Random;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
@@ -127,18 +119,12 @@ public class Sistema {
 
                         Thread.sleep(tempo);
                         ratio += quantidade;
-                        //System.out.println(ratio);
                         if (ratio >= 1) {
                             acabou = true;
                             Thread.currentThread().interrupt();
-                            //    System.out.println("a");
                         }
 
                     }
-
-                    //if (eu == false) {
-//                    acendidos[num - 1]--;
-                    //}
                 } catch (Exception ex) {
                     ex.printStackTrace();
                 }
@@ -182,15 +168,11 @@ public class Sistema {
         Random random = new Random();
         float valor = random.nextInt(100) / 100f;
         
-//        System.out.println(valor);
-        
         Color cor1 = new Color(Color.HSBtoRGB(valor, 0.3f + (random(-10, 10) / 100f), 0.8f + (random(-2, 2) / 100f)));
         
         float hsb[] = Color.RGBtoHSB(cor1.getRed(), cor1.getGreen(), cor1.getBlue(), null);
         
         float deslocamento = random(-4, 4) / 100f;
-        
-//        System.out.println(deslocamento);
         
         Color cor2 = new Color(Color.HSBtoRGB(hsb[0] + deslocamento, hsb[1], hsb[2] + (random(-5, 5) / 100f)));
         Color[] saida = {cor1, cor2};
