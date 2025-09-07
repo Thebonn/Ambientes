@@ -2,5 +2,6 @@ Arquivos/
 dist/
 nbproject/
 nbbuild/
+build/built-jar.properties
 
 *.class
