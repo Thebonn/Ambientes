@@ -51,14 +51,8 @@ public class Conectar {
         }
     }
     
-    public static String pegarSimples(String link) {
-        try {
+    public static String pegarSimples(String link) throws Exception {
             return Jsoup.connect(link).ignoreContentType(true).timeout(9000).execute().body();
-        } catch (Exception ex) {
-            ex.printStackTrace();
-            return null;
-        }
-        
     }
     
     public static InputStream pegarInputStream(String link) {
