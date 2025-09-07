@@ -177,8 +177,6 @@ public class GerenciadorDeSom {
                             if (porcentagemC <= porcentagemA) {
 
                                 if (encontrarSomPeloNome(nome).info != GerenciadorDeSom.TOCANDO && !estaDesativado(nome)) {
-                                    System.out.println("tocou " + nome);
-
                                     Som som = encontrarSomPeloNome(nome);
                                     som.darStart(false);
                                     som.configurarLoops(repetir);

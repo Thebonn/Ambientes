@@ -76,20 +76,6 @@ public class Som {
         }
     }
 
-//    public void parar() {
-//        try {
-//            nome = "";
-//            if (clip != null) {
-//                clip.stop();
-//                clip.flush();
-//                clip.close();
-//            }
-//            clip = null;
-//
-//        } catch (Exception ex) {
-//            ex.printStackTrace();
-//        }
-//    }
     public boolean darStart(boolean finalizarSomAoTerminar) {
         try {
             if (clip == null) {
@@ -110,7 +96,7 @@ public class Som {
                 }
             } while (clip.getMicrosecondPosition() == 0);
 
-            System.out.println(tentativas + ", " + (tentativas * 5) + "ms");
+//            System.out.println(tentativas + ", " + (tentativas * 5) + "ms");
             
              if (iniciou == false) {
                 lili = (e) -> {

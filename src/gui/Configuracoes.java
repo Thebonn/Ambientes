@@ -2,7 +2,7 @@ package gui;
 
 import com.formdev.flatlaf.FlatDarkLaf;
 import sistema.Configs;
-import sistema.Sistema;
+import sistema.Generico;
 import java.awt.Color;
 import java.net.URL;
 import javax.swing.ImageIcon;
@@ -15,7 +15,7 @@ import javax.swing.JColorChooser;
 public class Configuracoes extends javax.swing.JFrame {
 
     Color corExemplo;
-    Sistema sist = new Sistema();
+    Generico sist = new Generico();
 
     public Configuracoes() {
         FlatDarkLaf.install();
@@ -700,9 +700,9 @@ public class Configuracoes extends javax.swing.JFrame {
             "191a61, 010105, 080814, 1f1fb8, 00000a"};
 
         if ((jComboBox3.getSelectedIndex() == jComboBox3.getItemCount() - 1) && (jTextField1.getText() != null || jTextField1.getText().contains(", "))) {
-            saida = Sistema.converterCor(jTextField1.getText());
+            saida = Generico.converterCor(jTextField1.getText());
         } else {
-            saida = Sistema.converterCor(cores[jComboBox3.getSelectedIndex()]);
+            saida = Generico.converterCor(cores[jComboBox3.getSelectedIndex()]);
         }
 
 

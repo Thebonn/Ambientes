@@ -171,7 +171,7 @@ public class BaixarSetup extends javax.swing.JFrame {
                         setTitle("Descompactando...");
                         pgbProgresso.setIndeterminate(true);
 
-                        sistema.Sistema sistema = new sistema.Sistema();
+                        sistema.Generico sistema = new sistema.Generico();
 
                         sistema.descompactar(new File(saidadownload), new File(saidazip));
                         JOptionPane.showConfirmDialog(null, "Setup instalado com sucesso!", "Ambientes", JOptionPane.DEFAULT_OPTION, JOptionPane.INFORMATION_MESSAGE);
