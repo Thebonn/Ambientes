@@ -17,7 +17,7 @@ import java.util.zip.ZipInputStream;
  *
  * @author Thebonn
  */
-public class Sistema {
+public class Generico {
 
     public Thread acenderThread = new Thread();
     public double ratio = 0;

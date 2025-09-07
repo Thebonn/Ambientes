@@ -62,7 +62,7 @@ public final class Tocar extends javax.swing.JFrame {
 
     public Thread animThread = new Thread();
 
-    sistema.Sistema sist;
+    sistema.Generico sist;
     Configuracoes configs;
     public static GerenciadorDeSom gerenciadorDeSom;
 
@@ -84,7 +84,7 @@ public final class Tocar extends javax.swing.JFrame {
 
         contagemInatividade();
         bandeja();
-        sist = new sistema.Sistema();
+        sist = new sistema.Generico();
         cores = sist.converterCor("ABDEE6, CBAACB, FFFFB5, FFCCB6, F3B0C3");
 
         escolherCor();
