@@ -109,7 +109,7 @@ public final class Tocar extends javax.swing.JFrame {
 
     public void subir() {
         setLocation(getLocation().x, getLocation().y + 130);
-        sistema.Componentes.moverJanela(this, this.getLocation().x, this.getLocation().y - 130, 0.04);
+        sistema.Componentes.moverJanela(this, this.getLocation().x, this.getLocation().y - 130, 0.008);
 //        new Thread(new Runnable() {
 //            @Override
 //            public void run() {

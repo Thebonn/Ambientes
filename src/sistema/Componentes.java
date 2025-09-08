@@ -1,7 +1,3 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
 package sistema;
 
 import com.k33ptoo.components.KGradientPanel;
@@ -21,23 +17,21 @@ public class Componentes {
         new Thread(new Runnable() {
             @Override
             public void run() {
-                double animacao = 0;
-                
                 int xoriginal = janela.getLocation().x;
                 int yoriginal = janela.getLocation().y;
-                while (animacao < 1) {
-                    try {
-
-                        int xlocal = (int) ((xoriginal * (Math.abs(Easings.easeOutQuart(animacao) - 1))) - (Easings.easeOutQuart(animacao) * -x));
-                        int ylocal = (int) ((yoriginal * (Math.abs(Easings.easeOutQuart(animacao) - 1))) - (Easings.easeOutQuart(animacao) * -y));
+                try {
+                    for (double animacao = 0; animacao < 1; animacao += acrescimo) {
+                        int xlocal = (int) ((xoriginal * (Math.abs(Easings.easeOutQuart(animacao) - 1))) + (Easings.easeOutQuart(animacao) * x));
+                        int ylocal = (int) ((yoriginal * (Math.abs(Easings.easeOutQuart(animacao) - 1))) + (Easings.easeOutQuart(animacao) * y));
                         janela.setLocation(xlocal, ylocal);
                         animacao += acrescimo;
-                        Thread.sleep(16);
-                    } catch (Exception ex) {
-                        ex.printStackTrace();
-                    }
+                        Thread.sleep(8);
 
+                    }
+                } catch (Exception ex) {
+                    ex.printStackTrace();
                 }
+
             }
         }, "MOVER JANELA").start();
 

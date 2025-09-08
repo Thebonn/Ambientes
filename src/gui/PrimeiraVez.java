@@ -25,31 +25,29 @@ public class PrimeiraVez extends javax.swing.JFrame {
             @Override
             public void run() {
                 try {
-                    Thread.sleep(5000);
-                    Componentes.mudartexto("Parece que essa é a sua primeira vez aqui", lblTexto, lblTexto.getFont());
-                    Thread.sleep(4000);
-                    Componentes.mudartexto("No momento, não há nada de muito especial a ser dito", lblTexto, lblTexto.getFont());
-                    Thread.sleep(4000);
-                    Componentes.mudartexto("Mas é importante você saber...", lblTexto, lblTexto.getFont());
-                    Thread.sleep(3000);
+//                    Thread.sleep(5000);
+//                    Componentes.mudartexto("Parece que essa é a sua primeira vez aqui", lblTexto, lblTexto.getFont());
+//                    Thread.sleep(4000);
+//                    Componentes.mudartexto("No momento, não há nada de muito especial a ser dito", lblTexto, lblTexto.getFont());
+//                    Thread.sleep(4000);
+//                    Componentes.mudartexto("Mas é importante você saber...", lblTexto, lblTexto.getFont());
+//                    Thread.sleep(3000);
 
-
-//                    new gui.Tocar().setVisible(true).subir();
                     Tocar tocar = new Tocar();
                     tocar.setVisible(true);
                     tocar.subir();
-                    Thread.sleep(500);
-                    sistema.Componentes.moverJanela(tocar, tocar.getLocation().x - 200, tocar.getLocation().y, 0.02);
-                    sistema.Componentes.moverJanela(PrimeiraVez.this, getLocation().x + 200, getLocation().y, 0.02);
+                    Thread.sleep(600);
+                    sistema.Componentes.moverJanela(tocar, tocar.getLocation().x - 200, tocar.getLocation().y, 0.005);
+                    sistema.Componentes.moverJanela(PrimeiraVez.this, getLocation().x + 200, getLocation().y, 0.005);
                     Componentes.mudartexto("Essa é a sua janela principal", lblTexto, lblTexto.getFont());
                     Thread.sleep(4000);
-                    Componentes.mudartexto("Caso você escute alguma sobreposição no áudio ou um espaço vazio", lblTexto, lblTexto.getFont());
+                    Componentes.mudartexto("Caso você escute alguma sobreposição no áudio ou um espaço vazio...", lblTexto, lblTexto.getFont());
                     Thread.sleep(4000);
                     Componentes.mudartexto("Mude o predelay nas configurações", lblTexto, lblTexto.getFont());
                     Thread.sleep(3500);
                     Componentes.mudartexto("Divirta-se!", lblTexto, lblTexto.getFont());
                     Thread.sleep(3000);
-                    sistema.Componentes.moverJanela(tocar, tocar.getLocation().x + 200, tocar.getLocation().y, 0.01);
+                    sistema.Componentes.moverJanela(tocar, tocar.getLocation().x + 200, tocar.getLocation().y, 0.004);
                     dispose();
                 } catch (Exception ex) {
                     ex.printStackTrace();
