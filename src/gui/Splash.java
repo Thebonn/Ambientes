@@ -143,8 +143,8 @@ public class Splash extends javax.swing.JFrame {
         if (saida != null && !saida.equals("")) {
             ar = saida.split("\n");
 
-            sistema.Info.versaoReal = Double.parseDouble(ar[0]);
-            if (sistema.Info.versaoReal > sistema.Info.VERSAO_ATUAL) {
+            sistema.Info._versaoReal = Double.parseDouble(ar[0]);
+            if (sistema.Info._versaoReal > sistema.Info.VERSAO_ATUAL) {
                 int opc = JOptionPane.showConfirmDialog(null, "Atenção! Há uma nova versão do Ambientes disponível para download. Você deseja abrir a página do Github e instalar a versão nova?", "Ambientes", JOptionPane.YES_NO_OPTION, JOptionPane.WARNING_MESSAGE);
                 if (opc == 0) {
                     try {

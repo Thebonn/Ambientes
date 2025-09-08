@@ -1,6 +1,5 @@
 package sistema;
 
-import gui.Tocar;
 import static gui.Tocar.desativados;
 import java.io.File;
 import java.nio.file.Files;
@@ -19,7 +18,8 @@ public class GerenciadorDeSom {
     public String setup = "Nenhum";
     public String config[] = new String[200];
 
-    public static boolean tocando = false;
+    public boolean tocando = false;
+    public long playlistPredelay = -1;
 
     public static final byte CARREGADO = -1;
     public static final byte LIVRE = 0;
@@ -30,6 +30,9 @@ public class GerenciadorDeSom {
     //lembrar de adicionar o ngc de rodar I:
     private void tocarPlaylist(final File[] arquivos, final String tipo, long preDelay, final boolean temPrimeira) {
         try {
+            
+            playlistPredelay = preDelay;
+            
             pl = new Som[arquivos.length];
             for (int i = 0; i < pl.length; i++) {
                 pl[i] = new Som();
@@ -139,7 +142,7 @@ public class GerenciadorDeSom {
 
             File arquivo = new File("Arquivos/setups/" + setup + "/" + nome + ".wav");
             sons[i] = new Som();
-            sons[i].carregarSom(arquivo, nome, Tocar.volumeGlobal);
+            sons[i].carregarSom(arquivo, nome, Info.volumeGlobal);
         }
         this.setup = setup;
         rodar();
@@ -228,12 +231,10 @@ public class GerenciadorDeSom {
     }
 
     public void pararTudo() {
-        System.out.println("tudo parado");
         tocando = false;
         try {
             for (int i = 0; i < sons.length; i++) {
                 if (sons[i] != null) {
-//                    parar(i);
                     sons[i].finalizar();
                 }
             }
@@ -250,6 +251,8 @@ public class GerenciadorDeSom {
     }
 
     public void setarVolune(float volume) {
+        volume = (float) ((volume * 86 / 100) - 80);
+        
         try {
             for (int i = 0; i < sons.length; i++) {
                 if (sons[i] != null) {

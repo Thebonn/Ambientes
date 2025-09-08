@@ -2,8 +2,6 @@ package gui;
 
 import com.formdev.flatlaf.FlatDarkLaf;
 import java.awt.Color;
-import java.awt.Font;
-import java.awt.Image;
 import java.awt.MenuItem;
 import java.awt.PopupMenu;
 import java.awt.SystemTray;
@@ -47,8 +45,6 @@ public final class Tocar extends javax.swing.JFrame {
     public static String coresLegiveis = "";
     public static byte coresEspSel = 0;
     public static float mudancaVel = 0.002f;
-
-    public static byte volumeGlobal = -3;
 
     public static int esperaDelay = 5;
 
@@ -752,10 +748,10 @@ public final class Tocar extends javax.swing.JFrame {
             contagem = 2;
         }
 
-        volumeGlobal = (byte) ((sldVolume.getValue() * 86 / 100) - 80);
+        Info.volumeGlobal = sldVolume.getValue();
         lblVolume.setText(sldVolume.getValue() + "%");
 //        setarVolume(volumeGlobal);
-        gerenciadorDeSom.setarVolune(volumeGlobal);
+        gerenciadorDeSom.setarVolune(Info.volumeGlobal);
     }//GEN-LAST:event_sldVolumeStateChanged
 
     private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed

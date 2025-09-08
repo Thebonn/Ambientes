@@ -73,11 +73,11 @@ public class Infos extends javax.swing.JFrame {
                     addTexto("\nInfos do programa", txtDetalhes);
                     addTexto("\tSetup: " + Tocar.gerenciadorDeSom.setup, txtDetalhes);
                     addTexto("\tConfig. do setup: " + conversao(Tocar.gerenciadorDeSom.config), txtDetalhes);
-                    addTexto("\tVolume global: " + Tocar.volumeGlobal, txtDetalhes);
+                    addTexto("\tVolume global: " + Info.volumeGlobal, txtDetalhes);
                     addTexto("\tDesativados: " + conversao(Tocar.desativados), txtDetalhes);
                     addTexto("\tPode abrir aba de opções: " + Tocar.podeAbrir, txtDetalhes);
                     addTexto("\tCores legíveis: " + Tocar.coresLegiveis, txtDetalhes);
-//                    addTexto("  Playlist predelay: " + Tocar.gerenciadorDeSom.pre, txtDetalhes);
+                    addTexto("  Playlist predelay: " + Tocar.gerenciadorDeSom.playlistPredelay, txtDetalhes);
                     addTexto("\tEspera delay: " + Tocar.esperaDelay, txtDetalhes);
                     addTexto("\tLoja aberta: " + Tocar.lojaaberta, txtDetalhes);
                     addTexto("\nConfigurações", txtDetalhes);

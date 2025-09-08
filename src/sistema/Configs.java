@@ -4,14 +4,14 @@
  */
 package sistema;
 
-import gui.Tocar;
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.File;
-import java.io.FileReader;
-import java.io.FileWriter;
+import java.lang.reflect.Field;
+import java.lang.reflect.Modifier;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.util.Properties;
-import javax.swing.JOptionPane;
 
 /**
  *
@@ -19,55 +19,51 @@ import javax.swing.JOptionPane;
  */
 public class Configs {
 
-    public static File file = new File("Arquivos/configs.txt");
+//    public static File file = new File("Arquivos/configs.txt");
+    public static Path path = Path.of("Arquivos/configs.txt");
+    private static final Field FIELDS[] = sistema.Info.class.getDeclaredFields();
 
     public static void carregar() throws Exception {
-//        try {
-        FileReader fr = new FileReader(file);
-        BufferedReader ler = new BufferedReader(fr);
-
+        BufferedReader ler = Files.newBufferedReader(path);
         Properties prop = new Properties();
         prop.load(ler);
+        for (int i = 0; i < FIELDS.length; i++) {
+            if (!Modifier.isFinal(FIELDS[i].getModifiers()) && !FIELDS[i].getName().startsWith("_")) {
+                FIELDS[i].setAccessible(true);
 
-        sistema.Info.animTipo = Byte.parseByte(prop.getProperty("animTipo"));
-        sistema.Info.velocidade = Float.parseFloat(prop.getProperty("velocidade"));
-        sistema.Info.preDelay = Short.parseShort(prop.getProperty("preDelay"));
-        sistema.Info.podeColorir = prop.getProperty("podeColorir").equalsIgnoreCase("true");
-        sistema.Info.maximo = Byte.parseByte(prop.getProperty("maximo"));
-        sistema.Info.tipo = Byte.parseByte(prop.getProperty("tipo"));
-        sistema.Info.atualizacao = Short.parseShort(prop.getProperty("atualizacao"));
-        sistema.Info.intensidade = Float.parseFloat(prop.getProperty("intensidade"));
-        sistema.Info.escurecerFundo = Byte.parseByte(prop.getProperty("escurecerFundo"));
-        sistema.Info.rpcTipo = Byte.parseByte(prop.getProperty("rpcTipo"));
-        sistema.Info.mostrarSetups = prop.getProperty("mostrarSetups").equalsIgnoreCase("true");
-        sistema.Info.animacaoIntroducao = prop.getProperty("animacaoIntroducao").equalsIgnoreCase("true");
-        sistema.Info.iconeInterativo = prop.getProperty("iconeInterativo").equalsIgnoreCase("true");
+                Class c = FIELDS[i].getType();
+                if (c == int.class) {
+                    FIELDS[i].set(sistema.Info.class, Integer.valueOf(prop.getProperty(FIELDS[i].getName())));
+                } else if (c == byte.class) {
+                    FIELDS[i].set(sistema.Info.class, Byte.valueOf(prop.getProperty(FIELDS[i].getName())));
+                } else if (c == float.class) {
+                    FIELDS[i].set(sistema.Info.class, Float.valueOf(prop.getProperty(FIELDS[i].getName())));
+                } else if (c == boolean.class) {
+                    FIELDS[i].set(sistema.Info.class, Boolean.valueOf(prop.getProperty(FIELDS[i].getName())));
+                } else if (c == short.class) {
+                    FIELDS[i].set(sistema.Info.class, Short.valueOf(prop.getProperty(FIELDS[i].getName())));
+                }
 
+            }
+        }
         ler.close();
-        fr.close();
         salvar();
     }
 
     public static void salvar() {
         try {
-            FileWriter fw = new FileWriter(file);
-            BufferedWriter esc = new BufferedWriter(fw);
+            BufferedWriter esc = Files.newBufferedWriter(path);
+            Properties prop = new Properties();
 
-            esc.write("animTipo: " + sistema.Info.animTipo + "\n");
-            esc.write("velocidade: " + sistema.Info.velocidade + "\n");
-            esc.write("preDelay: " + sistema.Info.preDelay + "\n");
-            esc.write("podeColorir: " + Boolean.toString(sistema.Info.podeColorir) + "\n");
-            esc.write("maximo: " + (int) (sistema.Info.maximo - 1) + "\n");
-            esc.write("tipo: " + sistema.Info.tipo + "\n");
-            esc.write("atualizacao: " + sistema.Info.atualizacao + "\n");
-            esc.write("intensidade: " + sistema.Info.intensidade + "\n");
-            esc.write("escurecerFundo: " + sistema.Info.escurecerFundo + "\n");
-            esc.write("rpcTipo: " + sistema.Info.rpcTipo + "\n");
-            esc.write("mostrarSetups: " + Boolean.toString(sistema.Info.mostrarSetups) + "\n");
-            esc.write("animacaoIntroducao: " + Boolean.toString(sistema.Info.animacaoIntroducao) + "\n");
-            esc.write("iconeInterativo: " + Boolean.toString(sistema.Info.iconeInterativo) + "\n");
+            for (int i = 0; i < FIELDS.length; i++) {
+                Object obj = FIELDS[i].get(sistema.Info.class);
+                if (!Modifier.isFinal(FIELDS[i].getModifiers()) && !FIELDS[i].getName().startsWith("_")) {
+                    prop.setProperty(FIELDS[i].getName(), String.valueOf(obj));
+                }
+
+            }
+            prop.store(esc, null);
             esc.close();
-            fw.close();
         } catch (Exception ex) {
             ex.printStackTrace();
         }
