@@ -25,8 +25,6 @@ public class GerenciadorDeSom {
     public static final byte LIVRE = 0;
     public static final byte TOCANDO = 1;
 
-    Random random = new Random();
-
     //lembrar de adicionar o ngc de rodar I:
     private void tocarPlaylist(final File[] arquivos, final String tipo, long preDelay, final boolean temPrimeira) {
         try {
@@ -49,7 +47,7 @@ public class GerenciadorDeSom {
 
                         while (tocando) {
                             if (tipo.equals("a")) {
-                                int aleatorio = random.nextInt(arquivos.length);
+                                int aleatorio = Generico.random(0, arquivos.length);
                                 //parece horrivel e é mesmo. isso tudo para evitar selecionar o mesmo som quando for um aleatorio
                                 sel = aleatorio == sel ? (aleatorio + 1 > arquivos.length - 1 ? (aleatorio - 1 < 0 ? aleatorio : aleatorio - 1) : aleatorio + 1) : aleatorio;
                             } else {
@@ -175,7 +173,7 @@ public class GerenciadorDeSom {
                             int repetir = Integer.parseInt(config[i].split(", ")[2]);
                             float porcentagemA = Float.parseFloat(config[i].split(", ")[1]);
 
-                            float porcentagemC = random.nextInt(1000000) / 10000f; //gerando um int mt grande para dividir por um numero grande e formar um float
+                            float porcentagemC = Generico.random(0, 1000000) / 10000f; //gerando um int mt grande para dividir por um numero grande e formar um float
 
                             if (porcentagemC <= porcentagemA) {
 

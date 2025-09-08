@@ -153,12 +153,11 @@ public class Generico {
     }
     
     public static int random(int min, int max) {
-        return new java.util.Random().nextInt(max + 1 - min) + max;
+        return new java.util.Random().nextInt(max - min) + min;
     }
     
     public Color[] escolherCor() {
-        Random random = new Random();
-        float valor = random.nextInt(100) / 100f;
+        float valor = random(0, 100) / 100f;
         
         Color cor1 = new Color(Color.HSBtoRGB(valor, 0.3f + (random(-10, 10) / 100f), 0.8f + (random(-2, 2) / 100f)));
         
