@@ -12,16 +12,16 @@ import javax.sound.sampled.LineListener;
  * @author Bonn
  */
 public class Som {
-
+    
     public String nome = "";
     public byte info = GerenciadorDeSom.LIVRE;
     public Clip clip = null;
     public boolean iniciou = false;
-
+    
     public boolean finalizarSomAoTerminar = false;
-
+    
     public long tamDoSomMS = 0;
-
+    
     LineListener lili;
 
     //talvez seja melhor mover a criacao do clip para o metodo carregarSom
@@ -32,11 +32,11 @@ public class Som {
             ex.printStackTrace();
         }
     }
-
+    
     public void carregarSom(File arquivo, String nome) throws Exception {
-        carregarSom(arquivo, nome, -3);
+        carregarSom(arquivo, nome, 70);
     }
-
+    
     public long posDoSomMS() {
         if (clip != null) {
             return clip.getMicrosecondPosition() / 1000;
@@ -47,27 +47,26 @@ public class Som {
             } else {
                 return 0;
             }
-
+            
         }
     }
-
+    
     public boolean carregarSom(File arquivo, String nome, float volume) throws Exception {
         try {
-
+            
             if (clip == null) {
                 clip = AudioSystem.getClip();
             } else if (clip.isOpen()) {
                 return false;
             }
-
+            
             AudioInputStream audioStream = AudioSystem.getAudioInputStream(arquivo);
             clip.open(audioStream);
             audioStream.close();
-
+            
             this.nome = nome;
             info = GerenciadorDeSom.CARREGADO;
-            FloatControl vol = (FloatControl) clip.getControl(FloatControl.Type.MASTER_GAIN);
-            vol.setValue(volume);
+            setarVolume(volume);
             tamDoSomMS = clip.getMicrosecondLength() / 1000;
             return true;
         } catch (Exception ex) {
@@ -75,13 +74,13 @@ public class Som {
             return false;
         }
     }
-
+    
     public boolean darStart(boolean finalizarSomAoTerminar) {
         try {
             if (clip == null) {
                 return false;
             }
-
+            
             clip.setMicrosecondPosition(0);
 
             //em raras ocasioes [quando o audio acaba e ja é tocado de novo no mesmo instante], mesmo dando .start,
@@ -97,8 +96,7 @@ public class Som {
             } while (clip.getMicrosecondPosition() == 0);
 
 //            System.out.println(tentativas + ", " + (tentativas * 5) + "ms");
-            
-             if (iniciou == false) {
+            if (iniciou == false) {
                 lili = (e) -> {
                     if (clip.getMicrosecondPosition() >= clip.getMicrosecondLength()) {
                         info = GerenciadorDeSom.LIVRE;
@@ -110,26 +108,25 @@ public class Som {
                         
                     }
                 };
-
+                
                 clip.addLineListener(lili);
             }
             
             iniciou = true;
-
+            
             info = GerenciadorDeSom.TOCANDO;
-
-           
+            
             return true;
         } catch (Exception ex) {
             return false;
         }
-
+        
     }
-
+    
     public void finalizar() {
-
+        
         nome = "";
-
+        
         if (clip != null) {
             clip.stop();
             if (lili != null) {
@@ -140,9 +137,9 @@ public class Som {
             clip.close();
         }
         clip = null;
-
+        
     }
-
+    
     public void configurarLoops(int repetir) {
         if (repetir == -1) {
             clip.loop(Clip.LOOP_CONTINUOUSLY);
@@ -150,9 +147,9 @@ public class Som {
             clip.loop(repetir);
         }
     }
-
+    
     public void setarVolume(float volume) {
-        
+        volume = (volume * 86 / 100) - 80;
         if (clip == null) {
             return;
         }
@@ -160,5 +157,6 @@ public class Som {
         FloatControl vol = (FloatControl) clip.getControl(FloatControl.Type.MASTER_GAIN);
         vol.setValue(volume);
     }
-
+    
+    
 }

@@ -26,11 +26,11 @@ public class GerenciadorDeSom {
     public static final byte TOCANDO = 1;
 
     //lembrar de adicionar o ngc de rodar I:
-    private void tocarPlaylist(final File[] arquivos, final String tipo, long preDelay, final boolean temPrimeira) {
+    private void tocarPlaylist(final File[] arquivos, final String tipo, long preDelay, int primeira) {
         try {
-            
+
             playlistPredelay = preDelay;
-            
+
             pl = new Som[arquivos.length];
             for (int i = 0; i < pl.length; i++) {
                 pl[i] = new Som();
@@ -44,7 +44,7 @@ public class GerenciadorDeSom {
                     try {
 
                         int sel = -1;
-
+                        boolean tocouPrimeira = false;
                         while (tocando) {
                             if (tipo.equals("a")) {
                                 int aleatorio = Generico.random(0, arquivos.length);
@@ -53,6 +53,12 @@ public class GerenciadorDeSom {
                             } else {
                                 sel += sel + 1 >= arquivos.length ? -arquivos.length + 1 : 1;
                             }
+                            
+                            if (tocouPrimeira == false && primeira != -1) {
+                                tocouPrimeira = true;
+                                sel = primeira;
+                            }
+                            
                             pl[sel].darStart(false);
 
                             //normalmente esse sleep fica no final da thread, mas colocar ele no inicio ou no final
@@ -86,7 +92,7 @@ public class GerenciadorDeSom {
     }
 
     public boolean carregarERodarSetup(String setup) throws Exception {
-        
+
         File lugar = new File("Arquivos/setups/" + setup + "/mestre.txt");
 
         String linha = Files.readString(lugar.toPath()).replaceAll(sistema.Info.FILTRO, "");
@@ -105,18 +111,19 @@ public class GerenciadorDeSom {
                 long playlistPreDelay = Integer.parseInt(l[3]);
 
                 //pesquisa para saber se a playlist tem um som que tocará primeiro
-                boolean temPrimeira = false;
+                int primeira = -1;
+
                 for (int j = 0; j < sons.length; j++) {
 
                     if (j == 0 && sons[j].startsWith("i: ")) {
-                        temPrimeira = true;
+                        primeira = j;
                         sons[j] = sons[j].substring(3); //se tiver, tirar o "i: " do nome
                     }
 
                     sons[j] = "Arquivos/setups/" + setup + "/" + sons[j] + ".wav";
                     coisos[j] = new File(sons[j]);
                 }
-                tocarPlaylist(coisos, l[2], playlistPreDelay, temPrimeira);
+                tocarPlaylist(coisos, l[2], playlistPreDelay, primeira);
                 break;
             }
         }
@@ -249,8 +256,6 @@ public class GerenciadorDeSom {
     }
 
     public void setarVolune(float volume) {
-        volume = (float) ((volume * 86 / 100) - 80);
-        
         try {
             for (int i = 0; i < sons.length; i++) {
                 if (sons[i] != null) {
