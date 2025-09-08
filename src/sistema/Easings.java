@@ -11,25 +11,25 @@ package sistema;
  */
 public class Easings {
 
-    public double easeOutQuart(double x) {
+    public static double easeOutQuart(double x) {
         return 1 - Math.pow(1 - x, 4);
     }
 
-    public double easeInQuart(double x) {
+    public static double easeInQuart(double x) {
         return x * x * x * x;
     }
 
-    public double easeOutCirc(double x) {
+    public static double easeOutCirc(double x) {
         return Math.sqrt(1 - Math.pow(x - 1, 2));
     }
 
-    public double easeInOutCirc(double x) {
+    public static double easeInOutCirc(double x) {
         return x < 0.5
                 ? (1 - Math.sqrt(1 - Math.pow(2 * x, 2))) / 2
                 : (Math.sqrt(1 - Math.pow(-2 * x + 2, 2)) + 1) / 2;
     }
 
-    public double easeInOutExpo(double x) {
+    public static double easeInOutExpo(double x) {
         if (x == 0) {
             return 0;
         }

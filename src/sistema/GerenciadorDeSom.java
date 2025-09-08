@@ -48,10 +48,8 @@ public class GerenciadorDeSom {
                         boolean cortouPrimeira = false;
                         while (tocando) {
                             
-                            System.out.println(Arrays.toString(pl));
-                            
                             if (tipo.equals("a")) {
-                                int aleatorio = Generico.random(0, arquivos.length);
+                                int aleatorio = Generico.random(0, pl.length);
                                 //parece horrivel e é mesmo. isso tudo para evitar selecionar o mesmo som quando for um aleatorio
                                 sel = aleatorio == sel ? (aleatorio + 1 > pl.length - 1 ? (aleatorio - 1 < 0 ? aleatorio : aleatorio - 1) : aleatorio + 1) : aleatorio;
                             } else {
@@ -102,7 +100,7 @@ public class GerenciadorDeSom {
 
     public boolean carregarERodarSetup(String setup) throws Exception {
 
-        File lugar = new File("Arquivos/setups/" + setup + "/mestre.txt");
+        File lugar = new File(sistema.Info.localSetups + File.separator + setup + "/mestre.txt");
 
         String linha = Files.readString(lugar.toPath()).replaceAll(sistema.Info.FILTRO, "");
         config = linha.replace("\r", "").split("\n"); //tirar aquele caractere do mal
@@ -129,7 +127,7 @@ public class GerenciadorDeSom {
                         sons[j] = sons[j].substring(3); //se tiver, tirar o "i: " do nome
                     }
 
-                    sons[j] = "Arquivos/setups/" + setup + "/" + sons[j] + ".wav";
+                    sons[j] = sistema.Info.localSetups + File.separator + setup + "/" + sons[j] + ".wav";
                     coisos[j] = new File(sons[j]);
                 }
                 tocarPlaylist(coisos, l[2], playlistPreDelay, temPrimeira);
@@ -153,7 +151,7 @@ public class GerenciadorDeSom {
 
             String nome = l[0];
 
-            File arquivo = new File("Arquivos/setups/" + setup + "/" + nome + ".wav");
+            File arquivo = new File(sistema.Info.localSetups + File.separator + setup + "/" + nome + ".wav");
             sons[i] = new Som();
             sons[i].carregarSom(arquivo, nome, Info.volumeGlobal);
         }
@@ -257,7 +255,6 @@ public class GerenciadorDeSom {
                     pl[i].finalizar();
                 }
             }
-//            setarIcones(false);
         } catch (Exception ex) {
             ex.printStackTrace();
         }

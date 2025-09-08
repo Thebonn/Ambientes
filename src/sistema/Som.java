@@ -4,6 +4,7 @@ import java.io.File;
 import javax.sound.sampled.AudioInputStream;
 import javax.sound.sampled.AudioSystem;
 import javax.sound.sampled.Clip;
+import javax.sound.sampled.DataLine;
 import javax.sound.sampled.FloatControl;
 import javax.sound.sampled.LineListener;
 
@@ -12,31 +13,22 @@ import javax.sound.sampled.LineListener;
  * @author Bonn
  */
 public class Som {
-    
+
     public String nome = "";
     public byte info = GerenciadorDeSom.LIVRE;
     public Clip clip = null;
     public boolean iniciou = false;
-    
+
     public boolean finalizarSomAoTerminar = false;
-    
+
     public long tamDoSomMS = 0;
-    
+
     LineListener lili;
 
-    //talvez seja melhor mover a criacao do clip para o metodo carregarSom
-    public Som() {
-        try {
-            clip = AudioSystem.getClip();
-        } catch (Exception ex) {
-            ex.printStackTrace();
-        }
-    }
-    
     public void carregarSom(File arquivo, String nome) throws Exception {
         carregarSom(arquivo, nome, 70);
     }
-    
+
     public long posDoSomMS() {
         if (clip != null) {
             return clip.getMicrosecondPosition() / 1000;
@@ -47,23 +39,26 @@ public class Som {
             } else {
                 return 0;
             }
-            
+
         }
     }
-    
+
     public boolean carregarSom(File arquivo, String nome, float volume) throws Exception {
         try {
-            
-            if (clip == null) {
-                clip = AudioSystem.getClip();
-            } else if (clip.isOpen()) {
+
+            if (clip != null && clip.isOpen()) {
                 return false;
             }
             
+            clip = AudioSystem.getClip();
             AudioInputStream audioStream = AudioSystem.getAudioInputStream(arquivo);
             clip.open(audioStream);
             audioStream.close();
-            
+//            DataLine.Info i = new DataLine.Info(Clip.class, audioStream.getFormat());
+//            clip = (Clip) AudioSystem.getLine(i);
+//            clip.open(audioStream);
+
+//            audioStream.close();
             this.nome = nome;
             info = GerenciadorDeSom.CARREGADO;
             setarVolume(volume);
@@ -74,13 +69,13 @@ public class Som {
             return false;
         }
     }
-    
+
     public boolean darStart(boolean finalizarSomAoTerminar) {
         try {
             if (clip == null) {
                 return false;
             }
-            
+
             clip.setMicrosecondPosition(0);
 
             //em raras ocasioes [quando o audio acaba e ja é tocado de novo no mesmo instante], mesmo dando .start,
@@ -105,41 +100,39 @@ public class Som {
                         } else {
                             clip.setMicrosecondPosition(0);
                         }
-                        
+
                     }
                 };
-                
+
                 clip.addLineListener(lili);
             }
-            
+
             iniciou = true;
-            
+
             info = GerenciadorDeSom.TOCANDO;
-            
+
             return true;
         } catch (Exception ex) {
             return false;
         }
-        
+
     }
-    
+
     public void finalizar() {
-        
+
         nome = "";
-        
+
         if (clip != null) {
             clip.stop();
             if (lili != null) {
                 clip.removeLineListener(lili);
             }
-            clip.flush();
-            clip.drain();
             clip.close();
         }
         clip = null;
-        
+
     }
-    
+
     public void configurarLoops(int repetir) {
         if (repetir == -1) {
             clip.loop(Clip.LOOP_CONTINUOUSLY);
@@ -147,16 +140,15 @@ public class Som {
             clip.loop(repetir);
         }
     }
-    
+
     public void setarVolume(float volume) {
         volume = (volume * 86 / 100) - 80;
         if (clip == null) {
             return;
         }
-        
+
         FloatControl vol = (FloatControl) clip.getControl(FloatControl.Type.MASTER_GAIN);
         vol.setValue(volume);
     }
-    
-    
+
 }

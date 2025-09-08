@@ -48,7 +48,7 @@ public class SemGui {
         System.out.println(divisor + "\nDigite --help ou --ajuda para ajuda");
 
         GerenciadorDeSom gerenciador = new GerenciadorDeSom();
-        
+
         while (true) {
 
             Scanner scanner = new Scanner(System.in);
@@ -131,7 +131,7 @@ public class SemGui {
                         if (div.length == 2) {
                             try {
                                 Info.volumeGlobal = Float.parseFloat(div[1]);
-                                
+
                                 if (Info.volumeGlobal > 100) {
                                     System.out.println("Volume excedido, arredondando para 100...");
                                     Info.volumeGlobal = 100f;
@@ -139,7 +139,7 @@ public class SemGui {
                                     System.out.println("Volume não pode ser menor que 0, arredondando para 0...");
                                     Info.volumeGlobal = 0f;
                                 }
-                                
+
                                 gerenciador.setarVolune(Info.volumeGlobal);
                                 System.out.println("Volume alterado para " + Info.volumeGlobal);
                             } catch (Exception ex) {
@@ -153,7 +153,31 @@ public class SemGui {
                         for (int i = 0; i < gerenciador.config.length; i++) {
                             System.out.println(gerenciador.config[i]);
                         }
-                        
+
+                        break;
+
+                    case "ml":
+
+                        new Thread(new Runnable() {
+                            @Override
+                            public void run() {
+                                System.out.println("Estresse de memory leak iniciado...");
+                                while (true) {
+                                    try {
+                                        System.out.println("Carregado");
+                                        gerenciador.carregarERodarSetup("ps2");
+                                        Thread.sleep(5000);
+                                        System.out.println("Parado");
+                                        gerenciador.pararTudo();
+                                        Thread.sleep(5000);
+                                    } catch (Exception ex) {
+                                        ex.printStackTrace();
+                                    }
+
+                                }
+                            }
+                        }, "Thread").start();
+
                         break;
                     default:
                         System.out.println("-" + div[0] + " não é um comando reconhecido.");

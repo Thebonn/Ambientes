@@ -4,6 +4,8 @@
  */
 package gui;
 
+import sistema.Componentes;
+
 /**
  *
  * @author Bonn
@@ -15,6 +17,45 @@ public class PrimeiraVez extends javax.swing.JFrame {
      */
     public PrimeiraVez() {
         initComponents();
+        funcionar();
+    }
+
+    public void funcionar() {
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    Thread.sleep(5000);
+                    Componentes.mudartexto("Parece que essa é a sua primeira vez aqui", lblTexto, lblTexto.getFont());
+                    Thread.sleep(4000);
+                    Componentes.mudartexto("No momento, não há nada de muito especial a ser dito", lblTexto, lblTexto.getFont());
+                    Thread.sleep(4000);
+                    Componentes.mudartexto("Mas é importante você saber...", lblTexto, lblTexto.getFont());
+                    Thread.sleep(3000);
+
+
+//                    new gui.Tocar().setVisible(true).subir();
+                    Tocar tocar = new Tocar();
+                    tocar.setVisible(true);
+                    tocar.subir();
+                    Thread.sleep(500);
+                    sistema.Componentes.moverJanela(tocar, tocar.getLocation().x - 200, tocar.getLocation().y, 0.02);
+                    sistema.Componentes.moverJanela(PrimeiraVez.this, getLocation().x + 200, getLocation().y, 0.02);
+                    Componentes.mudartexto("Essa é a sua janela principal", lblTexto, lblTexto.getFont());
+                    Thread.sleep(4000);
+                    Componentes.mudartexto("Caso você escute alguma sobreposição no áudio ou um espaço vazio", lblTexto, lblTexto.getFont());
+                    Thread.sleep(4000);
+                    Componentes.mudartexto("Mude o predelay nas configurações", lblTexto, lblTexto.getFont());
+                    Thread.sleep(3500);
+                    Componentes.mudartexto("Divirta-se!", lblTexto, lblTexto.getFont());
+                    Thread.sleep(3000);
+                    sistema.Componentes.moverJanela(tocar, tocar.getLocation().x + 200, tocar.getLocation().y, 0.01);
+                    dispose();
+                } catch (Exception ex) {
+                    ex.printStackTrace();
+                }
+            }
+        }, "Thread").start();
     }
 
     /**
@@ -26,20 +67,46 @@ public class PrimeiraVez extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
+        jPanel1 = new javax.swing.JPanel();
+        lblTexto = new javax.swing.JLabel();
+
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setUndecorated(true);
+
+        lblTexto.setFont(new java.awt.Font("Open Sauce Sans Black", 1, 70)); // NOI18N
+        lblTexto.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        lblTexto.setText("Olá!");
+
+        javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
+        jPanel1.setLayout(jPanel1Layout);
+        jPanel1Layout.setHorizontalGroup(
+            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(lblTexto, javax.swing.GroupLayout.DEFAULT_SIZE, 462, Short.MAX_VALUE)
+                .addContainerGap())
+        );
+        jPanel1Layout.setVerticalGroup(
+            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel1Layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(lblTexto, javax.swing.GroupLayout.DEFAULT_SIZE, 311, Short.MAX_VALUE)
+                .addContainerGap())
+        );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 400, Short.MAX_VALUE)
+            .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 300, Short.MAX_VALUE)
+            .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
 
         pack();
+        setLocationRelativeTo(null);
     }// </editor-fold>//GEN-END:initComponents
 
     /**
@@ -78,5 +145,7 @@ public class PrimeiraVez extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JPanel jPanel1;
+    private javax.swing.JLabel lblTexto;
     // End of variables declaration//GEN-END:variables
 }

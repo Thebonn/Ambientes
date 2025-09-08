@@ -2,12 +2,14 @@ package sistema;
 
 import com.k33ptoo.components.KGradientPanel;
 import java.awt.Color;
+import java.awt.Font;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.util.Random;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
+import javax.swing.JLabel;
 
 /**
  *
@@ -15,8 +17,8 @@ import java.util.zip.ZipInputStream;
  */
 public class Generico {
 
-    public Thread acenderThread = new Thread();
-    public double ratio = 0;
+    
+    
 
     public static Color[] converterCor(String cores) {
         Color saida[] = new Color[20];
@@ -35,18 +37,6 @@ public class Generico {
         return saida;
     }
 
-    public void escurecerFundo(KGradientPanel painel) {
-        Color cor1escurecido = painel.getkStartColor();
-        Color cor2escurecido = painel.getkEndColor();
-
-        for (int i = 0; i < sistema.Info.escurecerFundo / 9; i++) {
-            cor1escurecido = cor1escurecido.darker();
-            cor2escurecido = cor2escurecido.darker();
-        }
-
-        painel.setkStartColor(cor1escurecido);
-        painel.setkEndColor(cor2escurecido);
-    }
 
     public void descompactar(File arquivo, File diretorio) {
         try {
@@ -84,53 +74,42 @@ public class Generico {
         }
 
     }
+    
+    public static int calcularTamanho(int tamDefault, String texto) {
+        String div[] = texto.split("");
+        String minus = "abcdefghijklmnopqrstuvwxyzáéíóúäëïöüàèìòùâêîôûãõ";
+        String maius = minus.toUpperCase();
+        String outro = "! .,;?\"@#$%&*_+-=/><'1234567890ýçÇÝ[](){}äëïöü|;";
 
-    public void acender(Color corInicial, Color corFinal, KGradientPanel painel, float quantidade, int tempo) {
-        acenderThread = new Thread(new Runnable() {
-            @Override
-            public void run() {
-                Color inicio = corInicial;
-                Color fim = corFinal;
+        float resultado = 0f;
 
-                painel.setkStartColor(inicio);
-                painel.setkEndColor(processarCor(inicio, sistema.Info.intensidade));
-
-                try {
-                    boolean acabou = false;
-                    ratio = 0;
-                    while (acabou == false) {
-
-                        int red = (int) Math.abs((ratio * inicio.getRed()) + ((1 - ratio) * fim.getRed()));
-                        int green = (int) Math.abs((ratio * inicio.getGreen()) + ((1 - ratio) * fim.getGreen()));
-                        int blue = (int) Math.abs((ratio * inicio.getBlue()) + ((1 - ratio) * fim.getBlue()));
-
-                        Color ultimo = new Color(red, green, blue);
-
-                        painel.setkStartColor(ultimo);
-                        painel.setkEndColor(processarCor(ultimo, sistema.Info.intensidade));
-
-                        escurecerFundo(painel);
-
-                        painel.updateUI();
-
-                        Thread.sleep(tempo);
-                        ratio += quantidade;
-                        if (ratio >= 1) {
-                            acabou = true;
-                            Thread.currentThread().interrupt();
-                        }
-
-                    }
-                } catch (Exception ex) {
-                    ex.printStackTrace();
+        for (int i = 0; i < div.length; i++) {
+            for (int j = 0; j < minus.length(); j++) {
+                if (div[i].contains(minus.split("")[j])) {
+                    resultado += 0.9f;
+                } else if (div[i].contains(maius.split("")[j])) {
+                    resultado += 1f;
+                } else if (div[i].contains(outro.split("")[j])) {
+                    resultado += 0.6f;
                 }
-                Thread.currentThread().interrupt();
             }
-        }, "TAD");
-        acenderThread.start();
-    }
 
-    public Color processarCor(Color corOriginal, float intensidade) {
+        }
+
+//        float divisao = new Float(div.length) / resultado;
+        int saida = (int) (tamDefault * 10 / resultado);
+
+        if (saida < 10) {
+            saida = 10;
+        } else if (saida > 100) {
+            saida = 100;
+        }
+        return saida;
+    }
+    
+
+
+    public static Color processarCor(Color corOriginal, float intensidade) {
         float hsb[] = Color.RGBtoHSB(corOriginal.getRed(), corOriginal.getGreen(), corOriginal.getBlue(), null);
         switch (sistema.Info.tipo) {
             case 0:
@@ -156,7 +135,7 @@ public class Generico {
         return new java.util.Random().nextInt(max - min) + min;
     }
     
-    public Color[] escolherCor() {
+    public static Color[] escolherCor() {
         float valor = random(0, 100) / 100f;
         
         Color cor1 = new Color(Color.HSBtoRGB(valor, 0.3f + (random(-10, 10) / 100f), 0.8f + (random(-2, 2) / 100f)));

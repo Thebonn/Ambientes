@@ -57,8 +57,6 @@ public final class Tocar extends javax.swing.JFrame {
     TrayIcon trayIcon;
 
     public Thread animThread = new Thread();
-
-    sistema.Generico sist;
     Configuracoes configs;
     public static GerenciadorDeSom gerenciadorDeSom;
 
@@ -80,8 +78,7 @@ public final class Tocar extends javax.swing.JFrame {
 
         contagemInatividade();
         bandeja();
-        sist = new sistema.Generico();
-        cores = sist.converterCor("ABDEE6, CBAACB, FFFFB5, FFCCB6, F3B0C3");
+        cores = sistema.Generico.converterCor("ABDEE6, CBAACB, FFFFB5, FFCCB6, F3B0C3");
 
         escolherCor();
         this.requestFocus();
@@ -112,25 +109,26 @@ public final class Tocar extends javax.swing.JFrame {
 
     public void subir() {
         setLocation(getLocation().x, getLocation().y + 130);
-        new Thread(new Runnable() {
-            @Override
-            public void run() {
-                try {
-                    float velocidade = 10;
-
-                    for (int i = 0; i < 35; i++) {
-
-                        setLocation(getLocation().x, (int) (getLocation().y - velocidade));
-                        velocidade = velocidade * 0.9f;
-                        Thread.sleep(10);
-
-                    }
-                } catch (Exception ex) {
-                    ex.printStackTrace();
-                }
-
-            }
-        }, "SubirJFrame").start();
+        sistema.Componentes.moverJanela(this, this.getLocation().x, this.getLocation().y - 130, 0.04);
+//        new Thread(new Runnable() {
+//            @Override
+//            public void run() {
+//                try {
+//                    float velocidade = 10;
+//
+//                    for (int i = 0; i < 35; i++) {
+//
+//                        setLocation(getLocation().x, (int) (getLocation().y - velocidade));
+//                        velocidade = velocidade * 0.9f;
+//                        Thread.sleep(10);
+//
+//                    }
+//                } catch (Exception ex) {
+//                    ex.printStackTrace();
+//                }
+//
+//            }
+//        }, "SubirJFrame").start();
     }
 
     void atualizacaoBaixaFrequencia() {
@@ -236,7 +234,7 @@ public final class Tocar extends javax.swing.JFrame {
 
     public void adicionarSetups() {
         String atual = cbbSetups.getSelectedItem().toString();
-        File pasta = new File("Arquivos/setups/");
+        File pasta = new File(sistema.Info.localSetups);
         String setups[] = pasta.list();
         cbbSetups.removeAllItems();
         for (int i = 0; i < setups.length; i++) {
@@ -413,7 +411,7 @@ public final class Tocar extends javax.swing.JFrame {
                                             cicloAnterior = (byte) cores.length;
                                         }
 
-                                        sist.acender(cores[ciclo], cores[cicloAnterior], pnlFundo, (float) (mudancaVel * sistema.Info.velocidade), 15);
+                                        sistema.Componentes.acender(cores[ciclo], cores[cicloAnterior], pnlFundo, (float) (mudancaVel * sistema.Info.velocidade), 15);
                                     }
                                     break;
                                 case 6:
@@ -428,7 +426,7 @@ public final class Tocar extends javax.swing.JFrame {
                                 pnlFundo.setkStartColor(ini);
                                 pnlFundo.setkEndColor(fin);
 
-                                sist.escurecerFundo(pnlFundo);
+                                sistema.Componentes.escurecerFundo(pnlFundo);
 
                             }
                             pnlFundo.setkGradientFocus(foco);
@@ -489,11 +487,11 @@ public final class Tocar extends javax.swing.JFrame {
                     } else {
                         play = true;
                         setarIcones(!play);
-                        sist.ratio = 1;
+                        sistema.Componentes.ratio = 1;
                         gerenciadorDeSom.pararTudo();
                         setTitle("Ambientes " + sistema.Info.VERSAO_ATUAL);
                         lblStatus.setText("Parado...");
-                        sist.acender(Color.darkGray, pnlFundo.getkStartColor(), pnlFundo, 0.04f, 10);
+                        sistema.Componentes.acender(Color.darkGray, pnlFundo.getkStartColor(), pnlFundo, 0.04f, 10);
                     }
                 } catch (Exception ex) {
                     ex.printStackTrace();
@@ -523,7 +521,7 @@ public final class Tocar extends javax.swing.JFrame {
 
     void escolherCor() {
         if (play == true) {
-            Color cor[] = sist.escolherCor();
+            Color cor[] = sistema.Generico.escolherCor();
             pnlFundo.setkStartColor(cor[0]);
             pnlFundo.setkEndColor(cor[1]);
             pnlFundo.updateUI();

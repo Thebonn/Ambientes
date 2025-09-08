@@ -4,9 +4,14 @@ import com.formdev.flatlaf.FlatDarkLaf;
 import sistema.Configs;
 import sistema.Generico;
 import java.awt.Color;
+import java.io.File;
 import java.net.URL;
+import java.nio.file.Files;
+import java.nio.file.StandardCopyOption;
 import javax.swing.ImageIcon;
 import javax.swing.JColorChooser;
+import javax.swing.JFileChooser;
+import javax.swing.JOptionPane;
 
 /**
  *
@@ -92,6 +97,8 @@ public class Configuracoes extends javax.swing.JFrame {
                     }
                 }
 
+                txfLocal.setText(sistema.Info.localSetups);
+
             }
         }, "TAD").start();
     }
@@ -103,14 +110,14 @@ public class Configuracoes extends javax.swing.JFrame {
         jTextField1.setEnabled(jComboBox1.getSelectedItem().toString().equals("Cores especiais") && jComboBox3.getSelectedItem().toString().equals("Outro"));
         if (jComboBox1.getSelectedIndex() != 5) {
             lblAviso.setText("Aviso: \"Cores especiais\" não está selecionado");
-            if (sist.acenderThread.isInterrupted()) {
-                sist.acenderThread.start();
-            }
+//            if (sist.acenderThread.isInterrupted()) {
+//                sist.acenderThread.start();
+//            }
         } else {
 
-            if (sist.acenderThread.isAlive()) {
-                sist.acenderThread.interrupt();
-            }
+//            if (sist.acenderThread.isAlive()) {
+//                sist.acenderThread.interrupt();
+//            }
 
             lblAviso.setText(" ");
         }
@@ -139,6 +146,9 @@ public class Configuracoes extends javax.swing.JFrame {
         jLabel2 = new javax.swing.JLabel();
         jLabel8 = new javax.swing.JLabel();
         jTextField2 = new javax.swing.JTextField();
+        jLabel15 = new javax.swing.JLabel();
+        txfLocal = new javax.swing.JTextField();
+        btnMudarLocal = new javax.swing.JToggleButton();
         jPanel5 = new javax.swing.JPanel();
         jCheckBox1 = new javax.swing.JCheckBox();
         jLabel5 = new javax.swing.JLabel();
@@ -292,30 +302,53 @@ public class Configuracoes extends javax.swing.JFrame {
             }
         });
 
+        jLabel15.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        jLabel15.setText("Local dos setups:");
+
+        txfLocal.setText("Lorem");
+
+        btnMudarLocal.setText("Mudar");
+        btnMudarLocal.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnMudarLocalActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout jPanel4Layout = new javax.swing.GroupLayout(jPanel4);
         jPanel4.setLayout(jPanel4Layout);
         jPanel4Layout.setHorizontalGroup(
             jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel4Layout.createSequentialGroup()
-                .addContainerGap()
-                .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jSlider1, javax.swing.GroupLayout.DEFAULT_SIZE, 479, Short.MAX_VALUE)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel4Layout.createSequentialGroup()
+                .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                     .addComponent(jLabel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addGroup(jPanel4Layout.createSequentialGroup()
-                        .addGap(0, 0, Short.MAX_VALUE)
+                        .addContainerGap(83, Short.MAX_VALUE)
                         .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
                             .addComponent(jTextField2, javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(jLabel8, javax.swing.GroupLayout.Alignment.LEADING))
-                        .addGap(0, 0, Short.MAX_VALUE)))
+                        .addGap(84, 84, 84)
+                        .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addGroup(jPanel4Layout.createSequentialGroup()
+                                .addComponent(txfLocal, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(btnMudarLocal))
+                            .addComponent(jLabel15, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 85, Short.MAX_VALUE))
+                    .addComponent(jSlider1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addContainerGap())
         );
         jPanel4Layout.setVerticalGroup(
             jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel4Layout.createSequentialGroup()
                 .addGap(28, 28, 28)
-                .addComponent(jLabel8)
+                .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel8)
+                    .addComponent(jLabel15))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jTextField2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jTextField2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(txfLocal, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(btnMudarLocal))
                 .addGap(18, 18, 18)
                 .addComponent(jLabel2)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
@@ -705,7 +738,6 @@ public class Configuracoes extends javax.swing.JFrame {
             saida = Generico.converterCor(cores[jComboBox3.getSelectedIndex()]);
         }
 
-
         Tocar.cores = saida;
         Tocar.coresEspSel = (byte) jComboBox3.getSelectedIndex();
         sistema.Info.tipo = (byte) jComboBox4.getSelectedIndex();
@@ -780,12 +812,40 @@ public class Configuracoes extends javax.swing.JFrame {
         } else {
             System.exit(0);
         }
-        
+
     }//GEN-LAST:event_jButton3ActionPerformed
 
     private void jButton4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton4ActionPerformed
         new Infos().setVisible(true);
     }//GEN-LAST:event_jButton4ActionPerformed
+
+    private void btnMudarLocalActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnMudarLocalActionPerformed
+
+        try {
+            JFileChooser jfc = new JFileChooser(new File(sistema.Info.localSetups));
+            jfc.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
+            jfc.showDialog(null, "Escolher local");
+
+            String lista[] = new File(sistema.Info.localSetups).list();
+            int e = 0;
+            if (lista.length > 0) {
+                e = JOptionPane.showConfirmDialog(null, "Você tem itens na sua pasta de setups. Deseja mover os itens da pasta antiga para a nova?", "Ambientes", JOptionPane.YES_NO_CANCEL_OPTION, JOptionPane.WARNING_MESSAGE);
+            }
+            if (e != 3) {
+                if (e == 0) {
+                    //contornando o java.nio.file.DirectoryNotEmptyException
+//                    File 
+                    Files.move(jfc.getSelectedFile().toPath(), new File(sistema.Info.localSetups).toPath(), StandardCopyOption.REPLACE_EXISTING);
+                }
+
+                sistema.Info.localSetups = jfc.getSelectedFile().getAbsolutePath();
+            }
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+
+
+    }//GEN-LAST:event_btnMudarLocalActionPerformed
 
     /**
      * @param args the command line arguments
@@ -823,6 +883,7 @@ public class Configuracoes extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JToggleButton btnMudarLocal;
     private javax.swing.JButton jButton1;
     private javax.swing.JButton jButton2;
     private javax.swing.JButton jButton3;
@@ -843,6 +904,7 @@ public class Configuracoes extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel12;
     private javax.swing.JLabel jLabel13;
     private javax.swing.JLabel jLabel14;
+    private javax.swing.JLabel jLabel15;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
@@ -874,5 +936,6 @@ public class Configuracoes extends javax.swing.JFrame {
     private javax.swing.JLabel lblAviso;
     private javax.swing.JLabel lblEscurecer;
     private com.k33ptoo.components.KGradientPanel painelExemplo;
+    private javax.swing.JTextField txfLocal;
     // End of variables declaration//GEN-END:variables
 }

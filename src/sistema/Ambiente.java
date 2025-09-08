@@ -2,13 +2,12 @@ package sistema;
 
 /**
  *
- * @author Thebonn
+ * @author Bonn
  */
 public class Ambiente {
 
-    
-    
     public static void main(String[] args) {
+
         boolean semgui = false;
         
         for (int i = 0; i < args.length; i++) {
@@ -23,6 +22,5 @@ public class Ambiente {
         } else {
             new gui.Splash().setVisible(true);
         }
-        
     }
 }

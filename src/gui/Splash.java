@@ -13,7 +13,9 @@ import java.net.URI;
 import java.util.Date;
 import java.util.Random;
 import javax.swing.ImageIcon;
+import javax.swing.JLabel;
 import javax.swing.JOptionPane;
+import sistema.Componentes;
 
 /**
  *
@@ -36,22 +38,21 @@ public class Splash extends javax.swing.JFrame {
 
     }
 
-    void ficarMudandoTexto() {
-        new Thread(new Runnable() {
-            @Override
-            public void run() {
-                try {
-                    while (true) {
-                        mudatexto();
-                        Thread.sleep(1000);
-                    }
-                } catch (Exception ex) {
-                    ex.printStackTrace();
-                }
-            }
-        }, "TAD").start();
-    }
-
+//    void ficarMudandoTexto() {
+//        new Thread(new Runnable() {
+//            @Override
+//            public void run() {
+//                try {
+//                    while (true) {
+//                        mudatexto();
+//                        Thread.sleep(1000);
+//                    }
+//                } catch (Exception ex) {
+//                    ex.printStackTrace();
+//                }
+//            }
+//        }, "TAD").start();
+//    }
     public void funcionar() {
         new Thread(new Runnable() {
             @Override
@@ -117,7 +118,11 @@ public class Splash extends javax.swing.JFrame {
 
                     pgbProgresso.setString("Verificando atualizações...");
                     selecionarTexto();
-                    mudatexto();
+
+                    if (escolhido.equals("")) {
+                        escolhido = textos[sistema.Generico.random(0, textos.length)];
+                    }
+                    Componentes.mudartexto(escolhido, lblNegocio, lblNegocio.getFont());
 
                     pgbProgresso.setString("Abrindo o Ambientes...");
                     Thread.sleep(2000);
@@ -158,8 +163,7 @@ public class Splash extends javax.swing.JFrame {
                 }
             }
 
-            Random random = new Random();
-            escolhido = ar[random.nextInt(ar.length - 1) + 1];
+            escolhido = ar[sistema.Generico.random(0, ar.length - 1) + 1];
         }
 
     }
@@ -192,7 +196,11 @@ public class Splash extends javax.swing.JFrame {
                         }
                     }
 
-                    tocar.setVisible(true);
+                    if (sistema.Info.primeiraVez) {
+                        new PrimeiraVez().setVisible(true);
+                    } else {
+                        tocar.setVisible(true);
+                    }
 
                     if (sistema.Info.animacaoIntroducao == true) { //dps vejo como eu faco isso sem repetir o if to mt cansado desculpa
                         tocar.subir();
@@ -209,83 +217,12 @@ public class Splash extends javax.swing.JFrame {
         }, "TAD").start();
     }
 
-    public int calcularTamanho(int tamDefault, String texto) {
-        String div[] = texto.split("");
-        String minus = "abcdefghijklmnopqrstuvwxyzáéíóúäëïöüàèìòùâêîôûãõ";
-        String maius = minus.toUpperCase();
-        String outro = "! .,;?\"@#$%&*_+-=/><'1234567890ýçÇÝ[](){}äëïöü|;";
-
-        float resultado = 0f;
-
-        for (int i = 0; i < div.length; i++) {
-            for (int j = 0; j < minus.length(); j++) {
-                if (div[i].contains(minus.split("")[j])) {
-                    resultado += 0.9f;
-                } else if (div[i].contains(maius.split("")[j])) {
-                    resultado += 1f;
-                } else if (div[i].contains(outro.split("")[j])) {
-                    resultado += 0.6f;
-                }
-            }
-
-        }
-
-//        float divisao = new Float(div.length) / resultado;
-        int saida = (int) (tamDefault * 10 / resultado);
-
-        if (saida < 10) {
-            saida = 10;
-        } else if (saida > 100) {
-            saida = 100;
-        }
-        return saida;
-    }
-
     //textos caso a pessoa esteja sem internet
     public String textos[] = {"Agora sem açúcar!", "Lorem Ipsum", "GAY GAY HOMOSSEXUAL GAY", "e n t e r i n g  t h e  p l a z a . . .",
         "Vamo que vamo!", "ENCARE O MC POZES POR 10 HORAS SEM RIR", "Dança gatinho, dança!", "as vozes...", "WOOF WOOF BARK BARK ARF ARF BARK WOOF WOOF GRRRRR",
         "Nunca ouça nada desse programa às 3 da manhã", "Vamos vamos!", "Simbora!!!", "u lkdusfg;ouzfgou", "MIAU!!!!!", "Divirta-se", "Que belos sons!", "Aviso de pancadas de chuva!",
         "so mim umilhao e mim, maltratao", "Meia noite eu te conto", "O próprio!", "ABCW", "Só nos sonszinhos!!!", "Bem na hora!", "eles disseram, \"O ambiente.\"", "biribabum",
         "Agora sem o Delay de Libet!", "Começando o dia bem", "Uiui", "Experimente CHOCOLATE™"};
-
-    public void mudatexto() {
-        new Thread(new Runnable() {
-            @Override
-            public void run() {
-                try {
-                    String caracteres = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ!;.,";
-                    Random random = new Random();
-
-                    String saida;
-                    if (escolhido.equals("")) {
-                        escolhido = textos[random.nextInt(textos.length)];
-                    }
-
-//                    int div = escolhido.length() / 10;
-//                    if (div <= 0) {
-//                        div = 1;
-//                    }
-                    Font fonte = new Font("Open Sauce One Black", Font.BOLD, calcularTamanho(40, escolhido));
-
-                    lblNegocio.setFont(fonte);
-
-                    for (int i = 0; i < 5; i++) {
-                        saida = "";
-                        for (int j = 0; j < escolhido.length() / 1.5; j++) {
-                            saida += caracteres.split("")[random.nextInt(caracteres.length())];
-                        }
-                        lblNegocio.setText(saida);
-                        Thread.sleep(40);
-                    }
-
-                    lblNegocio.setText(escolhido);
-
-                } catch (Exception ex) {
-                    ex.printStackTrace();
-                }
-            }
-        }, "MUDATEXTO").start();
-    }
 
     /**
      * This method is called from within the constructor to initialize the form.

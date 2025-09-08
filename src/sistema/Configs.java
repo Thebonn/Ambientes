@@ -36,6 +36,10 @@ public class Configs {
                     FIELDS[i].set(sistema.Info.class, Boolean.valueOf(prop.getProperty(FIELDS[i].getName())));
                 } else if (c == short.class) {
                     FIELDS[i].set(sistema.Info.class, Short.valueOf(prop.getProperty(FIELDS[i].getName())));
+                } else if (c == double.class) {
+                    FIELDS[i].set(sistema.Info.class, Double.valueOf(prop.getProperty(FIELDS[i].getName())));
+                } else {
+                    FIELDS[i].set(sistema.Info.class, prop.getProperty(FIELDS[i].getName()));
                 }
 
             }

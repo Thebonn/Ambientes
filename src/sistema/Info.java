@@ -28,6 +28,8 @@ public class Info {
     public static boolean mostrarSetups = true;
     public static boolean animacaoIntroducao = true;
     public static boolean iconeInterativo = true;
+    public static boolean primeiraVez =  true;
+    public static String localSetups = "Arquivos/setups";
     
     public static float volumeGlobal = 90;
     
