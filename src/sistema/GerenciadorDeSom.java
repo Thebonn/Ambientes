@@ -3,6 +3,7 @@ package sistema;
 import static gui.Tocar.desativados;
 import java.io.File;
 import java.nio.file.Files;
+import java.util.Arrays;
 import java.util.Random;
 import javax.swing.JOptionPane;
 
@@ -16,7 +17,7 @@ public class GerenciadorDeSom {
     public Som[] pl = new Som[0];
 
     public String setup = "Nenhum";
-    public String config[] = new String[200];
+    public String config[];
 
     public boolean tocando = false;
     public long playlistPredelay = -1;
@@ -25,8 +26,7 @@ public class GerenciadorDeSom {
     public static final byte LIVRE = 0;
     public static final byte TOCANDO = 1;
 
-    //lembrar de adicionar o ngc de rodar I:
-    private void tocarPlaylist(final File[] arquivos, final String tipo, long preDelay, int primeira) {
+    private void tocarPlaylist(final File[] arquivos, final String tipo, long preDelay, boolean temPrimeira) {
         try {
 
             playlistPredelay = preDelay;
@@ -45,20 +45,29 @@ public class GerenciadorDeSom {
 
                         int sel = -1;
                         boolean tocouPrimeira = false;
+                        boolean cortouPrimeira = false;
                         while (tocando) {
+                            
+                            System.out.println(Arrays.toString(pl));
+                            
                             if (tipo.equals("a")) {
                                 int aleatorio = Generico.random(0, arquivos.length);
                                 //parece horrivel e é mesmo. isso tudo para evitar selecionar o mesmo som quando for um aleatorio
-                                sel = aleatorio == sel ? (aleatorio + 1 > arquivos.length - 1 ? (aleatorio - 1 < 0 ? aleatorio : aleatorio - 1) : aleatorio + 1) : aleatorio;
+                                sel = aleatorio == sel ? (aleatorio + 1 > pl.length - 1 ? (aleatorio - 1 < 0 ? aleatorio : aleatorio - 1) : aleatorio + 1) : aleatorio;
                             } else {
-                                sel += sel + 1 >= arquivos.length ? -arquivos.length + 1 : 1;
+                                sel += sel + 1 >= pl.length ? -pl.length + 1 : 1;
                             }
-                            
-                            if (tocouPrimeira == false && primeira != -1) {
+
+                            if (tocouPrimeira == false && temPrimeira) {
                                 tocouPrimeira = true;
-                                sel = primeira;
+                                sel = 0;
+                            } else if (tocouPrimeira == true && temPrimeira && cortouPrimeira == false) {
+                                pl[sel].finalizar();
+                                cortouPrimeira = true;
+                                pl = Arrays.copyOfRange(pl, 1, pl.length);
+                                continue;
                             }
-                            
+
                             pl[sel].darStart(false);
 
                             //normalmente esse sleep fica no final da thread, mas colocar ele no inicio ou no final
@@ -111,19 +120,19 @@ public class GerenciadorDeSom {
                 long playlistPreDelay = Integer.parseInt(l[3]);
 
                 //pesquisa para saber se a playlist tem um som que tocará primeiro
-                int primeira = -1;
+                boolean temPrimeira = false;
 
                 for (int j = 0; j < sons.length; j++) {
 
                     if (j == 0 && sons[j].startsWith("i: ")) {
-                        primeira = j;
+                        temPrimeira = true;
                         sons[j] = sons[j].substring(3); //se tiver, tirar o "i: " do nome
                     }
 
                     sons[j] = "Arquivos/setups/" + setup + "/" + sons[j] + ".wav";
                     coisos[j] = new File(sons[j]);
                 }
-                tocarPlaylist(coisos, l[2], playlistPreDelay, primeira);
+                tocarPlaylist(coisos, l[2], playlistPreDelay, temPrimeira);
                 break;
             }
         }
@@ -134,7 +143,6 @@ public class GerenciadorDeSom {
 
         for (int i = 0; i < config.length; i++) {
             if (config[i].startsWith("#") || config[i].startsWith("p - ")) {
-//                            t--;
                 continue;
             }
 
