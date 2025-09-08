@@ -1,12 +1,7 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
 package sistema;
 
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
-import java.io.File;
 import java.lang.reflect.Field;
 import java.lang.reflect.Modifier;
 import java.nio.file.Files;
@@ -15,11 +10,10 @@ import java.util.Properties;
 
 /**
  *
- * @author Thebonn
+ * @author Bonn
  */
 public class Configs {
 
-//    public static File file = new File("Arquivos/configs.txt");
     public static Path path = Path.of("Arquivos/configs.txt");
     private static final Field FIELDS[] = sistema.Info.class.getDeclaredFields();
 
