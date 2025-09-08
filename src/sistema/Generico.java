@@ -1,7 +1,3 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
 package sistema;
 
 import com.k33ptoo.components.KGradientPanel;
@@ -15,7 +11,7 @@ import java.util.zip.ZipInputStream;
 
 /**
  *
- * @author Thebonn
+ * @author Bonn
  */
 public class Generico {
 
@@ -128,9 +124,6 @@ public class Generico {
                 } catch (Exception ex) {
                     ex.printStackTrace();
                 }
-                //}
-                //}, "TAD").start();
-
                 Thread.currentThread().interrupt();
             }
         }, "TAD");
@@ -159,9 +152,8 @@ public class Generico {
         }
     }
     
-    int random(int min, int max) {
-        Random random = new Random();
-        return random.nextInt(max + 1 - min) + max;
+    public static int random(int min, int max) {
+        return new java.util.Random().nextInt(max + 1 - min) + max;
     }
     
     public Color[] escolherCor() {
