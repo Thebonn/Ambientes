@@ -13,7 +13,7 @@ import javax.swing.JLabel;
  */
 public class Componentes {
 
-    public static void moverJanela(JFrame janela, int x, int y, double acrescimo) {
+    public static void moverJanela(JFrame janela, int x, int y, double acrescimo, int easing) {
         new Thread(new Runnable() {
             @Override
             public void run() {
@@ -21,9 +21,35 @@ public class Componentes {
                 int yoriginal = janela.getLocation().y;
                 try {
                     for (double animacao = 0; animacao < 1; animacao += acrescimo) {
-                        int xlocal = (int) ((xoriginal * (Math.abs(Easings.easeOutQuart(animacao) - 1))) + (Easings.easeOutQuart(animacao) * x));
-                        int ylocal = (int) ((yoriginal * (Math.abs(Easings.easeOutQuart(animacao) - 1))) + (Easings.easeOutQuart(animacao) * y));
+                        int xlocal = (int) ((xoriginal * (Math.abs(Easings.ease(animacao, easing) - 1))) + (Easings.ease(animacao, easing) * x));
+                        int ylocal = (int) ((yoriginal * (Math.abs(Easings.ease(animacao, easing) - 1))) + (Easings.ease(animacao, easing) * y));
                         janela.setLocation(xlocal, ylocal);
+                        animacao += acrescimo;
+                        Thread.sleep(8);
+
+                    }
+                } catch (Exception ex) {
+                    ex.printStackTrace();
+                }
+
+            }
+        }, "MOVER JANELA").start();
+    }
+
+    public static void resizeJanela(JFrame janela, int largura, int altura, double acrescimo, int easing) {
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                int posoriginalx = janela.getLocation().x;
+                int posoriginaly = janela.getLocation().y;
+
+                int xoriginal = janela.getSize().width;
+                int yoriginal = janela.getSize().height;
+                try {
+                    for (double animacao = 0; animacao < 1; animacao += acrescimo) {
+                        int xlocal = (int) ((xoriginal * (Math.abs(Easings.ease(animacao, easing) - 1))) + (Easings.ease(animacao, easing) * largura));
+                        int ylocal = (int) ((yoriginal * (Math.abs(Easings.ease(animacao, easing) - 1))) + (Easings.ease(animacao, easing) * altura));
+                        janela.setBounds(posoriginalx - ((xlocal - xoriginal) / 2), posoriginaly - ((ylocal - yoriginal) / 2), xlocal, ylocal);
                         animacao += acrescimo;
                         Thread.sleep(8);
 
@@ -37,7 +63,7 @@ public class Componentes {
 
     }
 
-    public static void mudartexto(String texto, JLabel componente, Font fonte) {
+    public static void mudarTexto(String texto, JLabel componente, int tamanho) {
         new Thread(new Runnable() {
             @Override
             public void run() {
@@ -45,7 +71,7 @@ public class Componentes {
                     String caracteres = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ!;.,";
                     Random random = new Random();
                     String saida;
-                    Font fonte = new Font("Open Sauce One Black", Font.BOLD, Generico.calcularTamanho(40, texto));
+                    Font fonte = new Font("Open Sauce One Black", Font.BOLD, Generico.calcularTamanho(tamanho, texto));
                     fonte = fonte.deriveFont(Generico.calcularTamanho(40, texto));
                     componente.setFont(fonte);
                     for (int i = 0; i < 5; i++) {
@@ -66,7 +92,7 @@ public class Componentes {
 
     public static double ratio = 0;
 
-    public static void acender(Color corInicial, Color corFinal, KGradientPanel painel, float quantidade, int tempo) {
+    public static void mudarCor(Color corInicial, Color corFinal, KGradientPanel painel, float quantidade, int tempo) {
 //        generico.acenderThread = new Thread(new Runnable() {
         new Thread(new Runnable() {
             @Override
@@ -76,8 +102,9 @@ public class Componentes {
                 painel.setkStartColor(inicio);
                 painel.setkEndColor(sistema.Generico.processarCor(inicio, Info.intensidade));
                 try {
-                    boolean acabou = false;
-                    while (acabou == false) {
+//                    boolean acabou = false;
+//                    while (acabou == false) {
+                    for (ratio = 0; ratio < 1; ratio += quantidade) {
                         int red = (int) Math.abs((ratio * inicio.getRed()) + ((1 - ratio) * fim.getRed()));
                         int green = (int) Math.abs((ratio * inicio.getGreen()) + ((1 - ratio) * fim.getGreen()));
                         int blue = (int) Math.abs((ratio * inicio.getBlue()) + ((1 - ratio) * fim.getBlue()));
@@ -89,14 +116,17 @@ public class Componentes {
                         Thread.sleep(tempo);
                         ratio += quantidade;
                         if (ratio >= 1) {
-                            acabou = true;
+//                            acabou = true;
                             Thread.currentThread().interrupt();
                         }
+
                     }
                 } catch (Exception ex) {
                     ex.printStackTrace();
                 }
-                Thread.currentThread().interrupt();
+
+                Thread.currentThread()
+                        .interrupt();
             }
 //        }, "TAD");
         }, "TAD").start();

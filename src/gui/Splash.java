@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package gui;
 
 import com.formdev.flatlaf.FlatDarkLaf;
@@ -11,21 +6,17 @@ import java.awt.Font;
 import java.io.File;
 import java.net.URI;
 import java.util.Date;
-import java.util.Random;
 import javax.swing.ImageIcon;
-import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import sistema.Componentes;
+import sistema.Info;
 
 /**
  *
- * @author Thebonn
+ * @author Bonn
  */
 public class Splash extends javax.swing.JFrame {
 
-    /**
-     * Creates new form Splash
-     */
     Tocar tocar;
     String escolhido = "";
 
@@ -80,7 +71,7 @@ public class Splash extends javax.swing.JFrame {
 
                     pgbProgresso.setString("Verificando arquivos...");
 
-                    File configsFile = new File("Arquivos/configs.txt");
+                    File configsFile = new File("Arquivos/configuracoes.txt");
 
                     if (!configsFile.exists()) {
                         try {
@@ -92,6 +83,8 @@ public class Splash extends javax.swing.JFrame {
                         }
 
                     }
+                    
+                    sistema.Configs.carregar();
 
                     pgbProgresso.setString("Verificando setups...");
 
@@ -114,7 +107,6 @@ public class Splash extends javax.swing.JFrame {
                     pgbProgresso.setIndeterminate(true);
 
                     pgbProgresso.setString("Fazendo as coisas acontecerem...");
-                    tocar = new Tocar();
 
                     pgbProgresso.setString("Verificando atualizações...");
                     selecionarTexto();
@@ -122,7 +114,7 @@ public class Splash extends javax.swing.JFrame {
                     if (escolhido.equals("")) {
                         escolhido = textos[sistema.Generico.random(0, textos.length)];
                     }
-                    Componentes.mudartexto(escolhido, lblNegocio, lblNegocio.getFont());
+                    Componentes.mudarTexto(escolhido, lblNegocio, 40);
 
                     pgbProgresso.setString("Abrindo o Ambientes...");
                     Thread.sleep(2000);
@@ -197,15 +189,16 @@ public class Splash extends javax.swing.JFrame {
                     }
 
                     if (sistema.Info.primeiraVez) {
+//                        tocar = new Tocar(false);
                         new PrimeiraVez().setVisible(true);
                     } else {
+                        tocar = new Tocar(sistema.Info.animacaoIntroducao);
                         tocar.setVisible(true);
                     }
 
-                    if (sistema.Info.animacaoIntroducao == true) { //dps vejo como eu faco isso sem repetir o if to mt cansado desculpa
-                        tocar.subir();
-                    }
-
+//                    if (sistema.Info.animacaoIntroducao == true) { //dps vejo como eu faco isso sem repetir o if to mt cansado desculpa
+//                        tocar.subir();
+//                    }
                     dispose();
                     System.gc();
 

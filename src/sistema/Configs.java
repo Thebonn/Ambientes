@@ -14,7 +14,7 @@ import java.util.Properties;
  */
 public class Configs {
 
-    public static Path path = Path.of("Arquivos/configs.txt");
+    public static Path path = Path.of("Arquivos/configuracoes.txt");
     private static final Field FIELDS[] = sistema.Info.class.getDeclaredFields();
 
     public static void carregar() throws Exception {
@@ -24,7 +24,6 @@ public class Configs {
         for (int i = 0; i < FIELDS.length; i++) {
             if (!Modifier.isFinal(FIELDS[i].getModifiers()) && !FIELDS[i].getName().startsWith("_")) {
                 FIELDS[i].setAccessible(true);
-
                 Class c = FIELDS[i].getType();
                 if (c == int.class) {
                     FIELDS[i].set(sistema.Info.class, Integer.valueOf(prop.getProperty(FIELDS[i].getName())));

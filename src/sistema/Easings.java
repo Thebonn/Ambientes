@@ -10,6 +10,29 @@ package sistema;
  * @author Bonn
  */
 public class Easings {
+    
+    public static final int EASE_OUT_QUART = 1;
+    public static final int EASE_IN_QUART = 2;
+    public static final int EASE_OUT_CIRC = 3;
+    public static final int EASE_IN_OUT_CIRC = 4;
+    public static final int EASE_IN_OUT_EXPO = 5;
+    
+    public static double ease(double x, int easing) {
+        switch (easing) {
+            case 1:
+                return easeOutQuart(x);
+            case 2:
+                return easeInQuart(x);
+            case 3:
+                return easeOutCirc(x);
+            case 4:
+                return easeInOutCirc(x);
+            case 5:
+                return easeInOutExpo(x);
+            default:
+                return x;
+        }
+    }
 
     public static double easeOutQuart(double x) {
         return 1 - Math.pow(1 - x, 4);

@@ -48,7 +48,6 @@ public final class Tocar extends javax.swing.JFrame {
 
     public static int esperaDelay = 5;
 
-    boolean avisoPlaylist = false;
     boolean avisoFechar = false;
     boolean play = true;
     public static boolean lojaaberta = false;
@@ -60,19 +59,15 @@ public final class Tocar extends javax.swing.JFrame {
     Configuracoes configs;
     public static GerenciadorDeSom gerenciadorDeSom;
 
-    public Tocar() {
+    public Tocar(boolean subir) {
         FlatDarkLaf.install();
         initComponents();
         this.setTitle("Ambientes " + sistema.Info.VERSAO_ATUAL);
-        
-        try {
-            sistema.Configs.carregar();
-        } catch (Exception ex) {
-            ex.printStackTrace();
-        }
+
         animar();
         adicionarSetups();
         gerenciadorDeSom = new GerenciadorDeSom();
+        sldVolume.setValue((int) Info.volumeGlobal);
 
         this.setIconImage(new ImageIcon(getClass().getResource("/recursos/imagens/ambientes logo 2.png")).getImage());
 
@@ -97,6 +92,10 @@ public final class Tocar extends javax.swing.JFrame {
         sistema.Rpc.iniciarRPC();
         atualizacaoBaixaFrequencia();
 
+        if (subir) {
+            subir();
+        }
+
     }
 
     private class BotaoNumericoAction extends AbstractAction {
@@ -109,7 +108,7 @@ public final class Tocar extends javax.swing.JFrame {
 
     public void subir() {
         setLocation(getLocation().x, getLocation().y + 130);
-        sistema.Componentes.moverJanela(this, this.getLocation().x, this.getLocation().y - 130, 0.008);
+        sistema.Componentes.moverJanela(this, this.getLocation().x, this.getLocation().y - 130, 0.008, sistema.Easings.EASE_OUT_QUART);
 //        new Thread(new Runnable() {
 //            @Override
 //            public void run() {
@@ -311,8 +310,6 @@ public final class Tocar extends javax.swing.JFrame {
                     //para easing
                     double negocio = 0.0d;
 
-                    sistema.Easings easings = new sistema.Easings();
-
                     while (true) {
 
                         if ((play == false) && isActive() && isFocused()) {
@@ -322,7 +319,7 @@ public final class Tocar extends javax.swing.JFrame {
                             } else {
                                 negocio += 0.001d * sistema.Info.velocidade / 2;
                             }
-                            foco = (short) (easings.easeInOutCirc(negocio) * 700);
+                            foco = (short) (sistema.Easings.easeInOutCirc(negocio) * 700);
 
                             if (negocio >= 1) {
                                 descendo = true;
@@ -334,7 +331,6 @@ public final class Tocar extends javax.swing.JFrame {
                                 case 0:
                                     luz += ((r.nextInt(10) - 5f) / 200f);
                                     hue = 0.06f + ((r.nextInt(10) - 5f) / 150f);
-//                                    System.out.println(luz);
                                     if (luz > 0.7f) {
                                         luz = 0.2f;
                                     } else if (luz < 0.1f) {
@@ -367,7 +363,7 @@ public final class Tocar extends javax.swing.JFrame {
                                     fin = new Color(0x1b1c1f);
 
                                     boolean deNovo = ((countup - ultimo > 1 && countup - ultimo < 10) && r.nextInt(1000) < 200);
-                                    if (r.nextInt(1000) / 10f < 0.3f || deNovo) {
+                                    if (r.nextInt(1000) / 10f < 0.1f || deNovo) {
                                         float valor = (r.nextInt(6) + 3) / 10f;
                                         if (deNovo == false) {
                                             ultimo = countup;
@@ -411,7 +407,9 @@ public final class Tocar extends javax.swing.JFrame {
                                             cicloAnterior = (byte) cores.length;
                                         }
 
-                                        sistema.Componentes.acender(cores[ciclo], cores[cicloAnterior], pnlFundo, (float) (mudancaVel * sistema.Info.velocidade), 15);
+                                        System.out.println(espera);
+
+                                        sistema.Componentes.mudarCor(cores[ciclo], cores[cicloAnterior], pnlFundo, (float) (mudancaVel * sistema.Info.velocidade), 15);
                                     }
                                     break;
                                 case 6:
@@ -465,7 +463,7 @@ public final class Tocar extends javax.swing.JFrame {
         }
 
     }
-    
+
     public void tocarParar() {
         new Thread(new Runnable() {
             @Override
@@ -491,7 +489,7 @@ public final class Tocar extends javax.swing.JFrame {
                         gerenciadorDeSom.pararTudo();
                         setTitle("Ambientes " + sistema.Info.VERSAO_ATUAL);
                         lblStatus.setText("Parado...");
-                        sistema.Componentes.acender(Color.darkGray, pnlFundo.getkStartColor(), pnlFundo, 0.04f, 10);
+                        sistema.Componentes.mudarCor(Color.darkGray, pnlFundo.getkStartColor(), pnlFundo, 0.04f, 10);
                     }
                 } catch (Exception ex) {
                     ex.printStackTrace();
@@ -828,7 +826,7 @@ public final class Tocar extends javax.swing.JFrame {
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                new Tocar().setVisible(true);
+                new Tocar(true).setVisible(true);
             }
         });
     }

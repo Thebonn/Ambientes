@@ -102,6 +102,41 @@ public class Configuracoes extends javax.swing.JFrame {
             }
         }, "TAD").start();
     }
+    
+    void aplicar() {
+        sistema.Info.animTipo = (byte) jComboBox1.getSelectedIndex();
+        sistema.Info.atualizacao = (short) jSlider1.getValue();
+        sistema.Info.velocidade = Double.parseDouble(jComboBox2.getSelectedItem().toString());
+        sistema.Info.maximo = (byte) jSlider2.getValue();
+        sistema.Info.podeColorir = jCheckBox1.isSelected();
+
+        Color saida[];
+
+        //em ordem: pastel, carro na chuva, por do sol, verao, aurora boreal, gay, floresta, ps2
+        String cores[] = {"ABDEE6, CBAACB, FFFFB5, FFCCB6, F3B0C3", "222633, 452224, 223145, 131830, 101a26, 704219, 0a1f33, 143c4a",
+            "eeaf61, fb9062, ee5d6c, ce4993, 6a0d83", "5fa65a, 01b4bb, f5d51e, fa8825, fa5456", "050306, 12093e, 412754, 4cc35b, 68da23",
+            "0b7c6a, 5cc8d2, f1eeff, 7bade2, 073370", "90aa4a, 81803e, 202f1f, 535b32, 57743e, c1b967, 90aa4a, 867b3e, 3a5a35",
+            "191a61, 010105, 080814, 1f1fb8, 00000a"};
+
+        if ((jComboBox3.getSelectedIndex() == jComboBox3.getItemCount() - 1) && (jTextField1.getText() != null || jTextField1.getText().contains(", "))) {
+            saida = Generico.converterCor(jTextField1.getText());
+        } else {
+            saida = Generico.converterCor(cores[jComboBox3.getSelectedIndex()]);
+        }
+
+        Tocar.cores = saida;
+        Tocar.coresEspSel = (byte) jComboBox3.getSelectedIndex();
+        sistema.Info.tipo = (byte) jComboBox4.getSelectedIndex();
+        sistema.Info.preDelay = (short) Integer.parseInt(jTextField2.getText());
+        sistema.Info.intensidade = jSlider4.getValue() / 10;
+        sistema.Info.escurecerFundo = (byte) jSlider5.getValue();
+        Tocar.coresLegiveis = jTextField1.getText();
+        sistema.Info.rpcTipo = (byte) jComboBox5.getSelectedIndex();
+        sistema.Info.mostrarSetups = jCheckBox2.isSelected();
+        sistema.Info.animacaoIntroducao = jCheckBox3.isSelected();
+        sistema.Info.iconeInterativo = jCheckBox4.isSelected();
+        Tocar.mudancaVel = Float.parseFloat(jComboBox6.getSelectedItem().toString().split(": ")[1]);
+    }
 
     void atualizarSelecionados() {
 
@@ -129,7 +164,7 @@ public class Configuracoes extends javax.swing.JFrame {
 
         jLabel11 = new javax.swing.JLabel();
         jPanel1 = new javax.swing.JPanel();
-        jButton1 = new javax.swing.JButton();
+        btnSalvar = new javax.swing.JButton();
         jLabel4 = new javax.swing.JLabel();
         jTabbedPane1 = new javax.swing.JTabbedPane();
         jPanel3 = new javax.swing.JPanel();
@@ -181,6 +216,7 @@ public class Configuracoes extends javax.swing.JFrame {
         jTextArea1 = new javax.swing.JTextArea();
         jLabel13 = new javax.swing.JLabel();
         jButton4 = new javax.swing.JButton();
+        bntAplicar = new javax.swing.JToggleButton();
 
         jLabel11.setText("jLabel11");
 
@@ -188,10 +224,10 @@ public class Configuracoes extends javax.swing.JFrame {
         setResizable(false);
         setType(java.awt.Window.Type.POPUP);
 
-        jButton1.setText("Salvar");
-        jButton1.addActionListener(new java.awt.event.ActionListener() {
+        btnSalvar.setText("Salvar");
+        btnSalvar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton1ActionPerformed(evt);
+                btnSalvarActionPerformed(evt);
             }
         });
 
@@ -675,6 +711,13 @@ public class Configuracoes extends javax.swing.JFrame {
 
         jTabbedPane1.addTab("Informações", jPanel7);
 
+        bntAplicar.setText("Aplicar");
+        bntAplicar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                bntAplicarActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
@@ -685,7 +728,9 @@ public class Configuracoes extends javax.swing.JFrame {
                     .addComponent(jLabel4, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
                         .addGap(0, 0, Short.MAX_VALUE)
-                        .addComponent(jButton1)
+                        .addComponent(bntAplicar)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(btnSalvar)
                         .addGap(0, 0, Short.MAX_VALUE))
                     .addComponent(jTabbedPane1))
                 .addContainerGap())
@@ -698,7 +743,9 @@ public class Configuracoes extends javax.swing.JFrame {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(jTabbedPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 206, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(jButton1)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(btnSalvar)
+                    .addComponent(bntAplicar))
                 .addGap(7, 7, 7))
         );
 
@@ -717,43 +764,11 @@ public class Configuracoes extends javax.swing.JFrame {
         setLocationRelativeTo(null);
     }// </editor-fold>//GEN-END:initComponents
 
-    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
-        sistema.Info.animTipo = (byte) jComboBox1.getSelectedIndex();
-        sistema.Info.atualizacao = (short) jSlider1.getValue();
-        sistema.Info.velocidade = Double.parseDouble(jComboBox2.getSelectedItem().toString());
-        sistema.Info.maximo = (byte) jSlider2.getValue();
-        sistema.Info.podeColorir = jCheckBox1.isSelected();
-
-        Color saida[];
-
-        //em ordem: pastel, carro na chuva, por do sol, verao, aurora boreal, gay, floresta, ps2
-        String cores[] = {"ABDEE6, CBAACB, FFFFB5, FFCCB6, F3B0C3", "222633, 452224, 223145, 131830, 101a26, 704219, 0a1f33, 143c4a",
-            "eeaf61, fb9062, ee5d6c, ce4993, 6a0d83", "5fa65a, 01b4bb, f5d51e, fa8825, fa5456", "050306, 12093e, 412754, 4cc35b, 68da23",
-            "0b7c6a, 5cc8d2, f1eeff, 7bade2, 073370", "90aa4a, 81803e, 202f1f, 535b32, 57743e, c1b967, 90aa4a, 867b3e, 3a5a35",
-            "191a61, 010105, 080814, 1f1fb8, 00000a"};
-
-        if ((jComboBox3.getSelectedIndex() == jComboBox3.getItemCount() - 1) && (jTextField1.getText() != null || jTextField1.getText().contains(", "))) {
-            saida = Generico.converterCor(jTextField1.getText());
-        } else {
-            saida = Generico.converterCor(cores[jComboBox3.getSelectedIndex()]);
-        }
-
-        Tocar.cores = saida;
-        Tocar.coresEspSel = (byte) jComboBox3.getSelectedIndex();
-        sistema.Info.tipo = (byte) jComboBox4.getSelectedIndex();
-        sistema.Info.preDelay = (short) Integer.parseInt(jTextField2.getText());
-        sistema.Info.intensidade = jSlider4.getValue() / 10;
-        sistema.Info.escurecerFundo = (byte) jSlider5.getValue();
-        Tocar.coresLegiveis = jTextField1.getText();
-        sistema.Info.rpcTipo = (byte) jComboBox5.getSelectedIndex();
-        sistema.Info.mostrarSetups = jCheckBox2.isSelected();
-        sistema.Info.animacaoIntroducao = jCheckBox3.isSelected();
-        sistema.Info.iconeInterativo = jCheckBox4.isSelected();
-        Tocar.mudancaVel = Float.parseFloat(jComboBox6.getSelectedItem().toString().split(": ")[1]);
-        Configs configs = new Configs();
-        configs.salvar();
+    private void btnSalvarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSalvarActionPerformed
+        aplicar();
+        sistema.Configs.salvar();
         this.dispose();
-    }//GEN-LAST:event_jButton1ActionPerformed
+    }//GEN-LAST:event_btnSalvarActionPerformed
 
     private void jSlider1StateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_jSlider1StateChanged
         jLabel2.setText("Tempo de atualização: " + jSlider1.getValue() + " ms");
@@ -847,6 +862,10 @@ public class Configuracoes extends javax.swing.JFrame {
 
     }//GEN-LAST:event_btnMudarLocalActionPerformed
 
+    private void bntAplicarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bntAplicarActionPerformed
+        aplicar();
+    }//GEN-LAST:event_bntAplicarActionPerformed
+
     /**
      * @param args the command line arguments
      */
@@ -883,8 +902,9 @@ public class Configuracoes extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JToggleButton bntAplicar;
     private javax.swing.JToggleButton btnMudarLocal;
-    private javax.swing.JButton jButton1;
+    private javax.swing.JButton btnSalvar;
     private javax.swing.JButton jButton2;
     private javax.swing.JButton jButton3;
     private javax.swing.JButton jButton4;

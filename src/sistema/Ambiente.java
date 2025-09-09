@@ -9,18 +9,38 @@ public class Ambiente {
     public static void main(String[] args) {
 
         boolean semgui = false;
-        
+        boolean semsplash = false;
+
         for (int i = 0; i < args.length; i++) {
-            if (args[i].contains("nogui") || args[i].contains("semgui")) {
-                semgui = true;
-                break;
+
+            switch (args[i]) {
+                case "nogui":
+                case "semgui":
+                    semgui = true;
+                    break;
+
+                case "semsplash":
+                case "nosplash":
+                    semsplash = true;
+                    break;
             }
+
         }
 
         if (semgui) {
-           new sistema.SemGui().principal();
+            new sistema.SemGui().principal();
         } else {
-            new gui.Splash().setVisible(true);
+            if (semsplash) {
+                if (sistema.Info.primeiraVez) {
+//                        tocar = new Tocar(false);
+                    new gui.PrimeiraVez().setVisible(true);
+                } else {
+                    new gui.Tocar(sistema.Info.animacaoIntroducao).setVisible(true);
+                }
+            } else {
+                new gui.Splash().setVisible(true);
+            }
+
         }
     }
 }

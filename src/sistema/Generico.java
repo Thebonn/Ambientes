@@ -1,15 +1,11 @@
 package sistema;
 
-import com.k33ptoo.components.KGradientPanel;
 import java.awt.Color;
-import java.awt.Font;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
-import java.util.Random;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
-import javax.swing.JLabel;
 
 /**
  *
@@ -86,11 +82,11 @@ public class Generico {
         for (int i = 0; i < div.length; i++) {
             for (int j = 0; j < minus.length(); j++) {
                 if (div[i].contains(minus.split("")[j])) {
-                    resultado += 0.9f;
+                    resultado += 0.8f;
                 } else if (div[i].contains(maius.split("")[j])) {
-                    resultado += 1f;
+                    resultado += 0.9f;
                 } else if (div[i].contains(outro.split("")[j])) {
-                    resultado += 0.6f;
+                    resultado += 0.5f;
                 }
             }
 

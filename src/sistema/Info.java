@@ -15,6 +15,7 @@ public class Info {
     public static final double VERSAO_ATUAL = 1.2;
     public static double _versaoReal = 0;
     
+    public static boolean primeiraVez = true;
     public static byte animTipo = 1;
     public static double velocidade = 1;
     public static short preDelay = 30;
@@ -28,7 +29,7 @@ public class Info {
     public static boolean mostrarSetups = true;
     public static boolean animacaoIntroducao = true;
     public static boolean iconeInterativo = true;
-    public static boolean primeiraVez =  true;
+    
     public static String localSetups = "Arquivos/setups";
     
     public static float volumeGlobal = 90;

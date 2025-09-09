@@ -1,10 +1,17 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JFrame.java to edit this template
- */
 package gui;
 
+import com.formdev.flatlaf.FlatDarkLaf;
+import java.awt.Color;
+import java.awt.Font;
+import java.awt.Point;
+import java.awt.Toolkit;
+import javax.swing.JFrame;
+import javax.swing.JLabel;
+import javax.swing.SwingConstants;
+import static javax.swing.WindowConstants.DO_NOTHING_ON_CLOSE;
 import sistema.Componentes;
+import sistema.Easings;
+import sistema.Info;
 
 /**
  *
@@ -12,11 +19,16 @@ import sistema.Componentes;
  */
 public class PrimeiraVez extends javax.swing.JFrame {
 
-    /**
-     * Creates new form PrimeiraVez
-     */
+    public boolean setaPararDeMexer = false;
+
     public PrimeiraVez() {
         initComponents();
+        Point pos = this.getLocation();
+        this.setOpacity(0);
+        FlatDarkLaf.install();
+        this.setLocation(pos.x, Toolkit.getDefaultToolkit().getScreenSize().height);
+        this.setOpacity(1);
+        Componentes.moverJanela(this, pos.x, pos.y, 0.005, sistema.Easings.EASE_OUT_CIRC);
         funcionar();
     }
 
@@ -25,35 +37,113 @@ public class PrimeiraVez extends javax.swing.JFrame {
             @Override
             public void run() {
                 try {
-//                    Thread.sleep(5000);
-//                    Componentes.mudartexto("Parece que essa é a sua primeira vez aqui", lblTexto, lblTexto.getFont());
-//                    Thread.sleep(4000);
-//                    Componentes.mudartexto("No momento, não há nada de muito especial a ser dito", lblTexto, lblTexto.getFont());
-//                    Thread.sleep(4000);
-//                    Componentes.mudartexto("Mas é importante você saber...", lblTexto, lblTexto.getFont());
-//                    Thread.sleep(3000);
 
-                    Tocar tocar = new Tocar();
-                    tocar.setVisible(true);
-                    tocar.subir();
-                    Thread.sleep(600);
-                    sistema.Componentes.moverJanela(tocar, tocar.getLocation().x - 200, tocar.getLocation().y, 0.005);
-                    sistema.Componentes.moverJanela(PrimeiraVez.this, getLocation().x + 200, getLocation().y, 0.005);
-                    Componentes.mudartexto("Essa é a sua janela principal", lblTexto, lblTexto.getFont());
-                    Thread.sleep(4000);
-                    Componentes.mudartexto("Caso você escute alguma sobreposição no áudio ou um espaço vazio...", lblTexto, lblTexto.getFont());
-                    Thread.sleep(4000);
-                    Componentes.mudartexto("Mude o predelay nas configurações", lblTexto, lblTexto.getFont());
-                    Thread.sleep(3500);
-                    Componentes.mudartexto("Divirta-se!", lblTexto, lblTexto.getFont());
                     Thread.sleep(3000);
-                    sistema.Componentes.moverJanela(tocar, tocar.getLocation().x + 200, tocar.getLocation().y, 0.004);
+
+                    Componentes.resizeJanela(PrimeiraVez.this, 500, 200, 0.005, sistema.Easings.EASE_IN_OUT_EXPO);
+                    Componentes.mudarTexto("Parece que essa é a sua primeira vez aqui", lblTexto, 50);
+                    Thread.sleep(3000);
+                    Componentes.mudarTexto("Vamos aos básicos", lblTexto, 50);
+                    Thread.sleep(2500);
+
+                    Info.maximo = 127;
+
+                    Tocar tocar = new Tocar(true);
+                    tocar.setVisible(true);
+                    tocar.contagem = 127;
+                    Thread.sleep(700);
+                    sistema.Componentes.moverJanela(tocar, tocar.getLocation().x - 200, tocar.getLocation().y, 0.005, sistema.Easings.EASE_OUT_QUART);
+                    sistema.Componentes.moverJanela(PrimeiraVez.this, getLocation().x + 200, getLocation().y, 0.005, sistema.Easings.EASE_OUT_QUART);
+
+                    Componentes.mudarTexto("Essa é a sua janela principal", lblTexto, 50);
+                    Thread.sleep(3000);
+
+                    JFrame seta = new JFrame();
+                    seta.setDefaultCloseOperation(DO_NOTHING_ON_CLOSE);
+                    seta.setUndecorated(true);
+                    seta.setLocationRelativeTo(null);
+                    seta.setBackground(new Color(0, 0, 0, 0));
+                    JLabel imagem = new JLabel();
+                    imagem.setText("→");
+                    imagem.setFont(new Font("Consolas", 0, 150));
+                    imagem.setHorizontalAlignment(SwingConstants.CENTER);
+                    imagem.setBounds(0, 0, 200, 200);
+                    seta.add(imagem);
+                    seta.pack();
+                    seta.setVisible(true);
+
+                    seta.setLocation(tocar.getLocation().x - 120, tocar.getLocation().y + 13);
+                    mexer(seta);
+
+                    Componentes.mudarTexto("Aqui você seleciona algum setup que você tiver para ouvir", lblTexto, 50);
+                    Thread.sleep(3000);
+                    pararMexerEEsperar();
+
+                    Componentes.moverJanela(seta, tocar.getLocation().x + 80, tocar.getLocation().y + 13, 0.005, Easings.EASE_IN_OUT_CIRC);
+                    Thread.sleep(1000);
+                    mexer(seta);
+
+                    Componentes.mudarTexto("Aqui você pode configurar algum setup do jeito que preferir", lblTexto, 50);
+                    Thread.sleep(4000);
+                    pararMexerEEsperar();
+
+                    Componentes.moverJanela(seta, tocar.getLocation().x - 50, tocar.getLocation().y + 136, 0.005, Easings.EASE_IN_OUT_CIRC);
+                    Thread.sleep(1000);
+                    mexer(seta);
+
+                    Componentes.mudarTexto("Caso você escute alguma sobreposição ou silêncio no som, mude o predelay nas configurações", lblTexto, 50);
+                    Thread.sleep(4000);
+                    Componentes.mudarTexto("Você pode configurar e personalizar coisas extras também aqui!", lblTexto, 50);
+                    Thread.sleep(3000);
+                    pararMexerEEsperar();
+                    Componentes.moverJanela(seta, seta.getLocation().x, seta.getLocation().y + java.awt.Toolkit.getDefaultToolkit().getScreenSize().height, 0.004, Easings.EASE_IN_QUART);
+
+                    Componentes.mudarTexto("É isso. Divirta-se!", lblTexto, 50);
+                    Thread.sleep(3000);
+                    seta.dispose();
+
+                    sistema.Componentes.moverJanela(tocar, tocar.getLocation().x + 200, tocar.getLocation().y, 0.004, sistema.Easings.EASE_IN_OUT_CIRC);
+
+                    Componentes.moverJanela(PrimeiraVez.this, getLocation().x, getLocation().y + java.awt.Toolkit.getDefaultToolkit().getScreenSize().height, 0.004, Easings.EASE_IN_QUART);
+
+                    Thread.sleep(3000);
+                    Info.primeiraVez = false;
+                    Info.maximo = 10;
+                    sistema.Configs.salvar();
+                    
                     dispose();
                 } catch (Exception ex) {
                     ex.printStackTrace();
                 }
             }
         }, "Thread").start();
+    }
+
+    void mexer(JFrame janela) {
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    while (setaPararDeMexer == false) {
+                        sistema.Componentes.moverJanela(janela, janela.getLocation().x + 50, janela.getLocation().y, 0.008, sistema.Easings.EASE_IN_OUT_CIRC);
+                        Thread.sleep(600);
+                        sistema.Componentes.moverJanela(janela, janela.getLocation().x - 50, janela.getLocation().y, 0.008, sistema.Easings.EASE_IN_OUT_CIRC);
+                        Thread.sleep(600);
+                    }
+                } catch (Exception ex) {
+                }
+            }
+        }, "Thread").start();
+    }
+
+    void pararMexerEEsperar() {
+        try {
+            setaPararDeMexer = true;
+            Thread.sleep(1500);
+            setaPararDeMexer = false;
+        } catch (Exception ex) {
+        }
+
     }
 
     /**
@@ -79,17 +169,11 @@ public class PrimeiraVez extends javax.swing.JFrame {
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(lblTexto, javax.swing.GroupLayout.DEFAULT_SIZE, 462, Short.MAX_VALUE)
-                .addContainerGap())
+            .addComponent(lblTexto, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 300, Short.MAX_VALUE)
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel1Layout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(lblTexto, javax.swing.GroupLayout.DEFAULT_SIZE, 311, Short.MAX_VALUE)
-                .addContainerGap())
+            .addComponent(lblTexto, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());

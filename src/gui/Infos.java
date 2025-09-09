@@ -77,7 +77,7 @@ public class Infos extends javax.swing.JFrame {
                     addTexto("\tDesativados: " + conversao(Tocar.desativados), txtDetalhes);
                     addTexto("\tPode abrir aba de opções: " + Tocar.podeAbrir, txtDetalhes);
                     addTexto("\tCores legíveis: " + Tocar.coresLegiveis, txtDetalhes);
-                    addTexto("  Playlist predelay: " + Tocar.gerenciadorDeSom.playlistPredelay, txtDetalhes);
+                    addTexto("\tPlaylist predelay: " + Tocar.gerenciadorDeSom.playlistPredelay, txtDetalhes);
                     addTexto("\tEspera delay: " + Tocar.esperaDelay, txtDetalhes);
                     addTexto("\tLoja aberta: " + Tocar.lojaaberta, txtDetalhes);
                     addTexto("\nConfigurações", txtDetalhes);

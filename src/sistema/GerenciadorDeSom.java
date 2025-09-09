@@ -34,7 +34,7 @@ public class GerenciadorDeSom {
             pl = new Som[arquivos.length];
             for (int i = 0; i < pl.length; i++) {
                 pl[i] = new Som();
-                pl[i].carregarSom(arquivos[i], arquivos[i].getName());
+                pl[i].carregarSom(arquivos[i], arquivos[i].getName(), Info.volumeGlobal);
             }
 
             new Thread(new Runnable() {
