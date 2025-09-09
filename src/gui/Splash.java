@@ -63,8 +63,9 @@ public class Splash extends javax.swing.JFrame {
                         JOptionPane.showConfirmDialog(null, "Não foi possível carregar as fontes, o programa funcionará usando a fonte de fallback.", "Ambientes", JOptionPane.DEFAULT_OPTION, JOptionPane.ERROR_MESSAGE);
                     }
 
-                    File file = new File("Arquivos/setups");
+                    File file = new File(Info.localSetups);
                     if (!file.exists()) {
+                        System.out.println("nao existe");
                         pgbProgresso.setString("Criando as pastas...");
                         file.mkdirs();
                     }
@@ -83,12 +84,18 @@ public class Splash extends javax.swing.JFrame {
                         }
 
                     }
-                    
+
                     sistema.Configs.carregar();
 
                     pgbProgresso.setString("Verificando setups...");
 
-                    File setups[] = new File("Arquivos/setups").listFiles();
+                    Thread.sleep(100);
+                    File setups[] = new File(Info.localSetups).listFiles();
+
+                    if (setups == null) {
+                        pgbProgresso.setString("Nenhum setup instalado...");
+                        Thread.sleep(200);
+                    } else {
                     pgbProgresso.setIndeterminate(false);
                     pgbProgresso.setMaximum(setups.length);
 
@@ -101,6 +108,7 @@ public class Splash extends javax.swing.JFrame {
                         if (!mestre.exists()) {
                             JOptionPane.showConfirmDialog(null, "Atenção! O setup " + nome + " não tem o arquivo \"mestre.txt\" para funcionar! É recomendado você contatar o criador", "Ambientes", JOptionPane.DEFAULT_OPTION, JOptionPane.ERROR_MESSAGE);
                         }
+                    }
                     }
 
                     pgbProgresso.setString("Criando negócios...");

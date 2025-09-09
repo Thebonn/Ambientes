@@ -4,6 +4,8 @@ import java.awt.Color;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
+import java.nio.file.Files;
+import java.nio.file.StandardCopyOption;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
 
@@ -12,9 +14,6 @@ import java.util.zip.ZipInputStream;
  * @author Bonn
  */
 public class Generico {
-
-    
-    
 
     public static Color[] converterCor(String cores) {
         Color saida[] = new Color[20];
@@ -32,7 +31,6 @@ public class Generico {
 
         return saida;
     }
-
 
     public void descompactar(File arquivo, File diretorio) {
         try {
@@ -70,7 +68,22 @@ public class Generico {
         }
 
     }
-    
+
+    public static void moverPasta(File de, File para) throws Exception {
+        
+        File arquivos[] = de.listFiles();
+        for (int i = 0; i < arquivos.length; i++) {
+            if (arquivos[i].isFile()) {
+                if (!para.exists()) {
+                    para.mkdirs();
+                }
+                Files.move(de.toPath(), para.toPath(), StandardCopyOption.REPLACE_EXISTING);
+            } else if (de.isDirectory()) {
+                moverPasta(arquivos[i], new File(para.getAbsolutePath() + File.separator + arquivos[i].getName()));
+            }
+        }
+    }
+
     public static int calcularTamanho(int tamDefault, String texto) {
         String div[] = texto.split("");
         String minus = "abcdefghijklmnopqrstuvwxyzáéíóúäëïöüàèìòùâêîôûãõ";
@@ -102,8 +115,6 @@ public class Generico {
         }
         return saida;
     }
-    
-
 
     public static Color processarCor(Color corOriginal, float intensidade) {
         float hsb[] = Color.RGBtoHSB(corOriginal.getRed(), corOriginal.getGreen(), corOriginal.getBlue(), null);
@@ -126,29 +137,29 @@ public class Generico {
                 return corOriginal;
         }
     }
-    
+
     public static int random(int min, int max) {
         return new java.util.Random().nextInt(max - min) + min;
     }
-    
+
     public static Color[] escolherCor() {
         float valor = random(0, 100) / 100f;
-        
+
         Color cor1 = new Color(Color.HSBtoRGB(valor, 0.3f + (random(-10, 10) / 100f), 0.8f + (random(-2, 2) / 100f)));
-        
+
         float hsb[] = Color.RGBtoHSB(cor1.getRed(), cor1.getGreen(), cor1.getBlue(), null);
-        
+
         float deslocamento = random(-4, 4) / 100f;
-        
+
         Color cor2 = new Color(Color.HSBtoRGB(hsb[0] + deslocamento, hsb[1], hsb[2] + (random(-5, 5) / 100f)));
         Color[] saida = {cor1, cor2};
         return saida;
     }
-    
-    //movido para conectar > pegarTextoAvancado/pegarTextoSimples
 
+    //movido para conectar > pegarTextoAvancado/pegarTextoSimples
 //    public String pegarTexto(String link) throws Exception {
 //        String tempDir = System.getProperty("java.io.tmpdir");
+
 ////        try {
 //        URL url = new URL(link);
 //        InputStream inputStream = (url).openStream();

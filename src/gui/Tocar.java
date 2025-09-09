@@ -37,8 +37,6 @@ public final class Tocar extends javax.swing.JFrame {
 
     float contagem = 10;
 
-    int selecionadoAnter = 0;
-
     public byte setupsInstalados = 0;
 
     public static Color cores[] = new Color[20];
@@ -109,25 +107,6 @@ public final class Tocar extends javax.swing.JFrame {
     public void subir() {
         setLocation(getLocation().x, getLocation().y + 130);
         sistema.Componentes.moverJanela(this, this.getLocation().x, this.getLocation().y - 130, 0.008, sistema.Easings.EASE_OUT_QUART);
-//        new Thread(new Runnable() {
-//            @Override
-//            public void run() {
-//                try {
-//                    float velocidade = 10;
-//
-//                    for (int i = 0; i < 35; i++) {
-//
-//                        setLocation(getLocation().x, (int) (getLocation().y - velocidade));
-//                        velocidade = velocidade * 0.9f;
-//                        Thread.sleep(10);
-//
-//                    }
-//                } catch (Exception ex) {
-//                    ex.printStackTrace();
-//                }
-//
-//            }
-//        }, "SubirJFrame").start();
     }
 
     void atualizacaoBaixaFrequencia() {
@@ -236,11 +215,15 @@ public final class Tocar extends javax.swing.JFrame {
         File pasta = new File(sistema.Info.localSetups);
         String setups[] = pasta.list();
         cbbSetups.removeAllItems();
-        for (int i = 0; i < setups.length; i++) {
-            cbbSetups.addItem(setups[i]);
+        
+        if (setups != null) {
+
+            for (int i = 0; i < setups.length; i++) {
+                cbbSetups.addItem(setups[i]);
+            }
+            setupsInstalados = (byte) setups.length;
         }
 
-        setupsInstalados = (byte) setups.length;
         cbbSetups.setSelectedItem(atual);
         cbbSetups.addItem("Obter mais setups");
 
@@ -406,8 +389,6 @@ public final class Tocar extends javax.swing.JFrame {
                                         if (cicloAnterior < 0) {
                                             cicloAnterior = (byte) cores.length;
                                         }
-
-                                        System.out.println(espera);
 
                                         sistema.Componentes.mudarCor(cores[ciclo], cores[cicloAnterior], pnlFundo, (float) (mudancaVel * sistema.Info.velocidade), 15);
                                     }

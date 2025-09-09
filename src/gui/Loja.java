@@ -1,18 +1,11 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package gui;
 
 import com.formdev.flatlaf.FlatDarkLaf;
 import com.k33ptoo.components.KButton;
 import java.awt.Color;
-import java.awt.Image;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.FileInputStream;
-import java.net.URL;
 import javax.swing.ImageIcon;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
@@ -21,14 +14,10 @@ import javax.imageio.ImageIO;
 
 /**
  *
- * @author Thebonn
+ * @author Bonn
  */
 public class Loja extends javax.swing.JFrame {
 
-    /**
-     * Creates new form Loja
-     */
-//    sist.Sistema sist = new sist.Sistema();
     public Loja() {
         FlatDarkLaf.install();
         initComponents();
@@ -290,6 +279,8 @@ public class Loja extends javax.swing.JFrame {
         kButton1 = new com.k33ptoo.components.KButton();
         kButton2 = new com.k33ptoo.components.KButton();
         jLabel2 = new javax.swing.JLabel();
+        txfProvedor = new javax.swing.JTextField();
+        jLabel3 = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setResizable(false);
@@ -299,7 +290,7 @@ public class Loja extends javax.swing.JFrame {
             }
         });
 
-        jLabel1.setFont(new java.awt.Font("Segoe UI", 1, 36)); // NOI18N
+        jLabel1.setFont(new java.awt.Font("Open Sauce One Black", 1, 36)); // NOI18N
         jLabel1.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         jLabel1.setText("Loja de setups");
 
@@ -308,7 +299,7 @@ public class Loja extends javax.swing.JFrame {
         img1.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         img1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/recursos/imagens/carregando.gif"))); // NOI18N
 
-        titulo1.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
+        titulo1.setFont(new java.awt.Font("Open Sauce One", 0, 18)); // NOI18N
         titulo1.setText("Carregando...");
 
         tamanho1.setText("Tamanho: 0 MB");
@@ -363,7 +354,7 @@ public class Loja extends javax.swing.JFrame {
                         .addComponent(autor1)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(id1)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 28, Short.MAX_VALUE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 30, Short.MAX_VALUE)
                         .addComponent(baixar1)))
                 .addContainerGap())
         );
@@ -373,7 +364,7 @@ public class Loja extends javax.swing.JFrame {
         img2.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         img2.setIcon(new javax.swing.ImageIcon(getClass().getResource("/recursos/imagens/carregando.gif"))); // NOI18N
 
-        titulo2.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
+        titulo2.setFont(new java.awt.Font("Open Sauce One", 0, 18)); // NOI18N
         titulo2.setText("Carregando...");
 
         tamanho2.setText("Tamanho: 0 MB");
@@ -428,7 +419,7 @@ public class Loja extends javax.swing.JFrame {
                         .addComponent(autor2)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(id2)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 28, Short.MAX_VALUE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 30, Short.MAX_VALUE)
                         .addComponent(baixar2)))
                 .addContainerGap())
         );
@@ -438,7 +429,7 @@ public class Loja extends javax.swing.JFrame {
         img3.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         img3.setIcon(new javax.swing.ImageIcon(getClass().getResource("/recursos/imagens/carregando.gif"))); // NOI18N
 
-        titulo3.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
+        titulo3.setFont(new java.awt.Font("Open Sauce One", 0, 18)); // NOI18N
         titulo3.setText("Carregando...");
 
         tamanho3.setText("Tamanho: 0 MB");
@@ -493,7 +484,7 @@ public class Loja extends javax.swing.JFrame {
                         .addComponent(autor3)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(id3)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 28, Short.MAX_VALUE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 30, Short.MAX_VALUE)
                         .addComponent(baixar3)))
                 .addContainerGap())
         );
@@ -532,6 +523,10 @@ public class Loja extends javax.swing.JFrame {
         jLabel2.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         jLabel2.setText("Página 0");
 
+        txfProvedor.setText("https://de-bonn.netlify.app/Ambientes");
+
+        jLabel3.setText("Provedor de setups:");
+
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
@@ -549,15 +544,23 @@ public class Loja extends javax.swing.JFrame {
                     .addComponent(jLabel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(painel1, javax.swing.GroupLayout.DEFAULT_SIZE, 789, Short.MAX_VALUE)
                     .addComponent(painel2, javax.swing.GroupLayout.DEFAULT_SIZE, 789, Short.MAX_VALUE)
-                    .addComponent(painel3, javax.swing.GroupLayout.DEFAULT_SIZE, 789, Short.MAX_VALUE))
+                    .addComponent(painel3, javax.swing.GroupLayout.DEFAULT_SIZE, 789, Short.MAX_VALUE)
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addComponent(jLabel3)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(txfProvedor)))
                 .addContainerGap())
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
-                .addGap(12, 12, 12)
+                .addContainerGap()
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(txfProvedor, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel3))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 51, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(painel1, javax.swing.GroupLayout.PREFERRED_SIZE, 154, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(painel2, javax.swing.GroupLayout.PREFERRED_SIZE, 154, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -666,6 +669,7 @@ public class Loja extends javax.swing.JFrame {
     private javax.swing.JLabel img3;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
+    private javax.swing.JLabel jLabel3;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel3;
     private javax.swing.JScrollPane jScrollPane1;
@@ -683,5 +687,6 @@ public class Loja extends javax.swing.JFrame {
     private javax.swing.JLabel titulo1;
     private javax.swing.JLabel titulo2;
     private javax.swing.JLabel titulo3;
+    private javax.swing.JTextField txfProvedor;
     // End of variables declaration//GEN-END:variables
 }

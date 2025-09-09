@@ -49,7 +49,7 @@ public class GerenciadorDeSom {
                         while (tocando) {
                             
                             if (tipo.equals("a")) {
-                                int aleatorio = Generico.random(0, pl.length);
+                                int aleatorio = Generico.random(tocouPrimeira ? 1 : 0, pl.length);
                                 //parece horrivel e é mesmo. isso tudo para evitar selecionar o mesmo som quando for um aleatorio
                                 sel = aleatorio == sel ? (aleatorio + 1 > pl.length - 1 ? (aleatorio - 1 < 0 ? aleatorio : aleatorio - 1) : aleatorio + 1) : aleatorio;
                             } else {
@@ -59,11 +59,6 @@ public class GerenciadorDeSom {
                             if (tocouPrimeira == false && temPrimeira) {
                                 tocouPrimeira = true;
                                 sel = 0;
-                            } else if (tocouPrimeira == true && temPrimeira && cortouPrimeira == false) {
-                                pl[sel].finalizar();
-                                cortouPrimeira = true;
-                                pl = Arrays.copyOfRange(pl, 1, pl.length);
-                                continue;
                             }
 
                             pl[sel].darStart(false);
@@ -75,6 +70,8 @@ public class GerenciadorDeSom {
 
                             //usaria esse thread sleep aqui, só que percebi que com sons mais longos, ele se torna inconsistente
                             //Thread.sleep(Math.max(pl[sel].tamDoSomMS - 1000 - preDelay - sistema.Info.preDelay, 1));
+
+                            
                             while (pl[sel].posDoSomMS() < pl[sel].tamDoSomMS - preDelay - sistema.Info.preDelay) {
                                 if ((double) (pl[sel].posDoSomMS()) / (double) (pl[sel].tamDoSomMS) < 0.9d) {
                                     long valor = Math.min(Math.max((pl[sel].tamDoSomMS - pl[sel].posDoSomMS() + 5) / 5, 10), 25000);
@@ -84,6 +81,19 @@ public class GerenciadorDeSom {
                                     Thread.sleep(1);
                                 }
 
+                            }
+                            
+                            if (tocouPrimeira && cortouPrimeira == false) {
+                                //thread para finalizar o audio que nao sera mais tocado, ja que
+                                //finalizar no meio da execucao pode causar um atraso no audio
+                                cortouPrimeira = true;
+                                new Thread(new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        System.out.println("finalizado");
+                                        pl[0].finalizar();
+                                    }
+                                }, "FINALIZAR SOM").start();
                             }
                         }
 

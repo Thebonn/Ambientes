@@ -1,13 +1,9 @@
 package gui;
 
 import com.formdev.flatlaf.FlatDarkLaf;
-import sistema.Configs;
 import sistema.Generico;
 import java.awt.Color;
 import java.io.File;
-import java.net.URL;
-import java.nio.file.Files;
-import java.nio.file.StandardCopyOption;
 import javax.swing.ImageIcon;
 import javax.swing.JColorChooser;
 import javax.swing.JFileChooser;
@@ -20,7 +16,6 @@ import javax.swing.JOptionPane;
 public class Configuracoes extends javax.swing.JFrame {
 
     Color corExemplo;
-    Generico sist = new Generico();
 
     public Configuracoes() {
         FlatDarkLaf.install();
@@ -91,6 +86,7 @@ public class Configuracoes extends javax.swing.JFrame {
                 jCheckBox2.setSelected(sistema.Info.mostrarSetups);
                 jCheckBox3.setSelected(sistema.Info.animacaoIntroducao);
                 jCheckBox4.setSelected(sistema.Info.iconeInterativo);
+                txfLocal.setCaretPosition(txfLocal.getText().length());
                 for (int i = 0; i < 4; i++) {
                     if (jComboBox6.getItemAt(i).split(": ")[1].contains(Float.toString(Tocar.mudancaVel))) {
                         jComboBox6.setSelectedIndex(i);
@@ -102,7 +98,7 @@ public class Configuracoes extends javax.swing.JFrame {
             }
         }, "TAD").start();
     }
-    
+
     void aplicar() {
         sistema.Info.animTipo = (byte) jComboBox1.getSelectedIndex();
         sistema.Info.atualizacao = (short) jSlider1.getValue();
@@ -153,7 +149,6 @@ public class Configuracoes extends javax.swing.JFrame {
 //            if (sist.acenderThread.isAlive()) {
 //                sist.acenderThread.interrupt();
 //            }
-
             lblAviso.setText(" ");
         }
     }
@@ -224,6 +219,7 @@ public class Configuracoes extends javax.swing.JFrame {
         setResizable(false);
         setType(java.awt.Window.Type.POPUP);
 
+        btnSalvar.setFont(new java.awt.Font("Open Sauce One", 0, 12)); // NOI18N
         btnSalvar.setText("Salvar");
         btnSalvar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -237,12 +233,14 @@ public class Configuracoes extends javax.swing.JFrame {
 
         jTabbedPane1.setFont(new java.awt.Font("Open Sauce One", 0, 12)); // NOI18N
 
+        jComboBox2.setFont(new java.awt.Font("Open Sauce One", 0, 12)); // NOI18N
         jComboBox2.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "0.1", "0.5", "1", "1.25", "1.5", "2", "4", "8", "16", "32" }));
         jComboBox2.setSelectedIndex(2);
         jComboBox2.setToolTipText("Velocidade da animação em alguns estilos");
 
         jLabel3.setText("Velocidade:");
 
+        jComboBox1.setFont(new java.awt.Font("Open Sauce One", 0, 12)); // NOI18N
         jComboBox1.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Fogo", "RGB", "Mar", "Raios", "Luz oscilante", "Cores especiais", "Nenhum" }));
         jComboBox1.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -250,15 +248,20 @@ public class Configuracoes extends javax.swing.JFrame {
             }
         });
 
+        jLabel1.setFont(new java.awt.Font("Open Sauce One", 0, 12)); // NOI18N
         jLabel1.setText("Estilo de animação:");
 
+        jLabel6.setFont(new java.awt.Font("Open Sauce One", 0, 12)); // NOI18N
         jLabel6.setText("Cores:");
 
+        jLabel7.setFont(new java.awt.Font("Open Sauce One", 0, 12)); // NOI18N
         jLabel7.setText("Customizado:");
 
+        jTextField1.setFont(new java.awt.Font("Open Sauce One", 0, 12)); // NOI18N
         jTextField1.setToolTipText("Insira as cores em HEX, separado por vírgula e espaço");
         jTextField1.setEnabled(false);
 
+        jComboBox3.setFont(new java.awt.Font("Open Sauce One", 0, 12)); // NOI18N
         jComboBox3.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Pastel", "Carro na chuva", "Pôr do sol", "Verão", "Aurora boreal", "GAY!!!", "Floresta", "Playstation 2", "Outro" }));
         jComboBox3.setEnabled(false);
         jComboBox3.addActionListener(new java.awt.event.ActionListener() {
@@ -276,7 +279,7 @@ public class Configuracoes extends javax.swing.JFrame {
                 .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jComboBox2, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 169, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jComboBox1, 0, 196, Short.MAX_VALUE)
+                    .addComponent(jComboBox1, 0, 202, Short.MAX_VALUE)
                     .addComponent(jLabel3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addGap(31, 31, 31)
                 .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
@@ -284,7 +287,7 @@ public class Configuracoes extends javax.swing.JFrame {
                     .addComponent(jComboBox3, javax.swing.GroupLayout.Alignment.LEADING, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(jLabel7, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, 202, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(33, Short.MAX_VALUE))
+                .addContainerGap(40, Short.MAX_VALUE))
         );
         jPanel3Layout.setVerticalGroup(
             jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -305,11 +308,12 @@ public class Configuracoes extends javax.swing.JFrame {
                 .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jComboBox2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(42, Short.MAX_VALUE))
+                .addContainerGap(67, Short.MAX_VALUE))
         );
 
         jTabbedPane1.addTab("Animação", jPanel3);
 
+        jSlider1.setFont(new java.awt.Font("Open Sauce One", 0, 12)); // NOI18N
         jSlider1.setMajorTickSpacing(500);
         jSlider1.setMaximum(2100);
         jSlider1.setMinimum(100);
@@ -324,12 +328,15 @@ public class Configuracoes extends javax.swing.JFrame {
             }
         });
 
+        jLabel2.setFont(new java.awt.Font("Open Sauce One", 0, 12)); // NOI18N
         jLabel2.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         jLabel2.setText("Tempo de atualização: 800 ms");
         jLabel2.setToolTipText("Enquanto menor o valor, eventos ocorrerão com mais frequência");
 
+        jLabel8.setFont(new java.awt.Font("Open Sauce One", 0, 12)); // NOI18N
         jLabel8.setText("Predelay de playlist:");
 
+        jTextField2.setFont(new java.awt.Font("Open Sauce One", 0, 12)); // NOI18N
         jTextField2.setText("120");
         jTextField2.setToolTipText("Delay em MS, aumente o número caso ouvir o silêncio,\ndiminua se ouvir sobreposição");
         jTextField2.addKeyListener(new java.awt.event.KeyAdapter() {
@@ -338,11 +345,15 @@ public class Configuracoes extends javax.swing.JFrame {
             }
         });
 
+        jLabel15.setFont(new java.awt.Font("Open Sauce One", 0, 12)); // NOI18N
         jLabel15.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         jLabel15.setText("Local dos setups:");
 
+        txfLocal.setEditable(false);
+        txfLocal.setFont(new java.awt.Font("Open Sauce One", 0, 12)); // NOI18N
         txfLocal.setText("Lorem");
 
+        btnMudarLocal.setFont(new java.awt.Font("Open Sauce One", 0, 12)); // NOI18N
         btnMudarLocal.setText("Mudar");
         btnMudarLocal.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -358,18 +369,18 @@ public class Configuracoes extends javax.swing.JFrame {
                 .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                     .addComponent(jLabel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addGroup(jPanel4Layout.createSequentialGroup()
-                        .addContainerGap(83, Short.MAX_VALUE)
+                        .addContainerGap(76, Short.MAX_VALUE)
                         .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
                             .addComponent(jTextField2, javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(jLabel8, javax.swing.GroupLayout.Alignment.LEADING))
                         .addGap(84, 84, 84)
                         .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                             .addGroup(jPanel4Layout.createSequentialGroup()
-                                .addComponent(txfLocal, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addComponent(txfLocal, javax.swing.GroupLayout.PREFERRED_SIZE, 70, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                 .addComponent(btnMudarLocal))
                             .addComponent(jLabel15, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 85, Short.MAX_VALUE))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 77, Short.MAX_VALUE))
                     .addComponent(jSlider1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addContainerGap())
         );
@@ -394,13 +405,16 @@ public class Configuracoes extends javax.swing.JFrame {
 
         jTabbedPane1.addTab("Setups", jPanel4);
 
+        jCheckBox1.setFont(new java.awt.Font("Open Sauce One", 0, 12)); // NOI18N
         jCheckBox1.setSelected(true);
         jCheckBox1.setText("Colorir com fundo quando inativo");
         jCheckBox1.setToolTipText("Desative para economizar memória");
 
+        jLabel5.setFont(new java.awt.Font("Open Sauce One", 0, 12)); // NOI18N
         jLabel5.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         jLabel5.setText("Tempo de espera: 10 segundos");
 
+        jSlider2.setFont(new java.awt.Font("Open Sauce One", 0, 12)); // NOI18N
         jSlider2.setMaximum(21);
         jSlider2.setMinimum(3);
         jSlider2.setMinorTickSpacing(2);
@@ -413,9 +427,11 @@ public class Configuracoes extends javax.swing.JFrame {
             }
         });
 
+        lblEscurecer.setFont(new java.awt.Font("Open Sauce One", 0, 12)); // NOI18N
         lblEscurecer.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         lblEscurecer.setText("Escurecer fundo: 0%");
 
+        jSlider5.setFont(new java.awt.Font("Open Sauce One", 0, 12)); // NOI18N
         jSlider5.setValue(0);
         jSlider5.addChangeListener(new javax.swing.event.ChangeListener() {
             public void stateChanged(javax.swing.event.ChangeEvent evt) {
@@ -450,11 +466,12 @@ public class Configuracoes extends javax.swing.JFrame {
                 .addComponent(lblEscurecer)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(jSlider5, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(7, Short.MAX_VALUE))
+                .addContainerGap(36, Short.MAX_VALUE))
         );
 
         jTabbedPane1.addTab("Fundo", jPanel5);
 
+        jLabel10.setFont(new java.awt.Font("Open Sauce One", 0, 12)); // NOI18N
         jLabel10.setText("Tipo de cor secundária: ");
 
         painelExemplo.setkGradientFocus(0);
@@ -494,6 +511,7 @@ public class Configuracoes extends javax.swing.JFrame {
                 .addContainerGap(37, Short.MAX_VALUE))
         );
 
+        jComboBox4.setFont(new java.awt.Font("Open Sauce One", 0, 12)); // NOI18N
         jComboBox4.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Sombra", "Luz", "Cor inversa", "Decslocamento na matiz (+)", "Decslocamento na matiz (-)", "Branco", "Preto", "A mesma da cor primária" }));
         jComboBox4.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -501,6 +519,7 @@ public class Configuracoes extends javax.swing.JFrame {
             }
         });
 
+        jButton2.setFont(new java.awt.Font("Open Sauce One", 0, 12)); // NOI18N
         jButton2.setText("Escolher cor");
         jButton2.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -508,6 +527,7 @@ public class Configuracoes extends javax.swing.JFrame {
             }
         });
 
+        jSlider3.setFont(new java.awt.Font("Open Sauce One", 0, 12)); // NOI18N
         jSlider3.setMaximum(700);
         jSlider3.setMinimum(-700);
         jSlider3.setToolTipText("");
@@ -518,6 +538,7 @@ public class Configuracoes extends javax.swing.JFrame {
             }
         });
 
+        jSlider4.setFont(new java.awt.Font("Open Sauce One", 0, 12)); // NOI18N
         jSlider4.setValue(10);
         jSlider4.addChangeListener(new javax.swing.event.ChangeListener() {
             public void stateChanged(javax.swing.event.ChangeEvent evt) {
@@ -525,13 +546,17 @@ public class Configuracoes extends javax.swing.JFrame {
             }
         });
 
+        jLabel12.setFont(new java.awt.Font("Open Sauce One", 0, 12)); // NOI18N
         jLabel12.setText("Intensidade:");
 
+        lblAviso.setFont(new java.awt.Font("Open Sauce One", 0, 12)); // NOI18N
         lblAviso.setForeground(new java.awt.Color(255, 51, 51));
         lblAviso.setText("Aviso: \"Cores especiais\" não está selecionado");
 
+        jLabel14.setFont(new java.awt.Font("Open Sauce One", 0, 12)); // NOI18N
         jLabel14.setText("Velocidade de transição:");
 
+        jComboBox6.setFont(new java.awt.Font("Open Sauce One", 0, 12)); // NOI18N
         jComboBox6.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Instantâneo: 1", "Muito rápido: 0.015", "Rápido: 0.009", "Normal: 0.002", "Lento: 0.001" }));
 
         javax.swing.GroupLayout jPanel6Layout = new javax.swing.GroupLayout(jPanel6);
@@ -556,7 +581,7 @@ public class Configuracoes extends javax.swing.JFrame {
                     .addGroup(jPanel6Layout.createSequentialGroup()
                         .addContainerGap()
                         .addComponent(lblAviso)))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 27, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 19, Short.MAX_VALUE)
                 .addGroup(jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addComponent(jSlider3, javax.swing.GroupLayout.PREFERRED_SIZE, 1, Short.MAX_VALUE)
                     .addComponent(painelExemplo, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
@@ -621,9 +646,11 @@ public class Configuracoes extends javax.swing.JFrame {
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
+        jCheckBox3.setFont(new java.awt.Font("Open Sauce One", 0, 12)); // NOI18N
         jCheckBox3.setSelected(true);
         jCheckBox3.setText("Animação de introdução");
 
+        jButton3.setFont(new java.awt.Font("Open Sauce One", 0, 12)); // NOI18N
         jButton3.setText("Fechar programa");
         jButton3.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -631,6 +658,7 @@ public class Configuracoes extends javax.swing.JFrame {
             }
         });
 
+        jCheckBox4.setFont(new java.awt.Font("Open Sauce One", 0, 12)); // NOI18N
         jCheckBox4.setSelected(true);
         jCheckBox4.setText("Ícone interativo");
         jCheckBox4.setToolTipText("O ícone que itera dependendo se algo está sendo tocado");
@@ -642,13 +670,13 @@ public class Configuracoes extends javax.swing.JFrame {
             .addGroup(jPanel8Layout.createSequentialGroup()
                 .addContainerGap()
                 .addComponent(jPanel9, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 34, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 33, Short.MAX_VALUE)
                 .addGroup(jPanel8Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addComponent(jButton3, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(jCheckBox3, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(jCheckBox4, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(jSeparator1))
-                .addContainerGap(39, Short.MAX_VALUE))
+                .addContainerGap(37, Short.MAX_VALUE))
         );
         jPanel8Layout.setVerticalGroup(
             jPanel8Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -673,12 +701,15 @@ public class Configuracoes extends javax.swing.JFrame {
 
         jTextArea1.setEditable(false);
         jTextArea1.setColumns(20);
+        jTextArea1.setFont(new java.awt.Font("Open Sauce One", 0, 12)); // NOI18N
         jTextArea1.setRows(5);
-        jTextArea1.setText("Changelog\n\n- Resolvido um bug no carregamento de setups na loja\n- Resolvido um problema nos botões da loja\n- Uso de uma biblioteca nova\n- Novo ícone para o programa\n- Ícone interativo [muda dependendo se algo está tocando]\n- Sistema de carregamendo das imagens na loja reescrito\n- Verificador de versão\n- Ícone interativo para o Discord RPC\n- Logo animada na inicialização\n- Pequenas mudanças na interface\n\nObrigado por usar esse programa! <3\n\t- Thebonn");
+        jTextArea1.setText("Changelog\n\n- Sistema de carregamento reescrito\n- Melhorado o reprodutor de áudio\n- Modo sem gui adicionado\n- Introdução de primeira vez\n- Fonte embutida\n- Pasta de setups ser alterável\n- Setups podem ter cores\n\nObrigado por usar esse programa! <3\n\t- Thebonn");
         jScrollPane1.setViewportView(jTextArea1);
 
-        jLabel13.setText("Ambientes versão 1.1 [06/03/2023]");
+        jLabel13.setFont(new java.awt.Font("Open Sauce One", 0, 12)); // NOI18N
+        jLabel13.setText("Ambientes versão 1.2 [06/03/2025]");
 
+        jButton4.setFont(new java.awt.Font("Open Sauce One", 0, 12)); // NOI18N
         jButton4.setText("Informações técnicas");
         jButton4.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -693,10 +724,10 @@ public class Configuracoes extends javax.swing.JFrame {
             .addGroup(jPanel7Layout.createSequentialGroup()
                 .addContainerGap()
                 .addComponent(jLabel13)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 156, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 117, Short.MAX_VALUE)
                 .addComponent(jButton4)
                 .addContainerGap())
-            .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 491, Short.MAX_VALUE)
+            .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 504, Short.MAX_VALUE)
         );
         jPanel7Layout.setVerticalGroup(
             jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -706,11 +737,13 @@ public class Configuracoes extends javax.swing.JFrame {
                     .addComponent(jLabel13)
                     .addComponent(jButton4))
                 .addGap(12, 12, 12)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 128, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(44, 44, 44))
         );
 
         jTabbedPane1.addTab("Informações", jPanel7);
 
+        bntAplicar.setFont(new java.awt.Font("Open Sauce One", 0, 12)); // NOI18N
         bntAplicar.setText("Aplicar");
         bntAplicar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -842,23 +875,22 @@ public class Configuracoes extends javax.swing.JFrame {
             jfc.showDialog(null, "Escolher local");
 
             String lista[] = new File(sistema.Info.localSetups).list();
-            int e = 0;
-            if (lista.length > 0) {
+            int e = -1;
+            if (lista != null && lista.length > 0) {
                 e = JOptionPane.showConfirmDialog(null, "Você tem itens na sua pasta de setups. Deseja mover os itens da pasta antiga para a nova?", "Ambientes", JOptionPane.YES_NO_CANCEL_OPTION, JOptionPane.WARNING_MESSAGE);
             }
             if (e != 3) {
                 if (e == 0) {
-                    //contornando o java.nio.file.DirectoryNotEmptyException
-//                    File 
-                    Files.move(jfc.getSelectedFile().toPath(), new File(sistema.Info.localSetups).toPath(), StandardCopyOption.REPLACE_EXISTING);
+                    sistema.Generico.moverPasta(new File(sistema.Info.localSetups), jfc.getSelectedFile());
+                    new File(sistema.Info.localSetups).delete();
                 }
-
+                
                 sistema.Info.localSetups = jfc.getSelectedFile().getAbsolutePath();
+                txfLocal.setText(sistema.Info.localSetups);
             }
         } catch (Exception ex) {
             ex.printStackTrace();
         }
-
 
     }//GEN-LAST:event_btnMudarLocalActionPerformed
 

@@ -4,7 +4,6 @@ import java.io.File;
 import javax.sound.sampled.AudioInputStream;
 import javax.sound.sampled.AudioSystem;
 import javax.sound.sampled.Clip;
-import javax.sound.sampled.DataLine;
 import javax.sound.sampled.FloatControl;
 import javax.sound.sampled.LineListener;
 
@@ -49,7 +48,7 @@ public class Som {
             if (clip != null && clip.isOpen()) {
                 return false;
             }
-            
+
             clip = AudioSystem.getClip();
             AudioInputStream audioStream = AudioSystem.getAudioInputStream(arquivo);
             clip.open(audioStream);
@@ -123,10 +122,10 @@ public class Som {
         nome = "";
 
         if (clip != null) {
-            clip.stop();
             if (lili != null) {
                 clip.removeLineListener(lili);
             }
+            clip.stop();
             clip.close();
         }
         clip = null;
