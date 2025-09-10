@@ -54,13 +54,16 @@
                           <Component id="kButton1" min="-2" pref="45" max="-2" attributes="0"/>
                       </Group>
                       <Component id="jLabel1" alignment="1" max="32767" attributes="0"/>
-                      <Component id="painel1" alignment="1" pref="789" max="32767" attributes="0"/>
-                      <Component id="painel2" alignment="1" pref="789" max="32767" attributes="0"/>
-                      <Component id="painel3" alignment="1" pref="789" max="32767" attributes="0"/>
+                      <Component id="painel1" alignment="1" pref="849" max="32767" attributes="0"/>
+                      <Component id="painel2" alignment="1" pref="849" max="32767" attributes="0"/>
+                      <Component id="painel3" alignment="1" pref="849" max="32767" attributes="0"/>
                       <Group type="102" alignment="1" attributes="0">
                           <Component id="jLabel3" min="-2" max="-2" attributes="0"/>
                           <EmptySpace max="-2" attributes="0"/>
-                          <Component id="txfProvedor" max="32767" attributes="0"/>
+                          <Component id="txfProvedor" min="-2" pref="577" max="-2" attributes="0"/>
+                          <EmptySpace max="-2" attributes="0"/>
+                          <Component id="jButton1" min="-2" max="-2" attributes="0"/>
+                          <EmptySpace min="0" pref="0" max="32767" attributes="0"/>
                       </Group>
                   </Group>
                   <EmptySpace max="-2" attributes="0"/>
@@ -74,6 +77,7 @@
                   <Group type="103" groupAlignment="3" attributes="0">
                       <Component id="txfProvedor" alignment="3" min="-2" max="-2" attributes="0"/>
                       <Component id="jLabel3" alignment="3" min="-2" max="-2" attributes="0"/>
+                      <Component id="jButton1" alignment="3" min="-2" max="-2" attributes="0"/>
                   </Group>
                   <EmptySpace max="-2" attributes="0"/>
                   <Component id="jLabel1" min="-2" pref="51" max="-2" attributes="0"/>
@@ -162,6 +166,9 @@
           <SubComponents>
             <Component class="javax.swing.JLabel" name="img1">
               <Properties>
+                <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
+                  <Font name="Open Sauce One" size="12" style="0"/>
+                </Property>
                 <Property name="horizontalAlignment" type="int" value="0"/>
                 <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
                   <Image iconType="3" name="/recursos/imagens/carregando.gif"/>
@@ -178,6 +185,9 @@
             </Component>
             <Component class="javax.swing.JLabel" name="tamanho1">
               <Properties>
+                <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
+                  <Font name="Open Sauce One" size="12" style="0"/>
+                </Property>
                 <Property name="text" type="java.lang.String" value="Tamanho: 0 MB"/>
               </Properties>
             </Component>
@@ -192,6 +202,9 @@
                   <Properties>
                     <Property name="editable" type="boolean" value="false"/>
                     <Property name="columns" type="int" value="20"/>
+                    <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
+                      <Font name="Open Sauce One" size="12" style="0"/>
+                    </Property>
                     <Property name="rows" type="int" value="5"/>
                   </Properties>
                 </Component>
@@ -199,11 +212,17 @@
             </Container>
             <Component class="javax.swing.JLabel" name="autor1">
               <Properties>
+                <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
+                  <Font name="Open Sauce One" size="12" style="0"/>
+                </Property>
                 <Property name="text" type="java.lang.String" value="Autor: Nenhum"/>
               </Properties>
             </Component>
             <Component class="javax.swing.JButton" name="baixar1">
               <Properties>
+                <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
+                  <Font name="Open Sauce One" size="12" style="0"/>
+                </Property>
                 <Property name="text" type="java.lang.String" value="Baixar"/>
               </Properties>
               <Events>
@@ -212,6 +231,9 @@
             </Component>
             <Component class="javax.swing.JLabel" name="id1">
               <Properties>
+                <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
+                  <Font name="Open Sauce One" size="12" style="0"/>
+                </Property>
                 <Property name="text" type="java.lang.String" value="ID: Nenhum"/>
               </Properties>
             </Component>
@@ -274,6 +296,9 @@
           <SubComponents>
             <Component class="javax.swing.JLabel" name="img2">
               <Properties>
+                <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
+                  <Font name="Open Sauce One" size="12" style="0"/>
+                </Property>
                 <Property name="horizontalAlignment" type="int" value="0"/>
                 <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
                   <Image iconType="3" name="/recursos/imagens/carregando.gif"/>
@@ -290,6 +315,9 @@
             </Component>
             <Component class="javax.swing.JLabel" name="tamanho2">
               <Properties>
+                <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
+                  <Font name="Open Sauce One" size="12" style="0"/>
+                </Property>
                 <Property name="text" type="java.lang.String" value="Tamanho: 0 MB"/>
               </Properties>
             </Component>
@@ -304,6 +332,9 @@
                   <Properties>
                     <Property name="editable" type="boolean" value="false"/>
                     <Property name="columns" type="int" value="20"/>
+                    <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
+                      <Font name="Open Sauce One" size="12" style="0"/>
+                    </Property>
                     <Property name="rows" type="int" value="5"/>
                   </Properties>
                 </Component>
@@ -311,11 +342,17 @@
             </Container>
             <Component class="javax.swing.JLabel" name="autor2">
               <Properties>
+                <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
+                  <Font name="Open Sauce One" size="12" style="0"/>
+                </Property>
                 <Property name="text" type="java.lang.String" value="Autor: Nenhum"/>
               </Properties>
             </Component>
             <Component class="javax.swing.JButton" name="baixar2">
               <Properties>
+                <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
+                  <Font name="Open Sauce One" size="12" style="0"/>
+                </Property>
                 <Property name="text" type="java.lang.String" value="Baixar"/>
               </Properties>
               <Events>
@@ -324,6 +361,9 @@
             </Component>
             <Component class="javax.swing.JLabel" name="id2">
               <Properties>
+                <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
+                  <Font name="Open Sauce One" size="12" style="0"/>
+                </Property>
                 <Property name="text" type="java.lang.String" value="ID: Nenhum"/>
               </Properties>
             </Component>
@@ -386,6 +426,9 @@
           <SubComponents>
             <Component class="javax.swing.JLabel" name="img3">
               <Properties>
+                <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
+                  <Font name="Open Sauce One" size="12" style="0"/>
+                </Property>
                 <Property name="horizontalAlignment" type="int" value="0"/>
                 <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
                   <Image iconType="3" name="/recursos/imagens/carregando.gif"/>
@@ -402,6 +445,9 @@
             </Component>
             <Component class="javax.swing.JLabel" name="tamanho3">
               <Properties>
+                <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
+                  <Font name="Open Sauce One" size="12" style="0"/>
+                </Property>
                 <Property name="text" type="java.lang.String" value="Tamanho: 0 MB"/>
               </Properties>
             </Component>
@@ -416,6 +462,9 @@
                   <Properties>
                     <Property name="editable" type="boolean" value="false"/>
                     <Property name="columns" type="int" value="20"/>
+                    <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
+                      <Font name="Open Sauce One" size="12" style="0"/>
+                    </Property>
                     <Property name="rows" type="int" value="5"/>
                   </Properties>
                 </Component>
@@ -423,11 +472,17 @@
             </Container>
             <Component class="javax.swing.JLabel" name="autor3">
               <Properties>
+                <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
+                  <Font name="Open Sauce One" size="12" style="0"/>
+                </Property>
                 <Property name="text" type="java.lang.String" value="Autor: Nenhum"/>
               </Properties>
             </Component>
             <Component class="javax.swing.JButton" name="baixar3">
               <Properties>
+                <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
+                  <Font name="Open Sauce One" size="12" style="0"/>
+                </Property>
                 <Property name="text" type="java.lang.String" value="Baixar"/>
               </Properties>
               <Events>
@@ -436,6 +491,9 @@
             </Component>
             <Component class="javax.swing.JLabel" name="id3">
               <Properties>
+                <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
+                  <Font name="Open Sauce One" size="12" style="0"/>
+                </Property>
                 <Property name="text" type="java.lang.String" value="ID: Nenhum"/>
               </Properties>
             </Component>
@@ -512,7 +570,7 @@
         <Component class="javax.swing.JLabel" name="jLabel2">
           <Properties>
             <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
-              <Font name="Segoe UI" size="18" style="0"/>
+              <Font name="Open Sauce One" size="18" style="0"/>
             </Property>
             <Property name="horizontalAlignment" type="int" value="0"/>
             <Property name="text" type="java.lang.String" value="P&#xe1;gina 0"/>
@@ -520,13 +578,30 @@
         </Component>
         <Component class="javax.swing.JTextField" name="txfProvedor">
           <Properties>
+            <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
+              <Font name="Open Sauce One" size="12" style="0"/>
+            </Property>
             <Property name="text" type="java.lang.String" value="https://de-bonn.netlify.app/Ambientes"/>
           </Properties>
         </Component>
         <Component class="javax.swing.JLabel" name="jLabel3">
           <Properties>
+            <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
+              <Font name="Open Sauce One" size="12" style="0"/>
+            </Property>
             <Property name="text" type="java.lang.String" value="Provedor de setups:"/>
           </Properties>
+        </Component>
+        <Component class="javax.swing.JButton" name="jButton1">
+          <Properties>
+            <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
+              <Font name="Open Sauce One" size="12" style="0"/>
+            </Property>
+            <Property name="text" type="java.lang.String" value="Atualizar provedor"/>
+          </Properties>
+          <Events>
+            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jButton1ActionPerformed"/>
+          </Events>
         </Component>
       </SubComponents>
     </Container>

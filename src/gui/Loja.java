@@ -21,14 +21,7 @@ public class Loja extends javax.swing.JFrame {
     public Loja() {
         FlatDarkLaf.install();
         initComponents();
-//        atualizarInfo();
-
-        new Thread(new Runnable() {
-            @Override
-            public void run() {
-                atualizarInfo();
-            }
-        }, "TAD").start();
+        atualizarInfo();
 
         this.setTitle("Loja de setups");
 
@@ -38,7 +31,7 @@ public class Loja extends javax.swing.JFrame {
 
     int pag = 0;
     int max = 12;
-    
+
     String links = "";
 
     String ar[] = null;
@@ -48,50 +41,53 @@ public class Loja extends javax.swing.JFrame {
     String autor[] = null;
 
     public void atualizarInfo() {
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    links = sistema.Conectar.pegarSimples(sistema.Info.provedor + "/links.txt");
 
-        try {
-            links = sistema.Conectar.pegarSimples("https://banco-de-dados.netlify.app/Arquivos/Ambientes/links.txt");
+                    ar = new String[links.split(", ").length];
+                    ar = links.split(", ");
 
-            ar = new String[links.split(", ").length];
-            ar = links.split(", ");
+                    if (max > ar.length) {
+                        max = ar.length;
+                    }
 
-            if (max > ar.length) {
-                max = ar.length;
-            }
+                    linkInfo = new String[ar.length];
+                    autor = new String[ar.length];
+                    info = new String[ar.length][];
 
-            linkInfo = new String[ar.length];
-            autor = new String[ar.length];
-            info = new String[ar.length][];
-
-            /*eu queria q desse para criar o tamanho do segundo coiso dentro do
+                    /*eu queria q desse para criar o tamanho do segundo coiso dentro do
                     * for com o coiso.length, mas eu nao achei como, entao vou ter que
                     * dar um tamanho limite mesmo
-             */
-            linhas = new String[ar.length][50];
-            System.out.println("vai carregar da pag " + pag * 3 + " ate a " + max);
-            for (int i = pag * 3; i < max; i++) {
+                     */
+                    linhas = new String[ar.length][50];
+                    System.out.println("vai carregar da pag " + pag * 3 + " ate a " + max);
+                    for (int i = pag * 3; i < max; i++) {
 
-                if (i >= ar.length) {
-                    break;
+                        if (i >= ar.length) {
+                            break;
+                        }
+
+                        linkInfo[i] = sistema.Info.provedor + "/" + ar[i] + "/info.txt";
+                        String coiso[] = sistema.Conectar.pegarSimples(linkInfo[i]).split("\n");
+                        for (int j = 0; j < coiso.length; j++) {
+                            linhas[i][j] = coiso[j];
+                            info[i] = linhas[i][0].split(", ");
+                        }
+
+                        autor[i] = sistema.Conectar.pegarSimples(sistema.Info.provedor + "/" + ar[i] + "/copyright.txt").split("\n")[0];
+
+                    }
+
+                    pegarLinks();
+
+                } catch (Exception ex) {
+                    ex.printStackTrace();
                 }
-
-                linkInfo[i] = "https://banco-de-dados.netlify.app/Arquivos/Ambientes/" + ar[i] + "/info.txt";
-                String coiso[] = sistema.Conectar.pegarSimples(linkInfo[i]).split("\n");
-                for (int j = 0; j < coiso.length; j++) {
-                    linhas[i][j] = coiso[j];
-                    info[i] = linhas[i][0].split(", ");
-                }
-
-                autor[i] = sistema.Conectar.pegarSimples("https://banco-de-dados.netlify.app/Arquivos/Ambientes/" + ar[i] + "/copyright.txt").split("\n")[0];
-
             }
-
-            pegarLinks();
-
-        } catch (Exception ex) {
-            ex.printStackTrace();
-        }
-
+        }, "Thread").start();
     }
 
     public void pegarLinks() {
@@ -137,9 +133,9 @@ public class Loja extends javax.swing.JFrame {
 
                         String caminho = System.getProperty("java.io.tmpdir") + info[i][0] + ".png";
                         if (!new File(caminho).exists()) {
-                            ImageIO.write(ImageIO.read(sistema.Conectar.pegarInputStream("https://banco-de-dados.netlify.app/Arquivos/Ambientes/" + ar[i] + "/cover.png")), "png", new File(caminho));
+                            ImageIO.write(ImageIO.read(sistema.Conectar.pegarInputStream(sistema.Info.provedor + "/" + ar[i] + "/cover.png")), "png", new File(caminho));
                         }
-                        
+
                         InputStream is = new FileInputStream(caminho);
                         ImageIcon imagem = new ImageIcon(ImageIO.read(is).getScaledInstance(150, 150, BufferedImage.SCALE_SMOOTH));
 
@@ -281,6 +277,7 @@ public class Loja extends javax.swing.JFrame {
         jLabel2 = new javax.swing.JLabel();
         txfProvedor = new javax.swing.JTextField();
         jLabel3 = new javax.swing.JLabel();
+        jButton1 = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setResizable(false);
@@ -296,21 +293,26 @@ public class Loja extends javax.swing.JFrame {
 
         painel1.setPreferredSize(new java.awt.Dimension(150, 150));
 
+        img1.setFont(new java.awt.Font("Open Sauce One", 0, 12)); // NOI18N
         img1.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         img1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/recursos/imagens/carregando.gif"))); // NOI18N
 
         titulo1.setFont(new java.awt.Font("Open Sauce One", 0, 18)); // NOI18N
         titulo1.setText("Carregando...");
 
+        tamanho1.setFont(new java.awt.Font("Open Sauce One", 0, 12)); // NOI18N
         tamanho1.setText("Tamanho: 0 MB");
 
         descricao1.setEditable(false);
         descricao1.setColumns(20);
+        descricao1.setFont(new java.awt.Font("Open Sauce One", 0, 12)); // NOI18N
         descricao1.setRows(5);
         jScrollPane1.setViewportView(descricao1);
 
+        autor1.setFont(new java.awt.Font("Open Sauce One", 0, 12)); // NOI18N
         autor1.setText("Autor: Nenhum");
 
+        baixar1.setFont(new java.awt.Font("Open Sauce One", 0, 12)); // NOI18N
         baixar1.setText("Baixar");
         baixar1.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -318,6 +320,7 @@ public class Loja extends javax.swing.JFrame {
             }
         });
 
+        id1.setFont(new java.awt.Font("Open Sauce One", 0, 12)); // NOI18N
         id1.setText("ID: Nenhum");
 
         javax.swing.GroupLayout painel1Layout = new javax.swing.GroupLayout(painel1);
@@ -361,21 +364,26 @@ public class Loja extends javax.swing.JFrame {
 
         painel2.setPreferredSize(new java.awt.Dimension(150, 150));
 
+        img2.setFont(new java.awt.Font("Open Sauce One", 0, 12)); // NOI18N
         img2.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         img2.setIcon(new javax.swing.ImageIcon(getClass().getResource("/recursos/imagens/carregando.gif"))); // NOI18N
 
         titulo2.setFont(new java.awt.Font("Open Sauce One", 0, 18)); // NOI18N
         titulo2.setText("Carregando...");
 
+        tamanho2.setFont(new java.awt.Font("Open Sauce One", 0, 12)); // NOI18N
         tamanho2.setText("Tamanho: 0 MB");
 
         descricao2.setEditable(false);
         descricao2.setColumns(20);
+        descricao2.setFont(new java.awt.Font("Open Sauce One", 0, 12)); // NOI18N
         descricao2.setRows(5);
         jScrollPane2.setViewportView(descricao2);
 
+        autor2.setFont(new java.awt.Font("Open Sauce One", 0, 12)); // NOI18N
         autor2.setText("Autor: Nenhum");
 
+        baixar2.setFont(new java.awt.Font("Open Sauce One", 0, 12)); // NOI18N
         baixar2.setText("Baixar");
         baixar2.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -383,6 +391,7 @@ public class Loja extends javax.swing.JFrame {
             }
         });
 
+        id2.setFont(new java.awt.Font("Open Sauce One", 0, 12)); // NOI18N
         id2.setText("ID: Nenhum");
 
         javax.swing.GroupLayout painel2Layout = new javax.swing.GroupLayout(painel2);
@@ -426,21 +435,26 @@ public class Loja extends javax.swing.JFrame {
 
         painel3.setPreferredSize(new java.awt.Dimension(150, 150));
 
+        img3.setFont(new java.awt.Font("Open Sauce One", 0, 12)); // NOI18N
         img3.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         img3.setIcon(new javax.swing.ImageIcon(getClass().getResource("/recursos/imagens/carregando.gif"))); // NOI18N
 
         titulo3.setFont(new java.awt.Font("Open Sauce One", 0, 18)); // NOI18N
         titulo3.setText("Carregando...");
 
+        tamanho3.setFont(new java.awt.Font("Open Sauce One", 0, 12)); // NOI18N
         tamanho3.setText("Tamanho: 0 MB");
 
         descricao3.setEditable(false);
         descricao3.setColumns(20);
+        descricao3.setFont(new java.awt.Font("Open Sauce One", 0, 12)); // NOI18N
         descricao3.setRows(5);
         jScrollPane3.setViewportView(descricao3);
 
+        autor3.setFont(new java.awt.Font("Open Sauce One", 0, 12)); // NOI18N
         autor3.setText("Autor: Nenhum");
 
+        baixar3.setFont(new java.awt.Font("Open Sauce One", 0, 12)); // NOI18N
         baixar3.setText("Baixar");
         baixar3.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -448,6 +462,7 @@ public class Loja extends javax.swing.JFrame {
             }
         });
 
+        id3.setFont(new java.awt.Font("Open Sauce One", 0, 12)); // NOI18N
         id3.setText("ID: Nenhum");
 
         javax.swing.GroupLayout painel3Layout = new javax.swing.GroupLayout(painel3);
@@ -519,13 +534,23 @@ public class Loja extends javax.swing.JFrame {
             }
         });
 
-        jLabel2.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
+        jLabel2.setFont(new java.awt.Font("Open Sauce One", 0, 18)); // NOI18N
         jLabel2.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         jLabel2.setText("Página 0");
 
+        txfProvedor.setFont(new java.awt.Font("Open Sauce One", 0, 12)); // NOI18N
         txfProvedor.setText("https://de-bonn.netlify.app/Ambientes");
 
+        jLabel3.setFont(new java.awt.Font("Open Sauce One", 0, 12)); // NOI18N
         jLabel3.setText("Provedor de setups:");
+
+        jButton1.setFont(new java.awt.Font("Open Sauce One", 0, 12)); // NOI18N
+        jButton1.setText("Atualizar provedor");
+        jButton1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton1ActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
@@ -542,13 +567,16 @@ public class Loja extends javax.swing.JFrame {
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addComponent(kButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 45, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addComponent(jLabel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(painel1, javax.swing.GroupLayout.DEFAULT_SIZE, 789, Short.MAX_VALUE)
-                    .addComponent(painel2, javax.swing.GroupLayout.DEFAULT_SIZE, 789, Short.MAX_VALUE)
-                    .addComponent(painel3, javax.swing.GroupLayout.DEFAULT_SIZE, 789, Short.MAX_VALUE)
+                    .addComponent(painel1, javax.swing.GroupLayout.DEFAULT_SIZE, 849, Short.MAX_VALUE)
+                    .addComponent(painel2, javax.swing.GroupLayout.DEFAULT_SIZE, 849, Short.MAX_VALUE)
+                    .addComponent(painel3, javax.swing.GroupLayout.DEFAULT_SIZE, 849, Short.MAX_VALUE)
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addComponent(jLabel3)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(txfProvedor)))
+                        .addComponent(txfProvedor, javax.swing.GroupLayout.PREFERRED_SIZE, 577, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jButton1)
+                        .addGap(0, 0, Short.MAX_VALUE)))
                 .addContainerGap())
         );
         jPanel1Layout.setVerticalGroup(
@@ -557,7 +585,8 @@ public class Loja extends javax.swing.JFrame {
                 .addContainerGap()
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(txfProvedor, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel3))
+                    .addComponent(jLabel3)
+                    .addComponent(jButton1))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 51, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
@@ -595,13 +624,23 @@ public class Loja extends javax.swing.JFrame {
     }//GEN-LAST:event_formWindowClosing
 
     private void kButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_kButton2ActionPerformed
+        kButton2.setEnabled(false);
+        img1.setIcon(new ImageIcon(getClass().getResource("/recursos/imagens/carregando.gif")));
+        img2.setIcon(new ImageIcon(getClass().getResource("/recursos/imagens/carregando.gif")));
+        img3.setIcon(new ImageIcon(getClass().getResource("/recursos/imagens/carregando.gif")));
         pag--;
         pegarLinks();
+        kButton2.setEnabled(true);
     }//GEN-LAST:event_kButton2ActionPerformed
 
     private void kButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_kButton1ActionPerformed
+        kButton1.setEnabled(false);
+        img1.setIcon(new ImageIcon(getClass().getResource("/recursos/imagens/carregando.gif")));
+        img2.setIcon(new ImageIcon(getClass().getResource("/recursos/imagens/carregando.gif")));
+        img3.setIcon(new ImageIcon(getClass().getResource("/recursos/imagens/carregando.gif")));
         pag++;
         pegarLinks();
+        kButton1.setEnabled(true);
     }//GEN-LAST:event_kButton1ActionPerformed
 
     private void baixar3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_baixar3ActionPerformed
@@ -615,6 +654,11 @@ public class Loja extends javax.swing.JFrame {
     private void baixar1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_baixar1ActionPerformed
         new BaixarSetup(id1.getText().substring(4), titulo1.getText(), new File(System.getProperty("java.io.tmpdir") + titulo1.getText() + ".png")).setVisible(true);
     }//GEN-LAST:event_baixar1ActionPerformed
+
+    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+        sistema.Info.provedor = txfProvedor.getText();
+        sistema.Configs.salvar();
+    }//GEN-LAST:event_jButton1ActionPerformed
 
     /**
      * @param args the command line arguments
@@ -667,6 +711,7 @@ public class Loja extends javax.swing.JFrame {
     private javax.swing.JLabel img1;
     private javax.swing.JLabel img2;
     private javax.swing.JLabel img3;
+    private javax.swing.JButton jButton1;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;

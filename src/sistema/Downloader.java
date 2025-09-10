@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package sistema;
 
 import java.io.BufferedInputStream;
@@ -16,14 +11,14 @@ import javax.swing.JOptionPane;
 
 /**
  *
- * @author Thebonn
+ * @author Bonn
  */
 public class Downloader implements Runnable {
 
     String link;
     File out;
-    public static double porcentagem;
-    public static boolean baixou = false;
+    public double porcentagem;
+    public boolean baixou = false;
 
     public Downloader(String link, File out) {
         this.link = link;

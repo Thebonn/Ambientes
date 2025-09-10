@@ -31,7 +31,7 @@ public class Info {
     public static boolean iconeInterativo = true;
     
     public static String localSetups = "Arquivos/setups";
-    public static String provedor = "https://de-bonn.netlify.app/Ambientes/";
+    public static String provedor = "https://de-bonn.netlify.app/ambientes";
     
     public static float volumeGlobal = 90;
     

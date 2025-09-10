@@ -469,7 +469,6 @@ public final class Tocar extends javax.swing.JFrame {
                     try {
                         configs = new Configuracoes();
                         Tocar t = Tocar.this;
-//                        java.awt.Point ponto = configs.getLocation();
 
                         configs.setVisible(true);
 

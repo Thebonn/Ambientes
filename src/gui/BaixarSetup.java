@@ -1,11 +1,5 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package gui;
 
-import java.awt.Image;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import javax.imageio.ImageIO;
@@ -14,7 +8,7 @@ import javax.swing.JOptionPane;
 
 /**
  *
- * @author Thebonn
+ * @author Bonn
  */
 public class BaixarSetup extends javax.swing.JFrame {
 
@@ -65,8 +59,9 @@ public class BaixarSetup extends javax.swing.JFrame {
         setResizable(false);
 
         icone.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        icone.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagens/saida-gif.gif"))); // NOI18N
+        icone.setIcon(new javax.swing.ImageIcon(getClass().getResource("/recursos/imagens/saida-gif.gif"))); // NOI18N
 
+        jButton1.setFont(new java.awt.Font("Open Sauce One", 0, 12)); // NOI18N
         jButton1.setText("Sim!");
         jButton1.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -74,10 +69,11 @@ public class BaixarSetup extends javax.swing.JFrame {
             }
         });
 
-        lblNome.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
+        lblNome.setFont(new java.awt.Font("Open Sauce One Black", 1, 18)); // NOI18N
         lblNome.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         lblNome.setText("Nome");
 
+        jButton2.setFont(new java.awt.Font("Open Sauce One", 0, 12)); // NOI18N
         jButton2.setText("Mudei de ideia");
         jButton2.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -85,9 +81,11 @@ public class BaixarSetup extends javax.swing.JFrame {
             }
         });
 
+        jLabel1.setFont(new java.awt.Font("Open Sauce One", 0, 12)); // NOI18N
         jLabel1.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         jLabel1.setText("Deseja realmente instalar esse setup?");
 
+        pgbProgresso.setFont(new java.awt.Font("Open Sauce One", 0, 10)); // NOI18N
         pgbProgresso.setStringPainted(true);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
@@ -101,11 +99,11 @@ public class BaixarSetup extends javax.swing.JFrame {
                     .addComponent(icone, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(jLabel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addGroup(layout.createSequentialGroup()
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 105, Short.MAX_VALUE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 100, Short.MAX_VALUE)
                         .addComponent(jButton1)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(jButton2)
-                        .addGap(0, 105, Short.MAX_VALUE))
+                        .addGap(0, 100, Short.MAX_VALUE))
                     .addComponent(pgbProgresso, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addContainerGap())
         );
@@ -118,7 +116,7 @@ public class BaixarSetup extends javax.swing.JFrame {
                 .addComponent(icone, javax.swing.GroupLayout.PREFERRED_SIZE, 150, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
                 .addComponent(jLabel1)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 10, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 14, Short.MAX_VALUE)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jButton1)
                     .addComponent(jButton2))
@@ -142,7 +140,7 @@ public class BaixarSetup extends javax.swing.JFrame {
         jButton2.setEnabled(false);
         jLabel1.setText("Instalando...");
         setTitle("Instalando...");
-        File diretorio = new File("Arquivos/setups/" + nome);
+        File diretorio = new File(sistema.Info.localSetups + File.separator + nome);
         if (!diretorio.exists()) {
             diretorio.mkdir();
         }
@@ -152,28 +150,31 @@ public class BaixarSetup extends javax.swing.JFrame {
             public void run() {
                 try {
 
-                    String saidadownload = "Arquivos/setups/" + nome + "/download.zip";
-                    String saidazip = "Arquivos/setups/" + nome;
-                    new Thread(new sistema.Downloader("https://banco-de-dados.netlify.app/Arquivos/Ambientes/" + id + "/" + id + ".zip", new File(saidadownload))).start();
+                    String saidadownload = sistema.Info.localSetups + "/" + nome + "/download.zip";
+                    String saidazip = sistema.Info.localSetups + "/" + nome;
+                    
+                    sistema.Downloader downloader = new sistema.Downloader(sistema.Info.provedor + "/" + id + "/" + id + ".zip", new File(saidadownload));
+                    
+//                    new Thread(new sistema.Downloader(sistema.Info.provedor + "/" + id + "/" + id + ".zip", new File(saidadownload))).start();
+                    
+                    downloader.run();
 
-                    while (sistema.Downloader.baixou == false) {
-                        pgbProgresso.setValue((int) sistema.Downloader.porcentagem);
-                        setTitle("Instalando... " + (int) (sistema.Downloader.porcentagem) + "%");
+                    while (downloader.baixou == false) {
+                        pgbProgresso.setValue((int) downloader.porcentagem);
+                        setTitle("Instalando... " + (int) (downloader.porcentagem) + "%");
                         Thread.sleep(50);
-                        if (sistema.Downloader.baixou == true) {
+                        if (downloader.baixou == true) {
                             //queria entender pq eu to tendo que fazer isso
                             break;
                         }
                     }
 
-                    if (sistema.Downloader.baixou == true && sistema.Downloader.porcentagem >= 100) {
+                    if (downloader.baixou == true && downloader.porcentagem >= 100) {
                         jLabel1.setText("Descompactando...");
                         setTitle("Descompactando...");
                         pgbProgresso.setIndeterminate(true);
 
-                        sistema.Generico sistema = new sistema.Generico();
-
-                        sistema.descompactar(new File(saidadownload), new File(saidazip));
+                        sistema.Generico.descompactar(new File(saidadownload), new File(saidazip));
                         JOptionPane.showConfirmDialog(null, "Setup instalado com sucesso!", "Ambientes", JOptionPane.DEFAULT_OPTION, JOptionPane.INFORMATION_MESSAGE);
                         new File(saidadownload).delete();
                     } else {

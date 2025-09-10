@@ -32,7 +32,7 @@ public class Generico {
         return saida;
     }
 
-    public void descompactar(File arquivo, File diretorio) {
+    public static void descompactar(File arquivo, File diretorio) {
         try {
             if (!diretorio.exists()) {
                 diretorio.mkdir();
