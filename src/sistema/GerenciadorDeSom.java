@@ -52,8 +52,8 @@ public class GerenciadorDeSom {
                                 int aleatorio = Generico.random(tocouPrimeira ? 1 : 0, pl.length);
                                 //parece horrivel e é mesmo. isso tudo para evitar selecionar o mesmo som quando for um aleatorio
                                 sel = aleatorio == sel ? (aleatorio + 1 > pl.length - 1 ? (aleatorio - 1 < 0 ? aleatorio : aleatorio - 1) : aleatorio + 1) : aleatorio;
-                            } else {
-                                sel += sel + 1 >= pl.length ? -pl.length + 1 : 1;
+                            } else { // -------------------------------- testar isso aqui \/ --------------
+                                sel += sel + 1 >= pl.length ? -pl.length + (temPrimeira ? 2 : 1) : 1;
                             }
 
                             if (tocouPrimeira == false && temPrimeira) {
@@ -74,6 +74,7 @@ public class GerenciadorDeSom {
                             
                             while (pl[sel].posDoSomMS() < pl[sel].tamDoSomMS - preDelay - sistema.Info.preDelay) {
                                 if ((double) (pl[sel].posDoSomMS()) / (double) (pl[sel].tamDoSomMS) < 0.9d) {
+                                    //pequeno calculo que faz o sleep ser menor quanto mais perto o som está de acabar
                                     long valor = Math.min(Math.max((pl[sel].tamDoSomMS - pl[sel].posDoSomMS() + 5) / 5, 10), 25000);
                                     Thread.sleep(valor);
 
@@ -90,7 +91,6 @@ public class GerenciadorDeSom {
                                 new Thread(new Runnable() {
                                     @Override
                                     public void run() {
-                                        System.out.println("finalizado");
                                         pl[0].finalizar();
                                     }
                                 }, "FINALIZAR SOM").start();
@@ -224,12 +224,18 @@ public class GerenciadorDeSom {
     }
 
     public boolean estaDesativado(String nome) {
-        for (int i = 0; i < desativados.length; i++) {
-            if (nome.equals(desativados[i])) {
-                return true;
-            }
-        }
-        return false;
+        
+        return desativados.contains(nome);
+        
+//        if (desativados.contains(nome)) {
+//            return true;
+//        } else {
+////            return fals
+//        }
+        
+//        for (int i = 0; i < desativados.length; i++) {
+//            if (nome.equals(desativados[i])) {
+
     }
 
     public byte posLivre() {

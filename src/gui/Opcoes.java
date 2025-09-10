@@ -16,7 +16,7 @@ public class Opcoes extends javax.swing.JFrame {
         initComponents();
         jList1.setModel(model);
         add();
-        txfDesativados.setText(Arrays.toString(desativados).replace(", null", "").replace("[", "").replace("]", "").replace("null", ""));
+        txfDesativados.setText(desativados.toString());
     }
 
     public void add() {
@@ -31,12 +31,14 @@ public class Opcoes extends javax.swing.JFrame {
     }
 
     public boolean taBloqueado(String nome) {
-        for (int i = 0; i < desativados.length; i++) {
-            if (nome.equals(desativados[i])) {
-                return true;
-            }
-        }
-        return false;
+        return desativados.contains(nome);
+        
+//        for (int i = 0; i < desativados.length; i++) {
+//            if (nome.equals(desativados[i])) {
+//                return true;
+//            }
+//        }
+//        return false;
     }
 
     /**
@@ -173,28 +175,34 @@ public class Opcoes extends javax.swing.JFrame {
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
         jButton1.setEnabled(false);
-        for (int i = 0; i < desativados.length; i++) {
-            if (jCheckBox1.isSelected()) {
-                if (desativados[i] == null) {
-                    desativados[i] = jList1.getSelectedValue();
-                    break;
-                }
-            } else {
-                if (desativados[i] != null && desativados[i].equals(jList1.getSelectedValue())) {
-                    desativados[i] = null;
-                }
-            }
 
-        }
+        Tocar.desativados.add(jList1.getSelectedValue());
 
-        txfDesativados.setText(Arrays.toString(desativados).replace(", null", "").replace("[", "").replace("]", "").replace("null", ""));
+//        for (int i = 0; i < desativados.length; i++) {
+//            if (jCheckBox1.isSelected()) {
+//                if (desativados[i] == null) {
+//                    desativados[i] = jList1.getSelectedValue();
+//                    break;
+//                }
+//            } else {
+//                if (desativados[i] != null && desativados[i].equals(jList1.getSelectedValue())) {
+//                    desativados[i] = null;
+//                }
+//            }
+//
+//        }
+        txfDesativados.setText(Tocar.desativados.toString());
+
+//        txfDesativados.setText(Arrays.toString(desativados).replace(", null", "").replace("[", "").replace("]", "").replace("null", ""));
     }//GEN-LAST:event_jButton1ActionPerformed
 
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
-        for (int i = 0; i < desativados.length; i++) {
-            desativados[i] = null;
-            txfDesativados.setText("");
-        }
+//        for (int i = 0; i < desativados.length; i++) {
+//            desativados[i] = null;
+//            txfDesativados.setText("");
+//        }
+
+        desativados.clear();
     }//GEN-LAST:event_jButton2ActionPerformed
 
     /**

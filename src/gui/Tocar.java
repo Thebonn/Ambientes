@@ -10,6 +10,8 @@ import java.awt.event.ActionEvent;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.net.URL;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Random;
 import javax.imageio.ImageIO;
 import javax.swing.AbstractAction;
@@ -18,7 +20,6 @@ import javax.swing.ImageIcon;
 import javax.swing.InputMap;
 import javax.swing.JPanel;
 import javax.swing.KeyStroke;
-import java.io.InputStream;
 import sistema.GerenciadorDeSom;
 import sistema.Info;
 import static sistema.Rpc.presence;
@@ -29,10 +30,8 @@ import static sistema.Rpc.presence;
  */
 public final class Tocar extends javax.swing.JFrame {
 
-    /**
-     * Creates new form Tocar
-     */
-    public static String desativados[] = new String[50];
+    public static List<String> desativados = new ArrayList<>();
+    
     public static boolean podeAbrir = true;
 
     float contagem = 10;
