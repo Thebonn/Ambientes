@@ -128,6 +128,7 @@ public class Som {
             clip.stop();
             clip.close();
         }
+        info = GerenciadorDeSom.MORTO;
         clip = null;
 
     }

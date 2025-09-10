@@ -1,7 +1,6 @@
 package gui;
 
 import static gui.Tocar.desativados;
-import java.util.Arrays;
 import javax.swing.DefaultListModel;
 
 /**

@@ -22,9 +22,10 @@ public class GerenciadorDeSom {
     public boolean tocando = false;
     public long playlistPredelay = -1;
 
-    public static final byte CARREGADO = -1;
-    public static final byte LIVRE = 0;
-    public static final byte TOCANDO = 1;
+    public static final byte MORTO = -2; //tocou e foi finalizado
+    public static final byte CARREGADO = -1; //carregado e nunca tocou
+    public static final byte LIVRE = 0; //carregado e tocou
+    public static final byte TOCANDO = 1; //tocando
 
     private void tocarPlaylist(final File[] arquivos, final String tipo, long preDelay, boolean temPrimeira) {
         try {
@@ -52,7 +53,7 @@ public class GerenciadorDeSom {
                                 int aleatorio = Generico.random(tocouPrimeira ? 1 : 0, pl.length);
                                 //parece horrivel e é mesmo. isso tudo para evitar selecionar o mesmo som quando for um aleatorio
                                 sel = aleatorio == sel ? (aleatorio + 1 > pl.length - 1 ? (aleatorio - 1 < 0 ? aleatorio : aleatorio - 1) : aleatorio + 1) : aleatorio;
-                            } else { // -------------------------------- testar isso aqui \/ --------------
+                            } else {
                                 sel += sel + 1 >= pl.length ? -pl.length + (temPrimeira ? 2 : 1) : 1;
                             }
 

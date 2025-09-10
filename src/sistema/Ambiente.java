@@ -30,15 +30,21 @@ public class Ambiente {
         if (semgui) {
             new sistema.SemGui().principal();
         } else {
-            if (semsplash) {
-                if (sistema.Info.primeiraVez) {
+            try {
+                sistema.Configs.carregar();
+
+                if (semsplash) {
+                    if (sistema.Info.primeiraVez) {
 //                        tocar = new Tocar(false);
-                    new gui.PrimeiraVez().setVisible(true);
+                        new gui.PrimeiraVez().setVisible(true);
+                    } else {
+                        new gui.Tocar(sistema.Info.animacaoIntroducao).setVisible(true);
+                    }
                 } else {
-                    new gui.Tocar(sistema.Info.animacaoIntroducao).setVisible(true);
+                    new gui.Splash().setVisible(true);
                 }
-            } else {
-                new gui.Splash().setVisible(true);
+            } catch (Exception ex) {
+                ex.printStackTrace();
             }
 
         }

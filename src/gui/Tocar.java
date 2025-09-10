@@ -7,19 +7,19 @@ import java.awt.PopupMenu;
 import java.awt.SystemTray;
 import java.awt.TrayIcon;
 import java.awt.event.ActionEvent;
+import java.awt.event.WindowEvent;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Random;
-import javax.imageio.ImageIO;
 import javax.swing.AbstractAction;
 import javax.swing.ActionMap;
 import javax.swing.ImageIcon;
 import javax.swing.InputMap;
 import javax.swing.JPanel;
 import javax.swing.KeyStroke;
+import sistema.Generico;
 import sistema.GerenciadorDeSom;
 import sistema.Info;
 import static sistema.Rpc.presence;
@@ -31,7 +31,7 @@ import static sistema.Rpc.presence;
 public final class Tocar extends javax.swing.JFrame {
 
     public static List<String> desativados = new ArrayList<>();
-    
+
     public static boolean podeAbrir = true;
 
     float contagem = 10;
@@ -70,7 +70,7 @@ public final class Tocar extends javax.swing.JFrame {
 
         contagemInatividade();
         bandeja();
-        cores = sistema.Generico.converterCor("ABDEE6, CBAACB, FFFFB5, FFCCB6, F3B0C3");
+        cores = Generico.converterCor("ABDEE6, CBAACB, FFFFB5, FFCCB6, F3B0C3");
 
         escolherCor();
         this.requestFocus();
@@ -182,31 +182,16 @@ public final class Tocar extends javax.swing.JFrame {
             return;
         }
 
-        if (sistema.Info.mostrarSetups) {
-            sistema.Rpc.atualizarEstado(setupsInstalados + " setups instalados");
-        } else {
-            sistema.Rpc.atualizarEstado("");
-        }
+        sistema.Rpc.atualizarEstado(sistema.Info.mostrarSetups ? setupsInstalados + " setups instalados" : "");
 
         if (lojaaberta) {
             sistema.Rpc.atualizarDetalhes("Na loja de setups");
             return;
         }
 
-        if (!play) {
-            presence.largeImageKey = "logo";
-            if (sistema.Info.rpcTipo == 0) {
-                if (cbbSetups.getSelectedItem().equals("Obter mais setups")) {
-                    adicionarSetups();
-                }
-                sistema.Rpc.atualizarDetalhes("Ouvindo " + cbbSetups.getSelectedItem());
-            } else if (sistema.Info.rpcTipo == 1) {
-                sistema.Rpc.atualizarDetalhes("Ouvindo um setup");
-            }
-        } else {
-            sistema.Rpc.atualizarDetalhes("Parado");
-            presence.largeImageKey = "logoparado";
-        }
+        presence.largeImageKey = !play ? "logo" : "logoparado";
+        sistema.Rpc.atualizarDetalhes(!play ? (sistema.Info.rpcTipo == 0 ? "Ouvindo " + cbbSetups.getSelectedItem() : "Ouvindo um setup") : "Parado");
+
     }
 
     public void adicionarSetups() {
@@ -214,7 +199,7 @@ public final class Tocar extends javax.swing.JFrame {
         File pasta = new File(sistema.Info.localSetups);
         String setups[] = pasta.list();
         cbbSetups.removeAllItems();
-        
+
         if (setups != null) {
 
             for (int i = 0; i < setups.length; i++) {
@@ -271,7 +256,6 @@ public final class Tocar extends javax.swing.JFrame {
                     Color ini = Color.black;
                     Color fin = Color.black;
                     int tempo = 10;
-                    Random r = new Random();
 
                     //raios
                     short ultimo = 0;
@@ -296,11 +280,8 @@ public final class Tocar extends javax.swing.JFrame {
 
                         if ((play == false) && isActive() && isFocused()) {
 
-                            if (descendo) {
-                                negocio -= 0.001d * sistema.Info.velocidade / 2;
-                            } else {
-                                negocio += 0.001d * sistema.Info.velocidade / 2;
-                            }
+                            negocio -= (descendo ? 0.001d : -0.001d) * sistema.Info.velocidade / 2;
+
                             foco = (short) (sistema.Easings.easeInOutCirc(negocio) * 700);
 
                             if (negocio >= 1) {
@@ -311,15 +292,15 @@ public final class Tocar extends javax.swing.JFrame {
 
                             switch (sistema.Info.animTipo) {
                                 case 0:
-                                    luz += ((r.nextInt(10) - 5f) / 200f);
-                                    hue = 0.06f + ((r.nextInt(10) - 5f) / 150f);
+                                    luz += ((Generico.random(0, 10) - 5f) / 200f);
+                                    hue = 0.06f + ((Generico.random(0, 10) - 5f) / 150f);
                                     if (luz > 0.7f) {
                                         luz = 0.2f;
                                     } else if (luz < 0.1f) {
                                         luz = 0.25f;
                                     }
                                     ini = new Color(Color.HSBtoRGB(hue, 1f, luz));
-                                    fin = new Color(Color.HSBtoRGB(hue + ((r.nextInt(10) - 5) / 100), 1f, luz - 0.1f));
+                                    fin = new Color(Color.HSBtoRGB(hue + ((Generico.random(0, 10) - 5) / 100), 1f, luz - 0.1f));
                                     break;
                                 case 1:
 //                                    tempo = 10;
@@ -332,10 +313,10 @@ public final class Tocar extends javax.swing.JFrame {
                                     break;
                                 case 2:
 
-                                    luz = 0.8f + ((r.nextInt(2) - 1f) / 700f);
-                                    hue = 0.56f + ((r.nextInt(10) - 5f) / 650f);
+                                    luz = 0.8f + ((Generico.random(0, 2) - 1f) / 700f);
+                                    hue = 0.56f + ((Generico.random(0, 10) - 5f) / 650f);
                                     ini = new Color(Color.HSBtoRGB(hue, 1f, luz));
-                                    fin = new Color(Color.HSBtoRGB(hue + ((r.nextInt(10) - 5) / 100), 1f, luz - 0.1f));
+                                    fin = new Color(Color.HSBtoRGB(hue + ((Generico.random(0, 10) - 5) / 100), 1f, luz - 0.1f));
 
                                     break;
 
@@ -344,9 +325,9 @@ public final class Tocar extends javax.swing.JFrame {
                                     ini = new Color(0x141516);
                                     fin = new Color(0x1b1c1f);
 
-                                    boolean deNovo = ((countup - ultimo > 1 && countup - ultimo < 10) && r.nextInt(1000) < 200);
-                                    if (r.nextInt(1000) / 10f < 0.1f || deNovo) {
-                                        float valor = (r.nextInt(6) + 3) / 10f;
+                                    boolean deNovo = ((countup - ultimo > 1 && countup - ultimo < 10) && Generico.random(0, 1000) < 200);
+                                    if (Generico.random(0, 1000) / 10f < 0.1f || deNovo) {
+                                        float valor = (Generico.random(0, 6) + 3) / 10f;
                                         if (deNovo == false) {
                                             ultimo = countup;
                                         }
@@ -485,11 +466,36 @@ public final class Tocar extends javax.swing.JFrame {
             new Thread(new Runnable() {
                 @Override
                 public void run() {
-                    configs = new Configuracoes();
-                    configs.setVisible(true);
+                    try {
+                        configs = new Configuracoes();
+                        Tocar t = Tocar.this;
+//                        java.awt.Point ponto = configs.getLocation();
 
-                    jButton3.setText("Configurações");
-                    jButton3.setEnabled(true);
+                        configs.setVisible(true);
+
+                        if (t.getSize().height < 500 && t.getSize().width < 500) {
+                            configs.setLocation(t.getLocation().x, t.getLocation().y + (t.getSize().height / 2) - (configs.getSize().height / 2));
+                            sistema.Componentes.moverJanela(configs, configs.getLocation().x + (configs.getSize().width / 3), configs.getLocation().y, 0.006, sistema.Easings.EASE_OUT_QUART);
+                            sistema.Componentes.moverJanela(t, t.getLocation().x - (t.getSize().width / 2), Tocar.this.getLocation().y, 0.006, sistema.Easings.EASE_OUT_QUART);
+                            configs.addWindowListener(new java.awt.event.WindowAdapter() {
+                                @Override
+                                public void windowClosed(java.awt.event.WindowEvent e) {
+                                    //outra checagem por que o usuario pode mudar o tamanho da janela enquanto configura
+                                    if (t.getSize().height < 500 && t.getSize().width < 500) {
+                                        sistema.Componentes.moverJanela(configs, configs.getLocation().x - (configs.getSize().width / 3), configs.getLocation().y, 0.006, sistema.Easings.EASE_OUT_QUART);
+                                        sistema.Componentes.moverJanela(t, t.getLocation().x + (t.getSize().width / 2), t.getLocation().y, 0.006, sistema.Easings.EASE_OUT_QUART);
+                                    }
+
+                                }
+                            });
+                        }
+
+                        jButton3.setText("Configurações");
+                        jButton3.setEnabled(true);
+
+                    } catch (Exception ex) {
+                        ex.printStackTrace();
+                    }
                 }
             }, "AbrirConfigs").start();
         } else {
@@ -499,7 +505,7 @@ public final class Tocar extends javax.swing.JFrame {
 
     void escolherCor() {
         if (play == true) {
-            Color cor[] = sistema.Generico.escolherCor();
+            Color cor[] = Generico.escolherCor();
             pnlFundo.setkStartColor(cor[0]);
             pnlFundo.setkEndColor(cor[1]);
             pnlFundo.updateUI();
