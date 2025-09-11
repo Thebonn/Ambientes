@@ -774,7 +774,7 @@ public final class Tocar extends javax.swing.JFrame {
     }//GEN-LAST:event_formWindowClosing
 
     private void cbbSetupsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cbbSetupsActionPerformed
-        if (cbbSetups.getSelectedItem() != null && cbbSetups.getSelectedItem().equals("Obter mais setups") && lojaaberta == false) {
+        if (cbbSetups.getSelectedItem() != null && cbbSetups.getSelectedItem().equals("Obter mais setups") && lojaaberta == false && sistema.Info.primeiraVez == false) {
             lojaaberta = true;
             new Loja().setVisible(true);
         }

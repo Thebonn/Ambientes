@@ -31,9 +31,8 @@ public class Ambiente {
             new sistema.SemGui().principal();
         } else {
             try {
-                sistema.Configs.carregar();
-
                 if (semsplash) {
+                    sistema.Configs.carregar();
                     if (sistema.Info.primeiraVez) {
 //                        tocar = new Tocar(false);
                         new gui.PrimeiraVez().setVisible(true);
