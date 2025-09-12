@@ -278,11 +278,6 @@ public final class Tocar extends javax.swing.JFrame {
                     //para easing
                     double negocio = 0.0d;
 
-                    System.out.println(gerenciadorDeSom.temCores);
-                    System.out.println(gerenciadorDeSom.cores);
-                    System.out.println(gerenciadorDeSom.fundoPredefinido);
-                    System.out.println(gerenciadorDeSom.corTempo);
-
                     if (Info.usarCoresDoSetup && gerenciadorDeSom.temCores) {
                         if (gerenciadorDeSom.fundoPredefinido != -1) {
                             sistema.Info.animTipo = gerenciadorDeSom.fundoPredefinido;
@@ -319,7 +314,6 @@ public final class Tocar extends javax.swing.JFrame {
                                     fin = new Color(Color.HSBtoRGB(hue + ((Generico.random(0, 10) - 5) / 100), 1f, luz - 0.1f));
                                     break;
                                 case 1:
-//                                    tempo = 10;
                                     hue += 0.0003f * sistema.Info.velocidade;
                                     ini = new Color(Color.HSBtoRGB(hue, 0.9f, 0.9f));
                                     fin = new Color(Color.HSBtoRGB(hue + 0.1f, 0.9f, 0.9f));
