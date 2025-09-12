@@ -1,36 +1,45 @@
-# Ambientes
-Relaxing to looping sounds
+<div align="center">
+  <h1> Ambientes </h1>
+  <img width="200" height="200" alt="Logo do ambientes" src="https://github.com/user-attachments/assets/ea128840-508a-4cfc-b2dd-c3dfe699e431"/>
+  <p> Relax to looping sounds</p>
+</div>
+
+
 
 ---
 
 Caso apenas queira baixar logo:
 [DOWNLOAD](https://github.com/Thebonn/Ambientes/releases/download/v1.1/Ambientes.jar)
 
+
+
 # **PT/BR**
 
 OLÁ!
 Esse é um programa focado em relaxar ouvindo sons em loops que podem ter toques adicionais dependendo do setup.
 
-Quando você abrir o programa pela primeira vez, ele vai abrir logo a Loja de Setups, onde você poderá baixar, instalar e descompactar os setups da sua preferência.
-Ao instalar, você poderá selecionar o setup que você instalou e tocar. Você pode ou deixar de fundo, ou usar como descanso de tela colocando em tela cheia.
+Leve, rápido e extremamente customizável com uma simples loja de setups embutida.
 
-Você pode mudar as cores do fundo na aba "Fundo". E se, caso selecionar as cores especiais, você pode configurar elas na aba "Cores especiais".
+Esse projeto aceita alguns argumentos e comportará diferente dependendo do que passar:
 
-Há interação com o Discord RPC com ícone interativo [para o desktop também]
+`semgui/nogui`: Inicia o programa sem uma interface e você poderá controlar ele apenas pelo terminal  
+`semsplash/nosplash`: Pula a etapa de splash do programa (Requer que você tenha aberto o programa pelo menos uma vez)
 
-Mais updates em breve!
+Há interação com o Discord RPC com ícone interativo (para o desktop também)
 
 ### BIBLIOTECAS
 
-Ambientes usa de 3 bibliotecas externas para funcionar:
-- Flatlaf (Biblioteca de interface)
-- KControls (Biblioteca de interface)
-- java-discord-rpc (Biblioteca para o RPC)
-- jsoup (Biblioteca de conexão)
+Ambientes usa 4 bibliotecas externas para funcionar:
+- [Flatlaf](https://www.formdev.com/flatlaf/) (LAF)
+- [KControls](https://k33ptoo.github.io/KControls/) (Biblioteca de interface)
+- [discord-rpc](https://github.com/firstdarkdev/discord-rpc/) (Biblioteca para o RPC)
+- [jsoup](https://jsoup.org/) (Biblioteca de conexão)
+
+Mais updates em breve!
 
 ---
 
-# **EN**
+# **EN** (Outdated)
 
 HELLO!
 This is a program focused in relax listening to looping sounds that can have additional touches depending on the setup
