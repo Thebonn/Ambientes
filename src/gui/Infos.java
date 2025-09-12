@@ -87,7 +87,7 @@ public class Infos extends javax.swing.JFrame {
                     addTexto("\tPredelay: " + Info.preDelay, txtDetalhes);
                     addTexto("\tPode colorir: " + Info.podeColorir, txtDetalhes);
                     addTexto("\tTempo de espera máximo: " + Info.maximo, txtDetalhes);
-                    addTexto("\tTipo de cores especiais: " + Info.tipo, txtDetalhes);
+                    addTexto("\tTipo de cores especiais: " + Info.tipoCorEspecial, txtDetalhes);
                     addTexto("\tTempo de atualização: " + Info.atualizacao, txtDetalhes);
                     addTexto("\tIntensidade da cor secundária: " + Info.intensidade, txtDetalhes);
                     addTexto("\tValor para escurecer o fundo: " + Info.escurecerFundo, txtDetalhes);

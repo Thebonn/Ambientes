@@ -77,7 +77,7 @@ public class Configuracoes extends javax.swing.JFrame {
                 jComboBox3.setSelectedIndex(Tocar.coresEspSel);
                 jTextField1.setText(Tocar.coresLegiveis);
 //                jCheckBox2.setSelected(Tocar.sombra);
-                jComboBox4.setSelectedIndex(sistema.Info.tipo);
+                jComboBox4.setSelectedIndex(sistema.Info.tipoCorEspecial);
                 jTextField2.setText(sistema.Info.preDelay + "");
                 jSlider4.setValue((int) (sistema.Info.intensidade * 10));
                 jSlider5.setValue(sistema.Info.escurecerFundo);
@@ -94,15 +94,15 @@ public class Configuracoes extends javax.swing.JFrame {
                 }
 
                 txfLocal.setText(sistema.Info.localSetups);
-
+                jCheckBox5.setSelected(sistema.Info.usarCoresDoSetup);
             }
-        }, "TAD").start();
+        }, "CARREGAR CONFIGS").start();
     }
 
     void aplicar() {
         sistema.Info.animTipo = (byte) jComboBox1.getSelectedIndex();
         sistema.Info.atualizacao = (short) jSlider1.getValue();
-        sistema.Info.velocidade = Double.parseDouble(jComboBox2.getSelectedItem().toString());
+        sistema.Info.velocidade = Float.parseFloat(jComboBox2.getSelectedItem().toString());
         sistema.Info.maximo = (byte) jSlider2.getValue();
         sistema.Info.podeColorir = jCheckBox1.isSelected();
 
@@ -122,7 +122,7 @@ public class Configuracoes extends javax.swing.JFrame {
 
         Tocar.cores = saida;
         Tocar.coresEspSel = (byte) jComboBox3.getSelectedIndex();
-        sistema.Info.tipo = (byte) jComboBox4.getSelectedIndex();
+        sistema.Info.tipoCorEspecial = (byte) jComboBox4.getSelectedIndex();
         sistema.Info.preDelay = (short) Integer.parseInt(jTextField2.getText());
         sistema.Info.intensidade = jSlider4.getValue() / 10;
         sistema.Info.escurecerFundo = (byte) jSlider5.getValue();
@@ -139,18 +139,9 @@ public class Configuracoes extends javax.swing.JFrame {
         jLabel6.setEnabled(jComboBox1.getSelectedItem().toString().equals("Cores especiais"));
         jComboBox3.setEnabled(jComboBox1.getSelectedItem().toString().equals("Cores especiais"));
         jTextField1.setEnabled(jComboBox1.getSelectedItem().toString().equals("Cores especiais") && jComboBox3.getSelectedItem().toString().equals("Outro"));
-        if (jComboBox1.getSelectedIndex() != 5) {
-            lblAviso.setText("Aviso: \"Cores especiais\" não está selecionado");
-//            if (sist.acenderThread.isInterrupted()) {
-//                sist.acenderThread.start();
-//            }
-        } else {
-
-//            if (sist.acenderThread.isAlive()) {
-//                sist.acenderThread.interrupt();
-//            }
-            lblAviso.setText(" ");
-        }
+        
+        jComboBox2.setEnabled(jComboBox1.getSelectedIndex() != 6);
+        lblAviso.setText(jComboBox1.getSelectedIndex() != 5 ? "Aviso: \"Cores especiais\" não está selecionado" : " ");
     }
 
     @SuppressWarnings("unchecked")
@@ -171,6 +162,7 @@ public class Configuracoes extends javax.swing.JFrame {
         jLabel7 = new javax.swing.JLabel();
         jTextField1 = new javax.swing.JTextField();
         jComboBox3 = new javax.swing.JComboBox<>();
+        jCheckBox5 = new javax.swing.JCheckBox();
         jPanel4 = new javax.swing.JPanel();
         jSlider1 = new javax.swing.JSlider();
         jLabel2 = new javax.swing.JLabel();
@@ -179,6 +171,7 @@ public class Configuracoes extends javax.swing.JFrame {
         jLabel15 = new javax.swing.JLabel();
         txfLocal = new javax.swing.JTextField();
         btnMudarLocal = new javax.swing.JToggleButton();
+        jLabel16 = new javax.swing.JLabel();
         jPanel5 = new javax.swing.JPanel();
         jCheckBox1 = new javax.swing.JCheckBox();
         jLabel5 = new javax.swing.JLabel();
@@ -270,16 +263,19 @@ public class Configuracoes extends javax.swing.JFrame {
             }
         });
 
+        jCheckBox5.setSelected(true);
+        jCheckBox5.setText("Usar cores do setup caso tenha");
+
         javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
         jPanel3.setLayout(jPanel3Layout);
         jPanel3Layout.setHorizontalGroup(
             jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel3Layout.createSequentialGroup()
-                .addGap(29, 29, 29)
+                .addContainerGap(32, Short.MAX_VALUE)
                 .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jComboBox2, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 169, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jComboBox1, 0, 202, Short.MAX_VALUE)
+                    .addComponent(jComboBox1, 0, 204, Short.MAX_VALUE)
                     .addComponent(jLabel3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addGap(31, 31, 31)
                 .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
@@ -287,12 +283,18 @@ public class Configuracoes extends javax.swing.JFrame {
                     .addComponent(jComboBox3, javax.swing.GroupLayout.Alignment.LEADING, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(jLabel7, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, 202, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(40, Short.MAX_VALUE))
+                .addContainerGap(35, Short.MAX_VALUE))
+            .addGroup(jPanel3Layout.createSequentialGroup()
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(jCheckBox5)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         jPanel3Layout.setVerticalGroup(
             jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel3Layout.createSequentialGroup()
-                .addContainerGap()
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel3Layout.createSequentialGroup()
+                .addContainerGap(7, Short.MAX_VALUE)
+                .addComponent(jCheckBox5)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel1)
                     .addComponent(jLabel6))
@@ -308,7 +310,7 @@ public class Configuracoes extends javax.swing.JFrame {
                 .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jComboBox2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(67, Short.MAX_VALUE))
+                .addGap(34, 34, 34))
         );
 
         jTabbedPane1.addTab("Animação", jPanel3);
@@ -361,6 +363,9 @@ public class Configuracoes extends javax.swing.JFrame {
             }
         });
 
+        jLabel16.setFont(new java.awt.Font("Open Sauce One", 0, 12)); // NOI18N
+        jLabel16.setText("ms");
+
         javax.swing.GroupLayout jPanel4Layout = new javax.swing.GroupLayout(jPanel4);
         jPanel4.setLayout(jPanel4Layout);
         jPanel4Layout.setHorizontalGroup(
@@ -369,18 +374,21 @@ public class Configuracoes extends javax.swing.JFrame {
                 .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                     .addComponent(jLabel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addGroup(jPanel4Layout.createSequentialGroup()
-                        .addContainerGap(76, Short.MAX_VALUE)
-                        .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                            .addComponent(jTextField2, javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jLabel8, javax.swing.GroupLayout.Alignment.LEADING))
-                        .addGap(84, 84, 84)
+                        .addContainerGap(58, Short.MAX_VALUE)
+                        .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jLabel8)
+                            .addGroup(jPanel4Layout.createSequentialGroup()
+                                .addComponent(jTextField2, javax.swing.GroupLayout.PREFERRED_SIZE, 92, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(jLabel16)))
+                        .addGap(63, 63, 63)
                         .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                             .addGroup(jPanel4Layout.createSequentialGroup()
-                                .addComponent(txfLocal, javax.swing.GroupLayout.PREFERRED_SIZE, 70, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addComponent(txfLocal, javax.swing.GroupLayout.PREFERRED_SIZE, 129, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                 .addComponent(btnMudarLocal))
                             .addComponent(jLabel15, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 77, Short.MAX_VALUE))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 57, Short.MAX_VALUE))
                     .addComponent(jSlider1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addContainerGap())
         );
@@ -395,7 +403,8 @@ public class Configuracoes extends javax.swing.JFrame {
                 .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jTextField2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(txfLocal, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(btnMudarLocal))
+                    .addComponent(btnMudarLocal)
+                    .addComponent(jLabel16))
                 .addGap(18, 18, 18)
                 .addComponent(jLabel2)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
@@ -458,13 +467,13 @@ public class Configuracoes extends javax.swing.JFrame {
             .addGroup(jPanel5Layout.createSequentialGroup()
                 .addContainerGap()
                 .addComponent(jCheckBox1)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(jLabel5)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jSlider2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(lblEscurecer)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jSlider5, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap(36, Short.MAX_VALUE))
         );
@@ -944,6 +953,7 @@ public class Configuracoes extends javax.swing.JFrame {
     private javax.swing.JCheckBox jCheckBox2;
     private javax.swing.JCheckBox jCheckBox3;
     private javax.swing.JCheckBox jCheckBox4;
+    private javax.swing.JCheckBox jCheckBox5;
     private javax.swing.JComboBox<String> jComboBox1;
     private javax.swing.JComboBox<String> jComboBox2;
     private javax.swing.JComboBox<String> jComboBox3;
@@ -957,6 +967,7 @@ public class Configuracoes extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel13;
     private javax.swing.JLabel jLabel14;
     private javax.swing.JLabel jLabel15;
+    private javax.swing.JLabel jLabel16;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;

@@ -1,10 +1,9 @@
 package sistema;
 
 import static gui.Tocar.desativados;
+import java.awt.Color;
 import java.io.File;
 import java.nio.file.Files;
-import java.util.Arrays;
-import java.util.Random;
 import javax.swing.JOptionPane;
 
 /**
@@ -18,6 +17,12 @@ public class GerenciadorDeSom {
 
     public String setup = "Nenhum";
     public String config[];
+    
+    //cores
+    public boolean temCores = false;
+    public byte fundoPredefinido = -1; //-1: não usa fundo predefinido
+    public Color cores[] = null;
+    public float corTempo = 0f;
 
     public boolean tocando = false;
     public long playlistPredelay = -1;
@@ -116,21 +121,34 @@ public class GerenciadorDeSom {
         String linha = Files.readString(lugar.toPath()).replaceAll(sistema.Info.FILTRO, "");
         config = linha.replace("\r", "").split("\n"); //tirar aquele caractere do mal
         tocando = true;
-        //configurar playlist [fazer em um lugar separado para economizar recursos]
-        for (int i = 0; i < config.length; i++) {
-            if (config[i].startsWith("p - ")) {
-
-                String l[] = config[i].split(" - ");
+        //configurar cores, se houver
+        for (String c : config) {
+            if (c.startsWith("c - ")) {
+                temCores = true;
+                String[] l = c.split(" - ");
+                //pegar cada cor que está separado por ,
+                if (l[1].split(", ") != null) {
+                    cores = sistema.Generico.converterCor(l[1]);
+                } else {
+                    fundoPredefinido = Byte.parseByte(l[1]);
+                }
+                
+                corTempo = Float.parseFloat(l[2]);
+                break;
+            }
+        }
+        
+        //configurar playlist
+        for (String c : config) {
+            if (c.startsWith("p - ")) {
+                String[] l = c.split(" - ");
                 //pegar cada som que está separado por ,
                 String sons[] = l[1].split(", ");
                 //criar um array de arquivos que tem todos os locais dos sons
                 File coisos[] = new File[sons.length];
-
                 long playlistPreDelay = Integer.parseInt(l[3]);
-
                 //pesquisa para saber se a playlist tem um som que tocará primeiro
                 boolean temPrimeira = false;
-
                 for (int j = 0; j < sons.length; j++) {
 
                     if (j == 0 && sons[j].startsWith("i: ")) {
@@ -146,12 +164,12 @@ public class GerenciadorDeSom {
             }
         }
 
-        //configurar sons
+        //carregar sons
         //acaba que o tamanho pode ser um pouco maior que o necessário, ver sobre isso depois
         sons = new Som[config.length];
 
         for (int i = 0; i < config.length; i++) {
-            if (config[i].startsWith("#") || config[i].startsWith("p - ")) {
+            if (config[i].startsWith("#") || config[i].startsWith("p - ") || config[i].startsWith("c - ")) {
                 continue;
             }
 

@@ -5,6 +5,7 @@ import java.awt.Color;
 import java.awt.Font;
 import java.awt.Point;
 import java.awt.Toolkit;
+import javax.swing.ImageIcon;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.SwingConstants;
@@ -20,6 +21,8 @@ import sistema.Info;
 public class PrimeiraVez extends javax.swing.JFrame {
 
     public boolean setaPararDeMexer = false;
+    boolean pularAbertura = false;
+    byte tempo = 40;
 
     public PrimeiraVez() {
         initComponents();
@@ -30,6 +33,7 @@ public class PrimeiraVez extends javax.swing.JFrame {
         this.setOpacity(1);
         Componentes.moverJanela(this, pos.x, pos.y, 0.005, sistema.Easings.EASE_OUT_CIRC);
         funcionar();
+        jPanel1.requestFocus();
     }
 
     public void funcionar() {
@@ -37,78 +41,94 @@ public class PrimeiraVez extends javax.swing.JFrame {
             @Override
             public void run() {
                 try {
-
-                    Thread.sleep(3000);
-
-                    Componentes.resizeJanela(PrimeiraVez.this, 500, 200, 0.005, sistema.Easings.EASE_IN_OUT_EXPO);
-                    Componentes.mudarTexto("Parece que essa é a sua primeira vez aqui", lblTexto, 50);
-                    Thread.sleep(3000);
-                    Componentes.mudarTexto("Vamos aos básicos", lblTexto, 50);
-                    Thread.sleep(2500);
-
-                    Info.maximo = 127;
-
-                    Tocar tocar = new Tocar(true);
-                    tocar.setVisible(true);
-                    tocar.contagem = 127;
-                    Thread.sleep(700);
-                    sistema.Componentes.moverJanela(tocar, tocar.getLocation().x - 200, tocar.getLocation().y, 0.005, sistema.Easings.EASE_OUT_QUART);
-                    sistema.Componentes.moverJanela(PrimeiraVez.this, getLocation().x + 200, getLocation().y, 0.005, sistema.Easings.EASE_OUT_QUART);
-
-                    Componentes.mudarTexto("Essa é a sua janela principal", lblTexto, 50);
-                    Thread.sleep(3000);
-
-                    JFrame seta = new JFrame();
-                    seta.setDefaultCloseOperation(DO_NOTHING_ON_CLOSE);
-                    seta.setUndecorated(true);
-                    seta.setLocationRelativeTo(null);
-                    seta.setBackground(new Color(0, 0, 0, 0));
-                    JLabel imagem = new JLabel();
-                    imagem.setText("→");
-                    imagem.setFont(new Font("Consolas", 0, 150));
-                    imagem.setHorizontalAlignment(SwingConstants.CENTER);
-                    imagem.setBounds(0, 0, 200, 200);
-                    seta.add(imagem);
-                    seta.pack();
-                    seta.setVisible(true);
-
-                    seta.setLocation(tocar.getLocation().x - 120, tocar.getLocation().y + 13);
-                    mexer(seta);
-
-                    Componentes.mudarTexto("Aqui você seleciona algum setup que você tiver para ouvir", lblTexto, 50);
-                    Thread.sleep(3000);
-                    pararMexerEEsperar();
-
-                    Componentes.moverJanela(seta, tocar.getLocation().x + 80, tocar.getLocation().y + 13, 0.005, Easings.EASE_IN_OUT_CIRC);
                     Thread.sleep(1000);
-                    mexer(seta);
 
-                    Componentes.mudarTexto("Aqui você pode configurar algum setup do jeito que preferir", lblTexto, 50);
-                    Thread.sleep(4000);
-                    pararMexerEEsperar();
+                    for (int i = 0; i <= 100; i++) {
+                        jProgressBar1.setValue(i);
+                        Thread.sleep(tempo);
+                    }
 
-                    Componentes.moverJanela(seta, tocar.getLocation().x - 50, tocar.getLocation().y + 136, 0.005, Easings.EASE_IN_OUT_CIRC);
-                    Thread.sleep(1000);
-                    mexer(seta);
+                    jProgressBar1.setVisible(false);
+                    jLabel1.setVisible(false);
 
-                    Componentes.mudarTexto("Caso você escute alguma sobreposição ou silêncio no som, mude o predelay nas configurações", lblTexto, 50);
-                    Thread.sleep(4000);
-                    Componentes.mudarTexto("Você pode configurar e personalizar coisas extras também aqui!", lblTexto, 50);
-                    Thread.sleep(3000);
-                    pararMexerEEsperar();
-                    Componentes.moverJanela(seta, seta.getLocation().x, seta.getLocation().y + java.awt.Toolkit.getDefaultToolkit().getScreenSize().height, 0.004, Easings.EASE_IN_QUART);
+                    if (!pularAbertura) {
+                        Componentes.resizeJanela(PrimeiraVez.this, 500, 200, 0.005, sistema.Easings.EASE_IN_OUT_EXPO);
+                        Componentes.mudarTexto("Parece que essa é a sua primeira vez aqui", lblTexto, 50);
+                        Thread.sleep(3000);
+                        Componentes.mudarTexto("Vamos aos básicos", lblTexto, 50);
+                        Thread.sleep(2500);
 
-                    Componentes.mudarTexto("É isso. Divirta-se!", lblTexto, 50);
-                    Thread.sleep(3000);
-                    seta.dispose();
+                        Info.maximo = 127;
 
-                    sistema.Componentes.moverJanela(tocar, tocar.getLocation().x + 200, tocar.getLocation().y, 0.004, sistema.Easings.EASE_IN_OUT_CIRC);
+                        Tocar tocar = new Tocar(true);
+                        tocar.setVisible(true);
+                        tocar.contagem = 127;
+                        Thread.sleep(700);
+                        sistema.Componentes.moverJanela(tocar, tocar.getLocation().x - 200, tocar.getLocation().y, 0.005, sistema.Easings.EASE_OUT_QUART);
+                        sistema.Componentes.moverJanela(PrimeiraVez.this, getLocation().x + 200, getLocation().y, 0.005, sistema.Easings.EASE_OUT_QUART);
 
-                    Componentes.moverJanela(PrimeiraVez.this, getLocation().x, getLocation().y + java.awt.Toolkit.getDefaultToolkit().getScreenSize().height, 0.004, Easings.EASE_IN_QUART);
+                        Componentes.mudarTexto("Essa é a sua janela principal", lblTexto, 50);
+                        Thread.sleep(3000);
 
-                    Thread.sleep(3000);
+                        JFrame seta = new JFrame();
+                        seta.setDefaultCloseOperation(DO_NOTHING_ON_CLOSE);
+                        seta.setUndecorated(true);
+                        seta.setLocationRelativeTo(null);
+                        seta.setBackground(new Color(0, 0, 0, 0));
+                        JLabel imagem = new JLabel();
+                        imagem.setText("");
+                        imagem.setIcon(new ImageIcon(PrimeiraVez.class.getResource("/recursos/imagens/seta.png")));
+                        imagem.setHorizontalAlignment(SwingConstants.CENTER);
+                        imagem.setBounds(0, 0, 200, 200);
+                        seta.add(imagem);
+                        seta.pack();
+                        seta.setVisible(true);
+
+                        seta.setLocation(tocar.getLocation().x - 150, tocar.getLocation().y + 5);
+                        mexer(seta);
+
+                        Componentes.mudarTexto("Aqui você seleciona algum setup que você tiver para ouvir", lblTexto, 50);
+                        Thread.sleep(3000);
+                        pararMexerEEsperar();
+
+                        Componentes.moverJanela(seta, tocar.getLocation().x + 40, tocar.getLocation().y + 5, 0.005, Easings.EASE_IN_OUT_CIRC);
+                        Thread.sleep(1000);
+                        mexer(seta);
+
+                        Componentes.mudarTexto("Aqui você pode configurar algum setup do jeito que preferir", lblTexto, 50);
+                        Thread.sleep(4000);
+                        pararMexerEEsperar();
+
+                        Componentes.moverJanela(seta, tocar.getLocation().x - 70, tocar.getLocation().y + 130, 0.005, Easings.EASE_IN_OUT_CIRC);
+                        Thread.sleep(1000);
+                        mexer(seta);
+
+                        Componentes.mudarTexto("Caso você escute alguma sobreposição ou silêncio no som, mude o predelay nas configurações", lblTexto, 50);
+                        Thread.sleep(4000);
+                        Componentes.mudarTexto("Você pode configurar e personalizar coisas extras também aqui!", lblTexto, 50);
+                        Thread.sleep(3000);
+                        pararMexerEEsperar();
+                        Componentes.moverJanela(seta, seta.getLocation().x, seta.getLocation().y + java.awt.Toolkit.getDefaultToolkit().getScreenSize().height, 0.004, Easings.EASE_IN_QUART);
+
+                        Componentes.mudarTexto("É isso. Divirta-se!", lblTexto, 50);
+                        Thread.sleep(3000);
+                        seta.dispose();
+
+                        sistema.Componentes.moverJanela(tocar, tocar.getLocation().x + 220, tocar.getLocation().y, 0.004, sistema.Easings.EASE_IN_OUT_CIRC);
+
+                        Componentes.moverJanela(PrimeiraVez.this, getLocation().x, getLocation().y + java.awt.Toolkit.getDefaultToolkit().getScreenSize().height, 0.004, Easings.EASE_IN_QUART);
+
+                        Thread.sleep(3000);
+                        Info.maximo = 10;
+
+                    } else {
+                        Componentes.moverJanela(PrimeiraVez.this, getLocation().x, getLocation().y + java.awt.Toolkit.getDefaultToolkit().getScreenSize().height, 0.004, Easings.EASE_IN_QUART);
+                        Thread.sleep(1000);
+                        new Tocar(true).setVisible(true);
+                        Thread.sleep(2000);
+                    }
+
                     Info.primeiraVez = false;
-                    Info.maximo = 10;
                     sistema.Configs.salvar();
                     
                     dispose();
@@ -124,11 +144,11 @@ public class PrimeiraVez extends javax.swing.JFrame {
             @Override
             public void run() {
                 try {
+                    boolean pos = true;
                     while (setaPararDeMexer == false) {
-                        sistema.Componentes.moverJanela(janela, janela.getLocation().x + 50, janela.getLocation().y, 0.008, sistema.Easings.EASE_IN_OUT_CIRC);
+                        sistema.Componentes.moverJanela(janela, janela.getLocation().x + 50 * (pos ? 1 : -1), janela.getLocation().y, 0.008, sistema.Easings.EASE_IN_OUT_CIRC);
                         Thread.sleep(600);
-                        sistema.Componentes.moverJanela(janela, janela.getLocation().x - 50, janela.getLocation().y, 0.008, sistema.Easings.EASE_IN_OUT_CIRC);
-                        Thread.sleep(600);
+                        pos = !pos;
                     }
                 } catch (Exception ex) {
                 }
@@ -139,7 +159,7 @@ public class PrimeiraVez extends javax.swing.JFrame {
     void pararMexerEEsperar() {
         try {
             setaPararDeMexer = true;
-            Thread.sleep(1500);
+            Thread.sleep(600);
             setaPararDeMexer = false;
         } catch (Exception ex) {
         }
@@ -157,23 +177,48 @@ public class PrimeiraVez extends javax.swing.JFrame {
 
         jPanel1 = new javax.swing.JPanel();
         lblTexto = new javax.swing.JLabel();
+        jLabel1 = new javax.swing.JLabel();
+        jProgressBar1 = new javax.swing.JProgressBar();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setUndecorated(true);
+
+        jPanel1.setBackground(new java.awt.Color(25, 25, 25));
+        jPanel1.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyReleased(java.awt.event.KeyEvent evt) {
+                jPanel1KeyReleased(evt);
+            }
+        });
 
         lblTexto.setFont(new java.awt.Font("Open Sauce Sans Black", 1, 70)); // NOI18N
         lblTexto.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         lblTexto.setText("Olá!");
 
+        jLabel1.setFont(new java.awt.Font("Open Sauce One Light", 0, 12)); // NOI18N
+        jLabel1.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        jLabel1.setText("Pressione ESC para pular a abertura");
+
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(lblTexto, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 300, Short.MAX_VALUE)
+            .addComponent(lblTexto, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 319, Short.MAX_VALUE)
+            .addGroup(jPanel1Layout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jProgressBar1, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(jLabel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap())
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(lblTexto, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addGroup(jPanel1Layout.createSequentialGroup()
+                .addComponent(lblTexto, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addGap(0, 0, 0)
+                .addComponent(jLabel1)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jProgressBar1, javax.swing.GroupLayout.PREFERRED_SIZE, 4, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap())
         );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
@@ -190,6 +235,15 @@ public class PrimeiraVez extends javax.swing.JFrame {
         pack();
         setLocationRelativeTo(null);
     }// </editor-fold>//GEN-END:initComponents
+
+    private void jPanel1KeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jPanel1KeyReleased
+        if (evt.getKeyCode() == 27) {
+            pularAbertura = true;
+            jLabel1.setText("A abertura será pulada");
+            jProgressBar1.setForeground(new Color(0x21EF55));
+            tempo = 5;
+        }
+    }//GEN-LAST:event_jPanel1KeyReleased
 
     /**
      * @param args the command line arguments
@@ -227,7 +281,9 @@ public class PrimeiraVez extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JLabel jLabel1;
     private javax.swing.JPanel jPanel1;
+    private javax.swing.JProgressBar jProgressBar1;
     private javax.swing.JLabel lblTexto;
     // End of variables declaration//GEN-END:variables
 }

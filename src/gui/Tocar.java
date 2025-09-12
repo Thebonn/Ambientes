@@ -38,7 +38,7 @@ public final class Tocar extends javax.swing.JFrame {
 
     public byte setupsInstalados = 0;
 
-    public static Color cores[] = new Color[20];
+    public static Color cores[] = new Color[0];
     public static String coresLegiveis = "";
     public static byte coresEspSel = 0;
     public static float mudancaVel = 0.002f;
@@ -51,8 +51,6 @@ public final class Tocar extends javax.swing.JFrame {
 
     public static boolean suportaSystemTray = false;
     TrayIcon trayIcon;
-
-    public Thread animThread = new Thread();
     Configuracoes configs;
     public static GerenciadorDeSom gerenciadorDeSom;
 
@@ -61,7 +59,7 @@ public final class Tocar extends javax.swing.JFrame {
         initComponents();
         this.setTitle("Ambientes " + sistema.Info.VERSAO_ATUAL);
 
-        animar();
+//        animar();
         adicionarSetups();
         gerenciadorDeSom = new GerenciadorDeSom();
         sldVolume.setValue((int) Info.volumeGlobal);
@@ -202,6 +200,10 @@ public final class Tocar extends javax.swing.JFrame {
 
         if (setups != null) {
 
+            if (setups.length == 0) {
+                cbbSetups.addItem("Selecionar");
+            }
+
             for (int i = 0; i < setups.length; i++) {
                 cbbSetups.addItem(setups[i]);
             }
@@ -246,7 +248,7 @@ public final class Tocar extends javax.swing.JFrame {
 
     public void animar() {
 
-        animThread = new Thread(new Runnable() {
+        new Thread(new Runnable() {
             @Override
             public void run() {
                 try {
@@ -276,7 +278,21 @@ public final class Tocar extends javax.swing.JFrame {
                     //para easing
                     double negocio = 0.0d;
 
-                    while (true) {
+                    System.out.println(gerenciadorDeSom.temCores);
+                    System.out.println(gerenciadorDeSom.cores);
+                    System.out.println(gerenciadorDeSom.fundoPredefinido);
+                    System.out.println(gerenciadorDeSom.corTempo);
+
+                    if (Info.usarCoresDoSetup && gerenciadorDeSom.temCores) {
+                        if (gerenciadorDeSom.fundoPredefinido != -1) {
+                            sistema.Info.animTipo = gerenciadorDeSom.fundoPredefinido;
+                        } else {
+                            sistema.Info.animTipo = 5;
+                            cores = gerenciadorDeSom.cores;
+                        }
+                    }
+
+                    while (gerenciadorDeSom.tocando) {
 
                         if ((play == false) && isActive() && isFocused()) {
 
@@ -348,30 +364,27 @@ public final class Tocar extends javax.swing.JFrame {
                                     fin = Color.lightGray;
                                     break;
                                 case 5:
-                                    espera -= 1 * sistema.Info.velocidade;
-                                    if (espera <= 0) {
-                                        espera = 500;
-                                        ciclo++;
-                                        cicloAnterior = (byte) (ciclo - 1);
+//                                    espera -= 1 * sistema.Info.velocidade;
+//                                    if (espera <= 0) {
+//                                        espera = 500;
+//                                        ciclo++;
 
-                                        while (cores[ciclo] == null) {
-                                            ciclo++;
-                                            if (ciclo >= cores.length) {
-                                                ciclo = 0;
-                                                break;
-                                            }
-                                        }
-
-                                        if (ciclo >= cores.length) {
-                                            ciclo = 0;
-                                        }
+                                    for (int i = 0; i < cores.length; i++) {
+                                        cicloAnterior = (byte) (i - 1);
 
                                         if (cicloAnterior < 0) {
-                                            cicloAnterior = (byte) cores.length;
+                                            cicloAnterior = (byte) (cores.length - 1);
                                         }
 
-                                        sistema.Componentes.mudarCor(cores[ciclo], cores[cicloAnterior], pnlFundo, (float) (mudancaVel * sistema.Info.velocidade), 15);
+                                        sistema.Componentes.mudarCor(cores[i], cores[cicloAnterior], pnlFundo, (float) (mudancaVel * sistema.Info.velocidade), 15);
+                                        
+                                        System.out.println("5000f - (" + mudancaVel + " * " + sistema.Info.velocidade + " * 150000f)");
+                                        float tempoespera = 5000f - (mudancaVel * sistema.Info.velocidade * 150000f);
+                                        System.out.println(tempoespera);
+                                        Thread.sleep((long) (Math.max(tempoespera, 2000)));
                                     }
+
+//                                    }
                                     break;
                                 case 6:
                                     ini = Color.gray;
@@ -394,17 +407,12 @@ public final class Tocar extends javax.swing.JFrame {
                             Thread.sleep(tempo);
 
                         }
-
-                        Thread.sleep(10);
                     }
                 } catch (Exception ex) {
                     ex.printStackTrace();
                 }
             }
-        });
-
-        animThread.setPriority(1);
-        animThread.start();
+        }).start();
     }
 
     public void setarIcones(boolean tocando) {
@@ -436,6 +444,8 @@ public final class Tocar extends javax.swing.JFrame {
                         lblStatus.setText("Carregando...");
                         boolean res = gerenciadorDeSom.carregarERodarSetup(cbbSetups.getSelectedItem().toString());
                         btnTocar.setEnabled(true);
+                        animar();
+
                         if (res) {
                             setTitle("Ambientes - " + gerenciadorDeSom.setup);
                             lblStatus.setText("Tocando agora: " + gerenciadorDeSom.setup);
@@ -447,6 +457,7 @@ public final class Tocar extends javax.swing.JFrame {
                         play = true;
                         setarIcones(!play);
                         sistema.Componentes.ratio = 1;
+                        lblStatus.setText("Parando...");
                         gerenciadorDeSom.pararTudo();
                         setTitle("Ambientes " + sistema.Info.VERSAO_ATUAL);
                         lblStatus.setText("Parado...");

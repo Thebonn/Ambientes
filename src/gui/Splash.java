@@ -51,7 +51,6 @@ public class Splash extends javax.swing.JFrame {
                 try {
                     Thread.sleep(100);
 
-//                    sistema.Configs configs = new sistema.Configs();
                     pgbProgresso.setString("Carregando fontes...");
                     boolean res = recursos.fontes.Fonte.carregarFontes();
                     if (res) {
@@ -65,7 +64,6 @@ public class Splash extends javax.swing.JFrame {
 
                     File file = new File(Info.localSetups);
                     if (!file.exists()) {
-                        System.out.println("nao existe");
                         pgbProgresso.setString("Criando as pastas...");
                         file.mkdirs();
                     }
@@ -125,7 +123,7 @@ public class Splash extends javax.swing.JFrame {
                     Componentes.mudarTexto(escolhido, lblNegocio, 40);
 
                     pgbProgresso.setString("Abrindo o Ambientes...");
-                    Thread.sleep(2000);
+                    Thread.sleep(1000);
 
                     cair();
 

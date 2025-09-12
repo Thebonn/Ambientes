@@ -30,6 +30,14 @@ public class Configs {
                 if (!Modifier.isFinal(FIELDS[i].getModifiers()) && !FIELDS[i].getName().startsWith("_")) {
                     FIELDS[i].setAccessible(true);
                     Class c = FIELDS[i].getType();
+                    
+                    //checagem para caso um valor esteja mal configurado, se estiver colocar o valor padrao e ir pro proximo valor
+                    //se propriedade nao for encontrada || se propriedade for encontrada mas valor ta "null" || se o valor ta vazio
+                    if (prop.getProperty(FIELDS[i].getName()) == null || prop.getProperty(FIELDS[i].getName()).equals("null") || prop.getProperty(FIELDS[i].getName()).equals("")) {
+                        FIELDS[i].set(sistema.Info.class, FIELDS[i].get(sistema.Info.class));
+                        continue;
+                    }
+                    
                     if (c == int.class) {
                         FIELDS[i].set(sistema.Info.class, Integer.valueOf(prop.getProperty(FIELDS[i].getName())));
                     } else if (c == byte.class) {

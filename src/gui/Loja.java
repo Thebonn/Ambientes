@@ -11,6 +11,7 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import java.io.InputStream;
 import javax.imageio.ImageIO;
+import javax.swing.JOptionPane;
 
 /**
  *
@@ -21,6 +22,8 @@ public class Loja extends javax.swing.JFrame {
     public Loja() {
         FlatDarkLaf.install();
         initComponents();
+        txfProvedor.setText(sistema.Info.provedor);
+        kButton1.requestFocus();
         atualizarInfo();
 
         this.setTitle("Loja de setups");
@@ -39,6 +42,27 @@ public class Loja extends javax.swing.JFrame {
     String linhas[][] = null;
     String info[][] = null;
     String autor[] = null;
+    
+    void descarregar() {
+        descricao1.setText("");
+        descricao2.setText("");
+        descricao3.setText("");
+        img1.setIcon(new ImageIcon(getClass().getResource("/recursos/imagens/carregando.gif")));
+        img2.setIcon(new ImageIcon(getClass().getResource("/recursos/imagens/carregando.gif")));
+        img3.setIcon(new ImageIcon(getClass().getResource("/recursos/imagens/carregando.gif")));
+        titulo1.setText("Carregando...");
+        titulo2.setText("Carregando...");
+        titulo3.setText("Carregando...");
+        tamanho1.setText("Tamanho: 0 MB");
+        tamanho2.setText("Tamanho: 0 MB");
+        tamanho3.setText("Tamanho: 0 MB");
+        autor1.setText("Autor: Nenhum");
+        autor2.setText("Autor: Nenhum");
+        autor3.setText("Autor: Nenhum");
+        id1.setText("ID: Nenhum");
+        id2.setText("ID: Nenhum");
+        id3.setText("ID: Nenhum");
+    }
 
     public void atualizarInfo() {
         new Thread(new Runnable() {
@@ -84,7 +108,7 @@ public class Loja extends javax.swing.JFrame {
                     pegarLinks();
 
                 } catch (Exception ex) {
-                    ex.printStackTrace();
+                    JOptionPane.showConfirmDialog(null, "Não foi possível carregar a URL: " + ex.toString() + ".\n\nO site está fora do ar ou o link está errado.", "Ambientes", JOptionPane.DEFAULT_OPTION, JOptionPane.ERROR_MESSAGE);
                 }
             }
         }, "Thread").start();
@@ -193,10 +217,6 @@ public class Loja extends javax.swing.JFrame {
                         }
 
                         is.close();
-
-//                        descricao1.setText(descricao1.getText().replace("null", "").replace("\n\n", ""));
-//                        descricao2.setText(descricao2.getText().replace("null", "").replace("\n\n", ""));
-//                        descricao3.setText(descricao3.getText().replace("null", "").replace("\n\n", ""));
                     }
 
                     kButton2.setEnabled(pag != 0);
@@ -539,7 +559,7 @@ public class Loja extends javax.swing.JFrame {
         jLabel2.setText("Página 0");
 
         txfProvedor.setFont(new java.awt.Font("Open Sauce One", 0, 12)); // NOI18N
-        txfProvedor.setText("https://de-bonn.netlify.app/Ambientes");
+        txfProvedor.setText("https://de-bonn.netlify.app/arquivos/ambientes");
 
         jLabel3.setFont(new java.awt.Font("Open Sauce One", 0, 12)); // NOI18N
         jLabel3.setText("Provedor de setups:");
@@ -625,9 +645,7 @@ public class Loja extends javax.swing.JFrame {
 
     private void kButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_kButton2ActionPerformed
         kButton2.setEnabled(false);
-        img1.setIcon(new ImageIcon(getClass().getResource("/recursos/imagens/carregando.gif")));
-        img2.setIcon(new ImageIcon(getClass().getResource("/recursos/imagens/carregando.gif")));
-        img3.setIcon(new ImageIcon(getClass().getResource("/recursos/imagens/carregando.gif")));
+        descarregar();
         pag--;
         pegarLinks();
         kButton2.setEnabled(true);
@@ -635,9 +653,7 @@ public class Loja extends javax.swing.JFrame {
 
     private void kButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_kButton1ActionPerformed
         kButton1.setEnabled(false);
-        img1.setIcon(new ImageIcon(getClass().getResource("/recursos/imagens/carregando.gif")));
-        img2.setIcon(new ImageIcon(getClass().getResource("/recursos/imagens/carregando.gif")));
-        img3.setIcon(new ImageIcon(getClass().getResource("/recursos/imagens/carregando.gif")));
+        descarregar();
         pag++;
         pegarLinks();
         kButton1.setEnabled(true);
@@ -658,6 +674,8 @@ public class Loja extends javax.swing.JFrame {
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
         sistema.Info.provedor = txfProvedor.getText();
         sistema.Configs.salvar();
+        txfProvedor.setText(sistema.Info.provedor);
+        atualizarInfo();
     }//GEN-LAST:event_jButton1ActionPerformed
 
     /**

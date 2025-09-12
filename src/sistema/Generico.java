@@ -16,9 +16,9 @@ import java.util.zip.ZipInputStream;
 public class Generico {
 
     public static Color[] converterCor(String cores) {
-        Color saida[] = new Color[20];
         String ar[] = cores.split(", ");
-
+        Color saida[] = new Color[ar.length];
+        
         for (int i = 0; i < ar.length; i++) {
 
             if (i < saida.length) {
@@ -118,7 +118,7 @@ public class Generico {
 
     public static Color processarCor(Color corOriginal, float intensidade) {
         float hsb[] = Color.RGBtoHSB(corOriginal.getRed(), corOriginal.getGreen(), corOriginal.getBlue(), null);
-        switch (sistema.Info.tipo) {
+        switch (sistema.Info.tipoCorEspecial) {
             case 0:
                 return corOriginal.darker();
             case 1:

@@ -34,7 +34,6 @@ public class Ambiente {
                 if (semsplash) {
                     sistema.Configs.carregar();
                     if (sistema.Info.primeiraVez) {
-//                        tocar = new Tocar(false);
                         new gui.PrimeiraVez().setVisible(true);
                     } else {
                         new gui.Tocar(sistema.Info.animacaoIntroducao).setVisible(true);
