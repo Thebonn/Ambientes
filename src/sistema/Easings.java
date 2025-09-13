@@ -63,4 +63,8 @@ public class Easings {
             return (2 - Math.pow(2, -20 * x + 10)) / 2;
         }
     }
+    
+    public static double easeInOutSine(double x) {
+        return -(Math.cos(Math.PI * x) - 1) / 2;
+    }
 }
