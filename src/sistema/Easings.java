@@ -16,6 +16,7 @@ public class Easings {
     public static final int EASE_OUT_CIRC = 3;
     public static final int EASE_IN_OUT_CIRC = 4;
     public static final int EASE_IN_OUT_EXPO = 5;
+    public static final int EASE_IN_OUT_SINE = 6;
     
     public static double ease(double x, int easing) {
         switch (easing) {
@@ -29,6 +30,8 @@ public class Easings {
                 return easeInOutCirc(x);
             case 5:
                 return easeInOutExpo(x);
+            case 6:
+                return easeInOutSine(x);
             default:
                 return x;
         }
