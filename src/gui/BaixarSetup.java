@@ -151,31 +151,26 @@ public class BaixarSetup extends javax.swing.JFrame {
                     downloader.baixar();
 
                     while (downloader.baixou == false) {
-                        System.out.println(downloader.porcentagem);
                         pgbProgresso.setValue((int) downloader.porcentagem);
                         setTitle("Instalando... " + (int) (downloader.porcentagem) + "%");
                         Thread.sleep(50);
-//                        if (downloader.baixou == true) {
-                            //queria entender pq eu to tendo que fazer isso
-//                            break;
-//                        }
                     }
 
                     if (downloader.baixou == true && downloader.porcentagem >= 100) {
                         jLabel1.setText("Descompactando...");
                         setTitle("Descompactando...");
+                        pgbProgresso.setStringPainted(false);
                         pgbProgresso.setIndeterminate(true);
 
                         sistema.Generico.descompactar(new File(saidadownload), new File(saidazip));
                         JOptionPane.showConfirmDialog(null, "Setup instalado com sucesso!", "Ambientes", JOptionPane.DEFAULT_OPTION, JOptionPane.INFORMATION_MESSAGE);
                         new File(saidadownload).delete();
                     } else {
-//                        JOptionPane.showConfirmDialog(null, "O setup não foi instalado", "Ambientes", JOptionPane.DEFAULT_OPTION, JOptionPane.ERROR_MESSAGE);
-                        throw new Exception();
+                        throw new Exception("Falha no download.");
                     }
                 } catch (Exception ex) {
                     ex.printStackTrace();
-                    JOptionPane.showConfirmDialog(null, "O setup não foi instalado", "Ambientes", JOptionPane.DEFAULT_OPTION, JOptionPane.ERROR_MESSAGE);
+                    JOptionPane.showConfirmDialog(null, "O setup não foi instalado. Mais detalhes:\n\n" + ex.toString(), "Ambientes", JOptionPane.DEFAULT_OPTION, JOptionPane.ERROR_MESSAGE);
                 }
                 dispose();
                 Thread.currentThread().interrupt();

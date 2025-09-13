@@ -50,7 +50,7 @@ public class Downloader {
                         bout.write(buffer, 0, lido);
                         baixado += lido;
                         porcentagem = (baixado * 100) / tamanho;
-                        String p = String.format("%.4f", porcentagem);
+//                        String p = String.format("%.4f", porcentagem);
 
                     }
                     baixou = true;
