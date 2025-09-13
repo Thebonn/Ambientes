@@ -13,7 +13,7 @@ import javax.swing.JOptionPane;
  *
  * @author Bonn
  */
-public class Downloader implements Runnable {
+public class Downloader {
 
     String link;
     File out;
@@ -26,49 +26,50 @@ public class Downloader implements Runnable {
         baixou = false;
     }
 
-    @Override
-    public void run() {
-        try {
-            baixou = false;
-            double baixado = 0.00;
-            int lido;
-            porcentagem = 0.00;
-            
-            URL url = new URL(link);
-            HttpURLConnection http = (HttpURLConnection) url.openConnection();
-            double tamanho = (double) http.getContentLength();
-            BufferedInputStream inp = new BufferedInputStream(http.getInputStream());
-            
-            FileOutputStream fos = new FileOutputStream(this.out);
-            BufferedOutputStream bout = new BufferedOutputStream(fos, 1024);
-            byte[] buffer = new byte[1024];
-            
-            
-            
-            
-            while ((lido = inp.read(buffer, 0, 1024)) >= 0) {
-                baixou = false;
-                bout.write(buffer, 0, lido);
-                baixado += lido;
-                porcentagem = (baixado * 100)/tamanho;
-                String p = String.format("%.4f", porcentagem);
-                
+    public void baixar() {
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    baixou = false;
+                    double baixado = 0.00;
+                    int lido;
+                    porcentagem = 0.00;
+
+                    URL url = new URL(link);
+                    HttpURLConnection http = (HttpURLConnection) url.openConnection();
+                    double tamanho = (double) http.getContentLength();
+                    BufferedInputStream inp = new BufferedInputStream(http.getInputStream());
+
+                    FileOutputStream fos = new FileOutputStream(Downloader.this.out);
+                    BufferedOutputStream bout = new BufferedOutputStream(fos, 1024);
+                    byte[] buffer = new byte[1024];
+
+                    while ((lido = inp.read(buffer, 0, 1024)) >= 0) {
+                        baixou = false;
+                        bout.write(buffer, 0, lido);
+                        baixado += lido;
+                        porcentagem = (baixado * 100) / tamanho;
+                        String p = String.format("%.4f", porcentagem);
+
+                    }
+                    baixou = true;
+                    bout.close();
+                    inp.close();
+
+                } catch (IOException ex) {
+                    int es = JOptionPane.showConfirmDialog(null, "Não foi possível baixar o arquivo. [Erro: " + ex.toString() + "]. Deseja tentar novamente?", "Ambientes", JOptionPane.YES_NO_OPTION, JOptionPane.ERROR_MESSAGE);
+                    if (es == 0) {
+                        new Downloader(link, out).baixar();
+                    } else {
+                        baixou = true;
+                    }
+
+                    ex.printStackTrace();
+                }
             }
-            baixou = true;
-            bout.close();
-            inp.close();
-            
-            
-        } catch (IOException ex) {
-            int es = JOptionPane.showConfirmDialog(null, "Não foi possível baixar o arquivo. [Erro: " + ex.toString() + "]. Deseja tentar novamente?", "Ambientes", JOptionPane.YES_NO_OPTION, JOptionPane.ERROR_MESSAGE);
-            if (es == 0) {
-                new Downloader(link, out).run();
-            } else {
-                baixou = true;
-            }
-            
-            ex.printStackTrace();
-        }
+        }, "BAIXAR SETUP").start();
+
     }
 
 }

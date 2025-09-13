@@ -12,13 +12,6 @@ import javax.swing.JOptionPane;
  */
 public class BaixarSetup extends javax.swing.JFrame {
 
-    /**
-     * Creates new form BaixarSetup
-     *
-     * @param idt
-     * @param nomet
-     * @param caminhot
-     */
     String id = "Nenhum";
     String nome = "Nenhum";
 
@@ -154,19 +147,18 @@ public class BaixarSetup extends javax.swing.JFrame {
                     String saidazip = sistema.Info.localSetups + "/" + nome;
                     
                     sistema.Downloader downloader = new sistema.Downloader(sistema.Info.provedor + "/" + id + "/" + id + ".zip", new File(saidadownload));
-                    
-//                    new Thread(new sistema.Downloader(sistema.Info.provedor + "/" + id + "/" + id + ".zip", new File(saidadownload))).start();
-                    
-                    downloader.run();
+
+                    downloader.baixar();
 
                     while (downloader.baixou == false) {
+                        System.out.println(downloader.porcentagem);
                         pgbProgresso.setValue((int) downloader.porcentagem);
                         setTitle("Instalando... " + (int) (downloader.porcentagem) + "%");
                         Thread.sleep(50);
-                        if (downloader.baixou == true) {
+//                        if (downloader.baixou == true) {
                             //queria entender pq eu to tendo que fazer isso
-                            break;
-                        }
+//                            break;
+//                        }
                     }
 
                     if (downloader.baixou == true && downloader.porcentagem >= 100) {
