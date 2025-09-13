@@ -7,7 +7,6 @@ import java.awt.PopupMenu;
 import java.awt.SystemTray;
 import java.awt.TrayIcon;
 import java.awt.event.ActionEvent;
-import java.awt.event.WindowEvent;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.net.URL;
@@ -22,7 +21,7 @@ import javax.swing.KeyStroke;
 import sistema.Generico;
 import sistema.GerenciadorDeSom;
 import sistema.Info;
-import static sistema.Rpc.presence;
+import sistema.Rpc;
 
 /**
  *
@@ -39,6 +38,8 @@ public final class Tocar extends javax.swing.JFrame {
     public byte setupsInstalados = 0;
 
     public static Color cores[] = new Color[0];
+    public static Color[] coresUsadas = new Color[0];
+
     public static String coresLegiveis = "";
     public static byte coresEspSel = 0;
     public static float mudancaVel = 0.002f;
@@ -52,6 +53,7 @@ public final class Tocar extends javax.swing.JFrame {
     public static boolean suportaSystemTray = false;
     TrayIcon trayIcon;
     Configuracoes configs;
+    sistema.AnimacaoFundo animacoes = new sistema.AnimacaoFundo(Tocar.this);
     public static GerenciadorDeSom gerenciadorDeSom;
 
     public Tocar(boolean subir) {
@@ -59,7 +61,6 @@ public final class Tocar extends javax.swing.JFrame {
         initComponents();
         this.setTitle("Ambientes " + sistema.Info.VERSAO_ATUAL);
 
-//        animar();
         adicionarSetups();
         gerenciadorDeSom = new GerenciadorDeSom();
         sldVolume.setValue((int) Info.volumeGlobal);
@@ -69,7 +70,7 @@ public final class Tocar extends javax.swing.JFrame {
         contagemInatividade();
         bandeja();
         cores = Generico.converterCor("ABDEE6, CBAACB, FFFFB5, FFCCB6, F3B0C3");
-
+        animacoes.carregarAnimacoes();
         escolherCor();
         this.requestFocus();
 
@@ -85,7 +86,8 @@ public final class Tocar extends javax.swing.JFrame {
         imap.put(KeyStroke.getKeyStroke(' '), "mudar");
 
         sistema.Rpc.iniciarRPC();
-        atualizacaoBaixaFrequencia();
+        atualizarRpc();
+//        atualizacaoBaixaFrequencia();
 
         if (subir) {
             subir();
@@ -104,24 +106,6 @@ public final class Tocar extends javax.swing.JFrame {
     public void subir() {
         setLocation(getLocation().x, getLocation().y + 130);
         sistema.Componentes.moverJanela(this, this.getLocation().x, this.getLocation().y - 130, 0.008, sistema.Easings.EASE_OUT_QUART);
-    }
-
-    void atualizacaoBaixaFrequencia() {
-        new Thread(new Runnable() {
-            @Override
-            public void run() {
-                Thread.currentThread().setPriority(Thread.MIN_PRIORITY);
-                try {
-                    while (true) {
-                        atualizarRpc();
-                        Thread.sleep(10000);
-                    }
-                } catch (Exception ex) {
-                    ex.printStackTrace();
-                }
-
-            }
-        }, "ATTBaixaFrequencia").start();
     }
 
     public void bandeja() {
@@ -176,20 +160,23 @@ public final class Tocar extends javax.swing.JFrame {
     void atualizarRpc() {
 
         if (sistema.Info.rpcTipo == 2) {
-            sistema.Rpc.atualizarDetalhes("Usando o Ambientes");
+            Rpc.chaveGrande = "logo";
+            Rpc.estado = "";
+            Rpc.detalhes = "Usando o Ambientes";
+            Rpc.atualizarRPC();
             return;
         }
 
-        sistema.Rpc.atualizarEstado(sistema.Info.mostrarSetups ? setupsInstalados + " setups instalados" : "");
-
+        Rpc.estado = sistema.Info.mostrarSetups ? (Byte.toString(setupsInstalados) + " setups instalados") : "";
         if (lojaaberta) {
-            sistema.Rpc.atualizarDetalhes("Na loja de setups");
+            Rpc.detalhes = "Na loja de setups";
+            Rpc.atualizarRPC();
             return;
         }
 
-        presence.largeImageKey = !play ? "logo" : "logoparado";
-        sistema.Rpc.atualizarDetalhes(!play ? (sistema.Info.rpcTipo == 0 ? "Ouvindo " + cbbSetups.getSelectedItem() : "Ouvindo um setup") : "Parado");
-
+        Rpc.chaveGrande = !play ? "logo" : "logoparado";
+        Rpc.detalhes = !play ? (sistema.Info.rpcTipo == 0 ? "Ouvindo " + cbbSetups.getSelectedItem() : "Ouvindo um setup") : "Parado";
+        sistema.Rpc.atualizarRPC();
     }
 
     public void adicionarSetups() {
@@ -204,8 +191,8 @@ public final class Tocar extends javax.swing.JFrame {
                 cbbSetups.addItem("Selecionar");
             }
 
-            for (int i = 0; i < setups.length; i++) {
-                cbbSetups.addItem(setups[i]);
+            for (String setup : setups) {
+                cbbSetups.addItem(setup);
             }
             setupsInstalados = (byte) setups.length;
         }
@@ -246,168 +233,6 @@ public final class Tocar extends javax.swing.JFrame {
         }, "ContagemInatividade").start();
     }
 
-    public void animar() {
-
-        new Thread(new Runnable() {
-            @Override
-            public void run() {
-                try {
-                    //rgb
-                    Thread.currentThread().setPriority(2);
-                    float hue = 0;
-                    Color ini = Color.black;
-                    Color fin = Color.black;
-                    int tempo = 10;
-
-                    //raios
-                    short ultimo = 0;
-                    short countup = 0;
-
-                    //fogo
-                    float luz = 0.6f;
-
-                    //foco do gradiente
-                    short foco;
-                    boolean descendo = false;
-
-                    //cores especiais
-                    byte ciclo = 1;
-                    byte cicloAnterior;
-                    short espera = 10;
-
-                    //para easing
-                    double negocio = 0.0d;
-
-                    if (Info.usarCoresDoSetup && gerenciadorDeSom.temCores) {
-                        if (gerenciadorDeSom.fundoPredefinido != -1) {
-                            sistema.Info.animTipo = gerenciadorDeSom.fundoPredefinido;
-                        } else {
-                            sistema.Info.animTipo = 5;
-                            cores = gerenciadorDeSom.cores;
-                        }
-                    }
-
-                    while (gerenciadorDeSom.tocando) {
-
-                        if ((play == false) && isActive() && isFocused()) {
-
-                            negocio -= (descendo ? 0.001d : -0.001d) * sistema.Info.velocidade / 2;
-
-                            foco = (short) (sistema.Easings.easeInOutCirc(negocio) * 700);
-
-                            if (negocio >= 1) {
-                                descendo = true;
-                            } else if (negocio <= 0) {
-                                descendo = false;
-                            }
-
-                            switch (sistema.Info.animTipo) {
-                                case 0:
-                                    luz += ((Generico.random(0, 10) - 5f) / 200f);
-                                    hue = 0.06f + ((Generico.random(0, 10) - 5f) / 150f);
-                                    if (luz > 0.7f) {
-                                        luz = 0.2f;
-                                    } else if (luz < 0.1f) {
-                                        luz = 0.25f;
-                                    }
-                                    ini = new Color(Color.HSBtoRGB(hue, 1f, luz));
-                                    fin = new Color(Color.HSBtoRGB(hue + ((Generico.random(0, 10) - 5) / 100), 1f, luz - 0.1f));
-                                    break;
-                                case 1:
-                                    hue += 0.0003f * sistema.Info.velocidade;
-                                    ini = new Color(Color.HSBtoRGB(hue, 0.9f, 0.9f));
-                                    fin = new Color(Color.HSBtoRGB(hue + 0.1f, 0.9f, 0.9f));
-                                    if (hue >= 1) {
-                                        hue = 0;
-                                    }
-                                    break;
-                                case 2:
-
-                                    luz = 0.8f + ((Generico.random(0, 2) - 1f) / 700f);
-                                    hue = 0.56f + ((Generico.random(0, 10) - 5f) / 650f);
-                                    ini = new Color(Color.HSBtoRGB(hue, 1f, luz));
-                                    fin = new Color(Color.HSBtoRGB(hue + ((Generico.random(0, 10) - 5) / 100), 1f, luz - 0.1f));
-
-                                    break;
-
-                                case 3:
-                                    countup++;
-                                    ini = new Color(0x141516);
-                                    fin = new Color(0x1b1c1f);
-
-                                    boolean deNovo = ((countup - ultimo > 1 && countup - ultimo < 10) && Generico.random(0, 1000) < 200);
-                                    if (Generico.random(0, 1000) / 10f < 0.1f || deNovo) {
-                                        float valor = (Generico.random(0, 6) + 3) / 10f;
-                                        if (deNovo == false) {
-                                            ultimo = countup;
-                                        }
-
-                                        Color cor = Color.getHSBColor(0.5f, 0.1f, valor);
-                                        ini = cor;
-                                        fin = cor;
-                                    }
-
-                                    if (countup > 3000) {
-                                        countup -= 3000;
-                                        ultimo -= 3000;
-                                    }
-
-                                    break;
-                                case 4:
-                                    ini = new Color(Color.HSBtoRGB(1, 0f, (float) ((foco + 700) / 1400f / 2)));
-                                    fin = Color.lightGray;
-                                    break;
-                                case 5:
-//                                    espera -= 1 * sistema.Info.velocidade;
-//                                    if (espera <= 0) {
-//                                        espera = 500;
-//                                        ciclo++;
-
-                                    for (int i = 0; i < cores.length; i++) {
-                                        cicloAnterior = (byte) (i - 1);
-
-                                        if (cicloAnterior < 0) {
-                                            cicloAnterior = (byte) (cores.length - 1);
-                                        }
-
-                                        sistema.Componentes.mudarCor(cores[i], cores[cicloAnterior], pnlFundo, (float) (mudancaVel * sistema.Info.velocidade), 15);
-                                        
-                                        System.out.println("5000f - (" + mudancaVel + " * " + sistema.Info.velocidade + " * 150000f)");
-                                        float tempoespera = 5000f - (mudancaVel * sistema.Info.velocidade * 150000f);
-                                        System.out.println(tempoespera);
-                                        Thread.sleep((long) (Math.max(tempoespera, 2000)));
-                                    }
-
-//                                    }
-                                    break;
-                                case 6:
-                                    ini = Color.gray;
-                                    fin = Color.darkGray;
-                                    break;
-                                default:
-                                    break;
-                            }
-
-                            if (sistema.Info.animTipo != 5) {
-                                pnlFundo.setkStartColor(ini);
-                                pnlFundo.setkEndColor(fin);
-
-                                sistema.Componentes.escurecerFundo(pnlFundo);
-
-                            }
-                            pnlFundo.setkGradientFocus(foco);
-                            pnlFundo.updateUI();
-
-                            Thread.sleep(tempo);
-
-                        }
-                    }
-                } catch (Exception ex) {
-                    ex.printStackTrace();
-                }
-            }
-        }).start();
-    }
 
     public void setarIcones(boolean tocando) {
         URL botaoURL;
@@ -438,7 +263,21 @@ public final class Tocar extends javax.swing.JFrame {
                         lblStatus.setText("Carregando...");
                         boolean res = gerenciadorDeSom.carregarERodarSetup(cbbSetups.getSelectedItem().toString());
                         btnTocar.setEnabled(true);
-                        animar();
+
+
+                        if (Info.usarCoresDoSetup && gerenciadorDeSom.temCores) {
+
+                            if (gerenciadorDeSom.fundoPredefinido == -1) {
+                                coresUsadas = gerenciadorDeSom.cores;
+                            }
+
+                            byte escolhido = gerenciadorDeSom.fundoPredefinido == -1 ? 5 : gerenciadorDeSom.fundoPredefinido;
+                            animacoes.animarFundo(escolhido);
+
+                        } else {
+                            coresUsadas = cores;
+                            animacoes.animarFundo(sistema.Info.animTipo);
+                        }
 
                         if (res) {
                             setTitle("Ambientes - " + gerenciadorDeSom.setup);
@@ -452,11 +291,14 @@ public final class Tocar extends javax.swing.JFrame {
                         setarIcones(!play);
                         sistema.Componentes.ratio = 1;
                         lblStatus.setText("Parando...");
+                        animacoes.pararAnimacao();
                         gerenciadorDeSom.pararTudo();
                         setTitle("Ambientes " + sistema.Info.VERSAO_ATUAL);
                         lblStatus.setText("Parado...");
                         sistema.Componentes.mudarCor(Color.darkGray, pnlFundo.getkStartColor(), pnlFundo, 0.04f, 10);
                     }
+
+                    atualizarRpc();
                 } catch (Exception ex) {
                     ex.printStackTrace();
                 }
@@ -489,6 +331,7 @@ public final class Tocar extends javax.swing.JFrame {
                                         sistema.Componentes.moverJanela(configs, configs.getLocation().x - (configs.getSize().width / 3), configs.getLocation().y, 0.006, sistema.Easings.EASE_OUT_QUART);
                                         sistema.Componentes.moverJanela(t, t.getLocation().x + (t.getSize().width / 2), t.getLocation().y, 0.006, sistema.Easings.EASE_OUT_QUART);
                                     }
+                                    atualizarRpc();
 
                                 }
                             });
@@ -679,13 +522,13 @@ public final class Tocar extends javax.swing.JFrame {
                 .addComponent(sldVolume, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(lblVolume)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 16, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 12, Short.MAX_VALUE)
                 .addComponent(jButton3)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(lblStatus)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 15, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 11, Short.MAX_VALUE)
                 .addComponent(btnTocar, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 16, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 10, Short.MAX_VALUE)
                 .addComponent(pgbSumir, javax.swing.GroupLayout.PREFERRED_SIZE, 2, javax.swing.GroupLayout.PREFERRED_SIZE))
         );
 
@@ -774,6 +617,7 @@ public final class Tocar extends javax.swing.JFrame {
             }
             this.setVisible(false);
         } else {
+            Rpc.pararRPC();
             System.exit(0);
         }
     }//GEN-LAST:event_formWindowClosing
@@ -782,6 +626,7 @@ public final class Tocar extends javax.swing.JFrame {
         if (cbbSetups.getSelectedItem() != null && cbbSetups.getSelectedItem().equals("Obter mais setups") && lojaaberta == false && sistema.Info.primeiraVez == false) {
             lojaaberta = true;
             new Loja().setVisible(true);
+            atualizarRpc();
         }
     }//GEN-LAST:event_cbbSetupsActionPerformed
 
@@ -832,7 +677,7 @@ public final class Tocar extends javax.swing.JFrame {
     private javax.swing.JLabel lblStatus;
     private javax.swing.JLabel lblVolume;
     private javax.swing.JProgressBar pgbSumir;
-    private com.k33ptoo.components.KGradientPanel pnlFundo;
+    public com.k33ptoo.components.KGradientPanel pnlFundo;
     private javax.swing.JSlider sldVolume;
     // End of variables declaration//GEN-END:variables
 }
