@@ -97,39 +97,89 @@ public class Componentes {
         new Thread(new Runnable() {
             @Override
             public void run() {
-                Color inicio = corInicial;
-                Color fim = corFinal;
-                painel.setkStartColor(inicio);
-                painel.setkEndColor(sistema.Generico.processarCor(inicio, Info.intensidade));
+//                Color inicio = corInicial;
+//                Color fim = corFinal;
+//                painel.setkStartColor(inicio);
+//                painel.setkEndColor(sistema.Generico.processarCor(inicio, Info.intensidade));
+//                try {
+                ////                    boolean acabou = false;
+////                    while (acabou == false) {
+//                    for (ratio = 0; ratio < 1; ratio += quantidade) {
+//                        int red = (int) Math.abs((ratio * inicio.getRed()) + ((1 - ratio) * fim.getRed()));
+//                        int green = (int) Math.abs((ratio * inicio.getGreen()) + ((1 - ratio) * fim.getGreen()));
+//                        int blue = (int) Math.abs((ratio * inicio.getBlue()) + ((1 - ratio) * fim.getBlue()));
+//                        Color ultimo = new Color(red, green, blue);
+//                        painel.setkStartColor(ultimo);
+//                        painel.setkEndColor(sistema.Generico.processarCor(ultimo, Info.intensidade));
+//                        escurecerFundo(painel);
+//                        painel.updateUI();
+//                        Thread.sleep(tempo);
+//                        ratio += quantidade;
+//                        if (ratio >= 1) {
+////                            acabou = true;
+//                            Thread.currentThread().interrupt();
+//                        }
+//
+//                    }
+//                } catch (Exception ex) {
+//                    ex.printStackTrace();
+//                }
+//
+//                Thread.currentThread()
+//                        .interrupt();
                 try {
-//                    boolean acabou = false;
-//                    while (acabou == false) {
-                    for (ratio = 0; ratio < 1; ratio += quantidade) {
-                        int red = (int) Math.abs((ratio * inicio.getRed()) + ((1 - ratio) * fim.getRed()));
-                        int green = (int) Math.abs((ratio * inicio.getGreen()) + ((1 - ratio) * fim.getGreen()));
-                        int blue = (int) Math.abs((ratio * inicio.getBlue()) + ((1 - ratio) * fim.getBlue()));
-                        Color ultimo = new Color(red, green, blue);
-                        painel.setkStartColor(ultimo);
-                        painel.setkEndColor(sistema.Generico.processarCor(ultimo, Info.intensidade));
-                        escurecerFundo(painel);
-                        painel.updateUI();
+                    for (float i = 0; i < 1; i += quantidade) {
+                        mudarCorCru(corInicial, corFinal, painel, i);
                         Thread.sleep(tempo);
-                        ratio += quantidade;
-                        if (ratio >= 1) {
-//                            acabou = true;
-                            Thread.currentThread().interrupt();
-                        }
-
                     }
                 } catch (Exception ex) {
                     ex.printStackTrace();
                 }
 
-                Thread.currentThread()
-                        .interrupt();
             }
 //        }, "TAD");
         }, "TAD").start();
+//        generico.acenderThread.start();
+    }
+
+    public static void mudarCorCru(Color corInicial, Color corFinal, KGradientPanel painel, float x) {
+//        generico.acenderThread = new Thread(new Runnable() {
+//        new Thread(new Runnable() {
+//            @Override
+//            public void run() {
+//                Color inicio = corInicial;
+//                Color fim = corFinal;
+//                painel.setkStartColor(inicio);
+//                painel.setkEndColor(sistema.Generico.processarCor(inicio, Info.intensidade));
+//                try {
+//                    boolean acabou = false;
+//                    while (acabou == false) {
+//                    for (ratio = 0; ratio < 1; ratio += quantidade) {
+                        int red = (int) Math.abs((x * corInicial.getRed()) + ((1 - x) * corFinal.getRed()));
+                        int green = (int) Math.abs((x * corInicial.getGreen()) + ((1 - x) * corFinal.getGreen()));
+                        int blue = (int) Math.abs((x * corInicial.getBlue()) + ((1 - x) * corFinal.getBlue()));
+                        Color ultimo = new Color(red, green, blue);
+                        painel.setkStartColor(ultimo);
+                        painel.setkEndColor(sistema.Generico.processarCor(ultimo, Info.intensidade));
+                        escurecerFundo(painel);
+                        painel.updateUI();
+//                        Thread.sleep(tempo);
+//                        ratio += quantidade;
+//                        if (ratio >= 1) {
+////                            acabou = true;
+//                            Thread.currentThread().interrupt();
+//                        }
+
+//                    }
+//                } catch (Exception ex) {
+//                    ex.printStackTrace();
+//                }
+//
+//                Thread.currentThread()
+//                        .interrupt();
+//            }
+////        }, "TAD");
+//        }, "TAD").start();
 //        generico.acenderThread.start();
     }
 

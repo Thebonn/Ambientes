@@ -17,6 +17,7 @@ public class AnimacaoFundo {
 
     public double foco = 0;
 
+//    public Color cores[];
     //primeira vez usando um map :3
     Map<Integer, Runnable> animacoes = new HashMap<>();
     Thread animacaoAtual;
@@ -151,66 +152,45 @@ public class AnimacaoFundo {
 
         animacoes.put(5, () -> {
 
+            int espera = 0;
+            byte ciclo = 0;
+            byte cicloAnterior = 0;
+
             while (tocando) {
-                if (!podeAnimar(tocar, true)) {
+                if (!podeAnimar(tocar, true) || Tocar.coresUsadas == null) {
                     continue;
                 }
 
-//                espera -= 1 * sistema.Info.velocidade;
-//                if (espera <= 0) {
-//                    espera = 500;
-//                    ciclo++;
-//
-//                    for (int i = 0; i < cores.length; i++) {
-//                        cicloAnterior = (byte) (i - 1);
-//
-//                        if (cicloAnterior < 0) {
-//                            cicloAnterior = (byte) (cores.length - 1);
-//                        }
-//
-//                        sistema.Componentes.mudarCor(cores[i], cores[cicloAnterior], pnlFundo, (float) (mudancaVel * sistema.Info.velocidade), 15);
-//
-//                        System.out.println("5000f - (" + mudancaVel + " * " + sistema.Info.velocidade + " * 150000f)");
-//                        float tempoespera = 5000f - (mudancaVel * sistema.Info.velocidade * 150000f);
-//                        System.out.println(tempoespera);
-//                        Thread.sleep((long) (Math.max(tempoespera, 2000)));
-//                    }
+                espera -= 1 * sistema.Info.velocidade;
+                if (espera <= 0) {
+                    espera = 500;
+                    ciclo++;
+                    cicloAnterior = (byte) (ciclo - 1);
 
-            
- espera -= 1 * sistema.Info.velocidade;
-                                    if (espera <= 0) {
-                                        espera = 500;
-                                        ciclo++;
-                                        cicloAnterior = (byte) (ciclo - 1);
+                    if (ciclo >= Tocar.coresUsadas.length) {
+                        ciclo = 0;
+                    }
 
-                                        while (cores[ciclo] == null) {
-                                            ciclo++;
-                                            if (ciclo >= cores.length) {
-                                                ciclo = 0;
-                                                break;
-                                            }
-                                        }
-
-                                        if (ciclo >= cores.length) {
-                                            ciclo = 0;
-                                        }
-
-                                        if (cicloAnterior < 0) {
-                                            cicloAnterior = (byte) cores.length;
-                                        }
-
-                                        sistema.Componentes.mudarCor(cores[ciclo], cores[cicloAnterior], pnlFundo, (float) (mudancaVel * sistema.Info.velocidade), 15);
-                                    }
-
+                    if (cicloAnterior < 0) {
+                        cicloAnterior = (byte) Tocar.coresUsadas.length;
+                    }
+                }
+                double x = sistema.Easings.ease(Math.abs(espera - 500) / 500f, sistema.Easings.EASE_IN_OUT_SINE);
+                sistema.Componentes.mudarCorCru(Tocar.coresUsadas[ciclo], Tocar.coresUsadas[cicloAnterior], tocar.pnlFundo, (float) x);
             }
-        }
-        );
+        });
+
+        animacoes.put(6, () -> {
+            Color ini = Color.gray;
+            Color fin = Color.darkGray;
+            atualizarFundo(tocar.pnlFundo, ini, fin);
+        });
     }
 
     private void dormir(long tempo) {
         try {
             Thread.sleep(tempo);
-        } catch (Exception ex) {
+        } catch (InterruptedException ex) {
             Thread.currentThread().interrupt();
         }
     }
@@ -258,14 +238,12 @@ public class AnimacaoFundo {
     }
 
     public void atualizarFundo(KGradientPanel painel, Color ini, Color fin) {
-//        if (sistema.Info.animTipo != 5) {
         painel.setkStartColor(ini);
         painel.setkEndColor(fin);
         painel.setkGradientFocus((int) foco);
 
         sistema.Componentes.escurecerFundo(painel);
 
-//        }
         painel.updateUI();
     }
 
@@ -281,103 +259,6 @@ public class AnimacaoFundo {
         });
 
         animacaoAtual.start();
-//        switch (animacao) {
-//            case 0:
-//
-//                float luz = 0.6f;
-//                float hue = 0;
-//
-//                while (tocando) {
-//                    luz += ((Generico.random(0, 10) - 5f) / 200f);
-//                    hue = 0.06f + ((Generico.random(0, 10) - 5f) / 150f);
-//                    if (luz > 0.7f) {
-//                        luz = 0.2f;
-//                    } else if (luz < 0.1f) {
-//                        luz = 0.25f;
-//                    }
-//                    Color ini = new Color(Color.HSBtoRGB(hue, 1f, luz));
-//                    Color fin = new Color(Color.HSBtoRGB(hue + ((Generico.random(0, 10) - 5) / 100), 1f, luz - 0.1f));
-//                    atualizarFundo(tocar.pnlFundo, ini, fin);
-//                }
-//
-//                break;
-//            case 1:
-//                hue += 0.0003f * sistema.Info.velocidade;
-//                ini = new Color(Color.HSBtoRGB(hue, 0.9f, 0.9f));
-//                fin = new Color(Color.HSBtoRGB(hue + 0.1f, 0.9f, 0.9f));
-//                if (hue >= 1) {
-//                    hue = 0;
-//                }
-//                break;
-//            case 2:
-//
-//                luz = 0.8f + ((Generico.random(0, 2) - 1f) / 700f);
-//                hue = 0.56f + ((Generico.random(0, 10) - 5f) / 650f);
-//                ini = new Color(Color.HSBtoRGB(hue, 1f, luz));
-//                fin = new Color(Color.HSBtoRGB(hue + ((Generico.random(0, 10) - 5) / 100), 1f, luz - 0.1f));
-//
-//                break;
-//
-//            case 3:
-//                countup++;
-//                ini = new Color(0x141516);
-//                fin = new Color(0x1b1c1f);
-//
-//                boolean deNovo = ((countup - ultimo > 1 && countup - ultimo < 10) && Generico.random(0, 1000) < 200);
-//                if (Generico.random(0, 1000) / 10f < 0.1f || deNovo) {
-//                    float valor = (Generico.random(0, 6) + 3) / 10f;
-//                    if (deNovo == false) {
-//                        ultimo = countup;
-//                    }
-//
-//                    Color cor = Color.getHSBColor(0.5f, 0.1f, valor);
-//                    ini = cor;
-//                    fin = cor;
-//                }
-//
-//                if (countup > 3000) {
-//                    countup -= 3000;
-//                    ultimo -= 3000;
-//                }
-//
-//                break;
-//            case 4:
-//                ini = new Color(Color.HSBtoRGB(1, 0f, (float) ((foco + 700) / 1400f / 2)));
-//                fin = Color.lightGray;
-//                break;
-//            case 5:
-
-    
-
-    ////                                    espera -= 1 * sistema.Info.velocidade;
-////                                    if (espera <= 0) {
-////                                        espera = 500;
-////                                        ciclo++;
-//
-//                for (int i = 0; i < cores.length; i++) {
-//                    cicloAnterior = (byte) (i - 1);
-//
-//                    if (cicloAnterior < 0) {
-//                        cicloAnterior = (byte) (cores.length - 1);
-//                    }
-//
-//                    sistema.Componentes.mudarCor(cores[i], cores[cicloAnterior], pnlFundo, (float) (mudancaVel * sistema.Info.velocidade), 15);
-//
-//                    System.out.println("5000f - (" + mudancaVel + " * " + sistema.Info.velocidade + " * 150000f)");
-//                    float tempoespera = 5000f - (mudancaVel * sistema.Info.velocidade * 150000f);
-//                    System.out.println(tempoespera);
-//                    Thread.sleep((long) (Math.max(tempoespera, 2000)));
-//                }
-//
-////                                    }
-//                break;
-//            case 6:
-//                ini = Color.gray;
-//                fin = Color.darkGray;
-//                break;
-//            default:
-//                break;
-//        }
     }
 
     public void pararAnimacao() {

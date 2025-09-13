@@ -22,7 +22,7 @@ public class GerenciadorDeSom {
     public boolean temCores = false;
     public byte fundoPredefinido = -1; //-1: não usa fundo predefinido
     public Color cores[] = null;
-    public float corTempo = 0f;
+//    public float corTempo = 0f;
 
     public boolean tocando = false;
     public long playlistPredelay = -1;
@@ -122,18 +122,17 @@ public class GerenciadorDeSom {
         config = linha.replace("\r", "").split("\n"); //tirar aquele caractere do mal
         tocando = true;
         //configurar cores, se houver
+        temCores = false;
         for (String c : config) {
             if (c.startsWith("c - ")) {
                 temCores = true;
                 String[] l = c.split(" - ");
                 //pegar cada cor que está separado por ,
-                if (l[1].split(", ") != null) {
+                if (l[1].split(", ") != null && l[1].split(", ").length > 1) {
                     cores = sistema.Generico.converterCor(l[1]);
                 } else {
                     fundoPredefinido = Byte.parseByte(l[1]);
                 }
-                
-                corTempo = Float.parseFloat(l[2]);
                 break;
             }
         }
