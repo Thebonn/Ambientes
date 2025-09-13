@@ -5,9 +5,13 @@
  */
 package sistema;
 
-import club.minnced.discord.rpc.DiscordEventHandlers;
-import club.minnced.discord.rpc.DiscordRPC;
-import club.minnced.discord.rpc.DiscordRichPresence;
+import dev.firstdark.rpc.DiscordRpc;
+import dev.firstdark.rpc.enums.ActivityType;
+import dev.firstdark.rpc.enums.ErrorCode;
+import dev.firstdark.rpc.handlers.DiscordEventHandler;
+import dev.firstdark.rpc.models.DiscordJoinRequest;
+import dev.firstdark.rpc.models.DiscordRichPresence;
+import dev.firstdark.rpc.models.User;
 
 /**
  *
@@ -15,72 +19,74 @@ import club.minnced.discord.rpc.DiscordRichPresence;
  */
 public class Rpc {
 
-    public static DiscordRPC lib;
+    public static DiscordRpc rpc;
     public static final String APPLICATION_ID = "990002259469406288";
-    public static DiscordEventHandlers handlers;
+    public static DiscordEventHandler handler;
     public static DiscordRichPresence presence;
 
+    public static String detalhes = "Parado";
+    public static String estado = "";
+    public static String chaveGrande = "logo";
+    public static String textoGrande = "v1.2";
+    public static String chavePequena = "";
+    public static String textoPequeno = "";
+
+    //essa biblioteca nova requer uma função que coloca tudo de uma vez, diferente da biblioteca anterior
     public static void atualizarRPC() {
-        lib.Discord_UpdatePresence(presence);
+
+        presence = DiscordRichPresence.builder()
+                .details(detalhes)
+                .state(estado)
+                .largeImageKey(chaveGrande)
+                .largeImageText(textoGrande)
+                .smallImageKey(chavePequena)
+                .smallImageText(textoPequeno)
+                .activityType(ActivityType.LISTENING)
+                .build();
+        rpc.updatePresence(presence);
     }
 
     public static void pararRPC() {
-        lib.Discord_Shutdown();
-        lib.Discord_ClearPresence();
-    }
-    
-    public static void atualizarDetalhes(String detalhes) {
-        presence.details = detalhes;
-        lib.Discord_UpdatePresence(presence);
-    }
-    
-    public static void atualizarEstado(String estado) {
-        presence.state = estado;
-        lib.Discord_UpdatePresence(presence);
-    }
-
-    public static void atualizarTextos(String detalhes, String estado) {
-        presence.details = detalhes;
-        presence.state = estado;
-        lib.Discord_UpdatePresence(presence);
-    }
-
-    public static void atualizarImagens(String chavePequeno, String chaveGrande, String textoPequeno, String textoGrande) {
-        presence.smallImageKey = chavePequeno;
-        presence.largeImageKey = chaveGrande;
-        presence.smallImageText = textoPequeno;
-        presence.largeImageText = textoGrande;
-
-        lib.Discord_UpdatePresence(presence);
+        rpc.shutdown();
     }
 
     public static void iniciarRPC() {
-        lib = DiscordRPC.INSTANCE;
+        try {
+            rpc = new DiscordRpc();
 
-        String steamId = "";
-        handlers = new DiscordEventHandlers();
-        lib.Discord_Initialize(APPLICATION_ID, handlers, true, steamId);
-        presence = new DiscordRichPresence();
-        presence.startTimestamp = System.currentTimeMillis() / 1000; // epoch second
-        presence.details = "Parado";
-        presence.largeImageKey = "logo";
-        presence.largeImageText = "Programa por Thebonn!";
-
-        lib.Discord_UpdatePresence(presence);
-        // in a worker thread
-
-        new Thread(new Runnable() {
-            @Override
-            public void run() {
-                Thread.currentThread().setPriority(2);
-                while (!Thread.currentThread().isInterrupted()) {
-                    lib.Discord_RunCallbacks();
-                    try {
-                        Thread.sleep(2000);
-                    } catch (InterruptedException ignored) {
-                    }
+            handler = new DiscordEventHandler() {
+                @Override
+                public void ready(User user) {
+                    //não preciso fazer nada aqui porque a classe tocar já atualiza o rpc logo após iniciar
                 }
-            }
-        }, "RPC-Callback-Handler").start();
+
+                @Override
+                public void disconnected(ErrorCode ec, String ns) {
+//                    System.out.println("Disconnected " + ec.name() + " - " + ns);
+                }
+
+                @Override
+                public void errored(ErrorCode ec, String ns) {
+//                    System.out.println("Disconnected " + ec.name() + " - " + ns);
+                }
+
+                @Override
+                public void joinGame(String string) {
+                }
+
+                @Override
+                public void spectateGame(String string) {
+                }
+
+                @Override
+                public void joinRequest(DiscordJoinRequest djr) {
+                }
+
+            };
+
+            rpc.init(APPLICATION_ID, handler, false);
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
     }
 }
