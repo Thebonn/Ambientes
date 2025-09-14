@@ -27,7 +27,8 @@ public class AnimacaoFundo {
 
     public AnimacaoFundo(Tocar tocar) {
         this.tocar = tocar;
-        animarFoco();
+        carregarAnimacoes();
+//        animarFoco();
     }
 
     public void carregarAnimacoes() {
@@ -214,13 +215,13 @@ public class AnimacaoFundo {
                 try {
                     Double negocio = 0d;
                     boolean descendo = false;
-                    while (true) {
+                    while (tocando) {
 
-                        if (tocando && !podeAnimar(tocar, true)) {
+                        if (!podeAnimar(tocar, true)) {
                             continue;
                         }
 
-                        negocio -= (descendo ? 0.001d : -0.001d) * sistema.Info.velocidade / 2;
+                        negocio -= (descendo ? 0.005d : -0.005d) * sistema.Info.velocidade / 2;
 
                         foco = (short) (sistema.Easings.easeInOutCirc(negocio) * 800) - 100;
 
@@ -229,6 +230,7 @@ public class AnimacaoFundo {
                         } else if (negocio <= 0) {
                             descendo = false;
                         }
+                        dormir(30);
                     }
                 } catch (Exception ex) {
                     ex.printStackTrace();
@@ -249,6 +251,7 @@ public class AnimacaoFundo {
 
     public void animarFundo(int animacao) {
         tocando = true;
+        animarFoco();
 
         animacaoAtual = new Thread(new Runnable() {
             @Override
