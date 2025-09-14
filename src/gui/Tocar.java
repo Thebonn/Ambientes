@@ -70,9 +70,7 @@ public final class Tocar extends javax.swing.JFrame {
         contagemInatividade();
         bandeja();
         cores = Generico.converterCor("ABDEE6, CBAACB, FFFFB5, FFCCB6, F3B0C3");
-        animacoes.carregarAnimacoes();
         escolherCor();
-        this.requestFocus();
 
         pnlFundo.requestFocus();
 
@@ -87,7 +85,6 @@ public final class Tocar extends javax.swing.JFrame {
 
         sistema.Rpc.iniciarRPC();
         atualizarRpc();
-//        atualizacaoBaixaFrequencia();
 
         if (subir) {
             subir();
@@ -207,11 +204,13 @@ public final class Tocar extends javax.swing.JFrame {
             @Override
             public void run() {
                 try {
+                    java.util.Date a = new java.util.Date();
+                    
                     while (true) {
-                        if (sistema.Info.podeColorir) {
-
-                            pgbSumir.setValue((int) (contagem));
-                            pgbSumir.setMaximum(sistema.Info.maximo);
+                        
+                        if (sistema.Info.podeColorir) {                            
+                            pgbSumir.setValue((int) (contagem * 100));
+                            pgbSumir.setMaximum(sistema.Info.maximo * 100);
                             if (contagem <= 0) {
                                 jPanel1.setVisible(false);
                             } else {
@@ -221,9 +220,10 @@ public final class Tocar extends javax.swing.JFrame {
                             contagem = 0;
                             jPanel1.setVisible(true);
                         }
-
-                        contagem -= 0.1;
+                        
                         Thread.sleep(100);
+                        contagem -= (new java.util.Date().getTime() - a.getTime()) / 1000f;
+                        a = new java.util.Date();
                     }
                 } catch (Exception ex) {
                     ex.printStackTrace();
