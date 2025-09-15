@@ -22,6 +22,9 @@ public class Loja extends javax.swing.JFrame {
     public Loja() {
         FlatDarkLaf.install();
         initComponents();
+        descricao1.getCaret().setVisible(false);
+        descricao2.getCaret().setVisible(false);
+        descricao3.getCaret().setVisible(false);
         txfProvedor.setText(sistema.Info.provedor);
         kButton1.requestFocus();
         atualizarInfo();
@@ -42,7 +45,7 @@ public class Loja extends javax.swing.JFrame {
     String linhas[][] = null;
     String info[][] = null;
     String autor[] = null;
-    
+
     void descarregar() {
         descricao1.setText("");
         descricao2.setText("");
@@ -87,8 +90,12 @@ public class Loja extends javax.swing.JFrame {
                     * dar um tamanho limite mesmo
                      */
                     linhas = new String[ar.length][50];
-                    System.out.println("vai carregar da pag " + pag * 3 + " ate a " + max);
+                    
+                    pgbProgresso.setVisible(true);
+                    pgbProgresso.setMaximum(max);
+
                     for (int i = pag * 3; i < max; i++) {
+                        pgbProgresso.setValue(i);
 
                         if (i >= ar.length) {
                             break;
@@ -104,6 +111,8 @@ public class Loja extends javax.swing.JFrame {
                         autor[i] = sistema.Conectar.pegarSimples(sistema.Info.provedor + "/" + ar[i] + "/copyright.txt").split("\n")[0];
 
                     }
+                    
+                    pgbProgresso.setVisible(false);
 
                     pegarLinks();
 
@@ -129,16 +138,14 @@ public class Loja extends javax.swing.JFrame {
                     }
 
 //                    String ar[] = links.split(", ");
-                    pgbProgresso.setVisible(true);
-                    pgbProgresso.setMaximum(3);
-
                     if ((pag * 3) - max >= 0) {
                         max += 12;
-                        System.out.println("atualize!!!!!!!");
                         atualizarInfo();
-
                         return;
                     }
+
+                    pgbProgresso.setVisible(true);
+                    pgbProgresso.setMaximum(3);
 
                     if (info[pag * 3] == null) {
 
@@ -154,6 +161,10 @@ public class Loja extends javax.swing.JFrame {
                     for (int i = pag * 3; i < max; i++) {
 
                         pgbProgresso.setValue(i + 1 - (pag * 3));
+
+                        if (info[i] == null) {
+                            continue;
+                        }
 
                         String caminho = System.getProperty("java.io.tmpdir") + info[i][0] + ".png";
                         if (!new File(caminho).exists()) {
@@ -220,8 +231,7 @@ public class Loja extends javax.swing.JFrame {
                     }
 
                     kButton2.setEnabled(pag != 0);
-//                    System.out.println(pag);
-//                
+
                     for (int i = 0; i < t.length; i++) {
                         if (t[i].getText().equals("ID: Nenhum")) {
                             p[i].setVisible(false);
