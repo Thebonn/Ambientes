@@ -34,8 +34,9 @@ public class Splash extends javax.swing.JFrame {
 //            public void run() {
 //                try {
 //                    while (true) {
-//                        mudatexto();
-//                        Thread.sleep(1000);
+//                        selecionarTexto();
+//                        Componentes.mudarTexto(textoSplash.equals("") ? textos[sistema.Generico.random(0, textos.length)] : textoSplash, lblNegocio, 40);
+//                        Thread.sleep(2000);
 //                    }
 //                } catch (Exception ex) {
 //                    ex.printStackTrace();
@@ -43,6 +44,7 @@ public class Splash extends javax.swing.JFrame {
 //            }
 //        }, "TAD").start();
 //    }
+
     public void funcionar() {
         new Thread(new Runnable() {
             @Override
@@ -59,12 +61,11 @@ public class Splash extends javax.swing.JFrame {
                     if (res) {
                         lblNegocio.setFont(new Font("Open Sauce One Black", 0, 25));
                         pgbProgresso.setFont(new Font("Open Sauce One", 0, 13));
-
-                        pgbProgresso.setString("Verificando as pastas...");
                     } else {
                         JOptionPane.showConfirmDialog(null, "Não foi possível carregar as fontes, o programa funcionará usando a fonte de fallback.", "Ambientes", JOptionPane.DEFAULT_OPTION, JOptionPane.ERROR_MESSAGE);
                     }
 
+                    pgbProgresso.setString("Verificando as pastas...");
                     File file = new File(Info.localSetups);
                     if (!file.exists()) {
                         pgbProgresso.setString("Criando as pastas...");
@@ -114,15 +115,14 @@ public class Splash extends javax.swing.JFrame {
 
                     pgbProgresso.setIndeterminate(true);
 
-
-
                     pgbProgresso.setString("Abrindo o Ambientes...");
                     Thread.sleep(1000);
-
                     cair();
 
                 } catch (Exception ex) {
+                    JOptionPane.showConfirmDialog(null, "Um erro ocorreu ao tentar abrir o ambientes: " + ex.toString(), "Ambientes", JOptionPane.DEFAULT_OPTION, JOptionPane.ERROR_MESSAGE);
                     ex.printStackTrace();
+                    System.exit(-1);
                 }
             }
         }, "FUNCIONAR").start();
@@ -155,7 +155,7 @@ public class Splash extends javax.swing.JFrame {
                 }
             }
 
-            textoSplash = ar[sistema.Generico.random(0, ar.length - 1) + 1];
+            textoSplash = ar[sistema.Generico.random(1, ar.length)];
         }
 
     }
