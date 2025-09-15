@@ -17,8 +17,7 @@ import sistema.Info;
  */
 public class Splash extends javax.swing.JFrame {
 
-    Tocar tocar;
-    String escolhido = "";
+    String textoSplash = "";
 
     public Splash() {
         FlatDarkLaf.install();
@@ -49,7 +48,11 @@ public class Splash extends javax.swing.JFrame {
             @Override
             public void run() {
                 try {
-                    Thread.sleep(100);
+//                    Thread.sleep(100);
+
+                    pgbProgresso.setString("Verificando atualizações...");
+                    selecionarTexto();
+                    Componentes.mudarTexto(textoSplash.equals("") ? textos[sistema.Generico.random(0, textos.length)] : textoSplash, lblNegocio, 40);
 
                     pgbProgresso.setString("Carregando fontes...");
                     boolean res = recursos.fontes.Fonte.carregarFontes();
@@ -94,33 +97,24 @@ public class Splash extends javax.swing.JFrame {
                         pgbProgresso.setString("Nenhum setup instalado...");
                         Thread.sleep(200);
                     } else {
-                    pgbProgresso.setIndeterminate(false);
-                    pgbProgresso.setMaximum(setups.length);
+                        pgbProgresso.setIndeterminate(false);
+                        pgbProgresso.setMaximum(setups.length);
 
-                    for (int i = 0; i < setups.length; i++) {
-                        pgbProgresso.setValue(i);
-                        File mestre = new File(setups[i].getAbsolutePath() + "/mestre.txt");
-                        String nome = new File(mestre.getParent()).getName();
-                        pgbProgresso.setString("Verificando " + nome + " ...");
+                        for (int i = 0; i < setups.length; i++) {
+                            pgbProgresso.setValue(i);
+                            File mestre = new File(setups[i].getAbsolutePath() + "/mestre.txt");
+                            String nome = new File(mestre.getParent()).getName();
+                            pgbProgresso.setString("Verificando " + nome + " ...");
 
-                        if (!mestre.exists()) {
-                            JOptionPane.showConfirmDialog(null, "Atenção! O setup " + nome + " não tem o arquivo \"mestre.txt\" para funcionar! É recomendado você contatar o criador", "Ambientes", JOptionPane.DEFAULT_OPTION, JOptionPane.ERROR_MESSAGE);
+                            if (!mestre.exists()) {
+                                JOptionPane.showConfirmDialog(null, "Atenção! O setup " + nome + " não tem o arquivo \"mestre.txt\" para funcionar! É recomendado você contatar o criador", "Ambientes", JOptionPane.DEFAULT_OPTION, JOptionPane.ERROR_MESSAGE);
+                            }
                         }
                     }
-                    }
 
-                    pgbProgresso.setString("Criando negócios...");
                     pgbProgresso.setIndeterminate(true);
 
-                    pgbProgresso.setString("Fazendo as coisas acontecerem...");
 
-                    pgbProgresso.setString("Verificando atualizações...");
-                    selecionarTexto();
-
-                    if (escolhido.equals("")) {
-                        escolhido = textos[sistema.Generico.random(0, textos.length)];
-                    }
-                    Componentes.mudarTexto(escolhido, lblNegocio, 40);
 
                     pgbProgresso.setString("Abrindo o Ambientes...");
                     Thread.sleep(1000);
@@ -161,7 +155,7 @@ public class Splash extends javax.swing.JFrame {
                 }
             }
 
-            escolhido = ar[sistema.Generico.random(0, ar.length - 1) + 1];
+            textoSplash = ar[sistema.Generico.random(0, ar.length - 1) + 1];
         }
 
     }
@@ -195,18 +189,12 @@ public class Splash extends javax.swing.JFrame {
                     }
 
                     if (sistema.Info.primeiraVez) {
-//                        tocar = new Tocar(false);
                         new PrimeiraVez().setVisible(true);
                     } else {
-                        tocar = new Tocar(sistema.Info.animacaoIntroducao);
-                        tocar.setVisible(true);
+                        new Tocar(sistema.Info.animacaoIntroducao).setVisible(true);
                     }
 
-//                    if (sistema.Info.animacaoIntroducao == true) { //dps vejo como eu faco isso sem repetir o if to mt cansado desculpa
-//                        tocar.subir();
-//                    }
                     dispose();
-                    System.gc();
 
                 } catch (Exception ex) {
                     ex.printStackTrace();
@@ -218,8 +206,8 @@ public class Splash extends javax.swing.JFrame {
 
     //textos caso a pessoa esteja sem internet
     public String textos[] = {"Agora sem açúcar!", "Lorem Ipsum", "GAY GAY HOMOSSEXUAL GAY", "e n t e r i n g  t h e  p l a z a . . .",
-        "Vamo que vamo!", "ENCARE O MC POZES POR 10 HORAS SEM RIR", "Dança gatinho, dança!", "as vozes...", "WOOF WOOF BARK BARK ARF ARF BARK WOOF WOOF GRRRRR",
-        "Nunca ouça nada desse programa às 3 da manhã", "Vamos vamos!", "Simbora!!!", "u lkdusfg;ouzfgou", "MIAU!!!!!", "Divirta-se", "Que belos sons!", "Aviso de pancadas de chuva!",
+        "Vamo que vamo!", "Dança gatinho, dança!", "as vozes...", "WOOF WOOF BARK BARK ARF ARF BARK WOOF WOOF GRRRRR", "Rumo à paz",
+        "Nunca ouça nada desse programa às 3 da manhã", "Vamos vamos!", "Simbora!!!", "MIAU!!!!!", "Divirta-se", "Que belos sons!", "Aviso de pancadas de chuva!",
         "so mim umilhao e mim, maltratao", "Meia noite eu te conto", "O próprio!", "ABCW", "Só nos sonszinhos!!!", "Bem na hora!", "eles disseram, \"O ambiente.\"", "biribabum",
         "Agora sem o Delay de Libet!", "Começando o dia bem", "Uiui", "Experimente CHOCOLATE™"};
 
@@ -244,7 +232,7 @@ public class Splash extends javax.swing.JFrame {
 
         lblNegocio.setFont(new java.awt.Font("Gadugi", 1, 24)); // NOI18N
         lblNegocio.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        lblNegocio.setText("O programa está iniciando!");
+        lblNegocio.setText("Ambientes está iniciando!");
 
         pgbProgresso.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
         pgbProgresso.setIndeterminate(true);
