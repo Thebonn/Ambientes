@@ -99,7 +99,7 @@ public class Generico {
                 } else if (div[i].contains(maius.split("")[j])) {
                     resultado += 0.9f;
                 } else if (div[i].contains(outro.split("")[j])) {
-                    resultado += 0.5f;
+                    resultado += 0.7f;
                 }
             }
 
