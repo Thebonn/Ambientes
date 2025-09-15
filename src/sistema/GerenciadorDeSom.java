@@ -17,7 +17,7 @@ public class GerenciadorDeSom {
 
     public String setup = "Nenhum";
     public String config[];
-    
+
     //cores
     public boolean temCores = false;
     public byte fundoPredefinido = -1; //-1: não usa fundo predefinido
@@ -53,7 +53,7 @@ public class GerenciadorDeSom {
                         boolean tocouPrimeira = false;
                         boolean cortouPrimeira = false;
                         while (tocando) {
-                            
+
                             if (tipo.equals("a")) {
                                 int aleatorio = Generico.random(tocouPrimeira ? 1 : 0, pl.length);
                                 //parece horrivel e é mesmo. isso tudo para evitar selecionar o mesmo som quando for um aleatorio
@@ -74,10 +74,13 @@ public class GerenciadorDeSom {
                             //logo antes da espera do som acabar para se mesclar com ela                            
                             Thread.sleep(500);
 
+                            if (tocouPrimeira && cortouPrimeira == false && pl[0].info == GerenciadorDeSom.LIVRE) {
+                                cortouPrimeira = true;
+                                pl[0].finalizar();
+                            }
+
                             //usaria esse thread sleep aqui, só que percebi que com sons mais longos, ele se torna inconsistente
                             //Thread.sleep(Math.max(pl[sel].tamDoSomMS - 1000 - preDelay - sistema.Info.preDelay, 1));
-
-                            
                             while (pl[sel].posDoSomMS() < pl[sel].tamDoSomMS - preDelay - sistema.Info.preDelay) {
                                 if ((double) (pl[sel].posDoSomMS()) / (double) (pl[sel].tamDoSomMS) < 0.9d) {
                                     //pequeno calculo que faz o sleep ser menor quanto mais perto o som está de acabar
@@ -88,18 +91,6 @@ public class GerenciadorDeSom {
                                     Thread.sleep(1);
                                 }
 
-                            }
-                            
-                            if (tocouPrimeira && cortouPrimeira == false) {
-                                //thread para finalizar o audio que nao sera mais tocado, ja que
-                                //finalizar no meio da execucao pode causar um atraso no audio
-                                cortouPrimeira = true;
-                                new Thread(new Runnable() {
-                                    @Override
-                                    public void run() {
-                                        pl[0].finalizar();
-                                    }
-                                }, "FINALIZAR SOM").start();
                             }
                         }
 
@@ -136,7 +127,7 @@ public class GerenciadorDeSom {
                 break;
             }
         }
-        
+
         //configurar playlist
         for (String c : config) {
             if (c.startsWith("p - ")) {
@@ -242,13 +233,15 @@ public class GerenciadorDeSom {
     }
 
     public boolean estaDesativado(String nome) {
-        
+
         return desativados.contains(nome);
-        
+
 //        if (desativados.contains(nome)) {
 //            return true;
 //        } else {
-////            return fals
+    
+
+    ////            return fals
 //        }
         
 //        for (int i = 0; i < desativados.length; i++) {
