@@ -17,7 +17,6 @@ public class AnimacaoFundo {
 
     public double foco = 0;
 
-//    public Color cores[];
     //primeira vez usando um map :3
     Map<Integer, Runnable> animacoes = new HashMap<>();
     Thread animacaoAtual;
@@ -28,7 +27,6 @@ public class AnimacaoFundo {
     public AnimacaoFundo(Tocar tocar) {
         this.tocar = tocar;
         carregarAnimacoes();
-//        animarFoco();
     }
 
     public void carregarAnimacoes() {
