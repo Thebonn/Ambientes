@@ -264,6 +264,9 @@ public class AnimacaoFundo {
 
     public void pararAnimacao() {
         tocando = false;
-        animacaoAtual.interrupt();
+        if (animacaoAtual != null) {
+            animacaoAtual.interrupt();
+        }
+
     }
 }
