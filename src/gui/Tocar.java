@@ -16,6 +16,7 @@ import javax.swing.AbstractAction;
 import javax.swing.ActionMap;
 import javax.swing.ImageIcon;
 import javax.swing.InputMap;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.KeyStroke;
 import sistema.Generico;
@@ -164,7 +165,7 @@ public final class Tocar extends javax.swing.JFrame {
             return;
         }
 
-        Rpc.estado = sistema.Info.mostrarSetups ? (Byte.toString(setupsInstalados) + " setups instalados") : "";
+        Rpc.estado = sistema.Info.mostrarSetups ? (Byte.toString(setupsInstalados) + (setupsInstalados > 1 ? " setups instalados" : " setup instalado")) : "";
         if (lojaaberta) {
             Rpc.detalhes = "Na loja de setups";
             Rpc.atualizarRPC();
@@ -205,10 +206,10 @@ public final class Tocar extends javax.swing.JFrame {
             public void run() {
                 try {
                     java.util.Date a = new java.util.Date();
-                    
+
                     while (true) {
-                        
-                        if (sistema.Info.podeColorir) {                            
+
+                        if (sistema.Info.podeColorir) {
                             pgbSumir.setValue((int) (contagem * 100));
                             pgbSumir.setMaximum(sistema.Info.maximo * 100);
                             if (contagem <= 0) {
@@ -220,7 +221,7 @@ public final class Tocar extends javax.swing.JFrame {
                             contagem = 0;
                             jPanel1.setVisible(true);
                         }
-                        
+
                         Thread.sleep(100);
                         contagem -= (new java.util.Date().getTime() - a.getTime()) / 1000f;
                         a = new java.util.Date();
@@ -232,7 +233,6 @@ public final class Tocar extends javax.swing.JFrame {
             }
         }, "ContagemInatividade").start();
     }
-
 
     public void setarIcones(boolean tocando) {
         URL botaoURL;
@@ -253,17 +253,21 @@ public final class Tocar extends javax.swing.JFrame {
     }
 
     public void tocarParar() {
+        adicionarSetups();
+        logicaToque(play);
+        play = !play;
+    }
+
+    public void logicaToque(boolean status) {
         new Thread(new Runnable() {
             @Override
             public void run() {
                 try {
-                    if (play) {
-                        play = false;
+                    if (status) {
                         btnTocar.setEnabled(false);
                         lblStatus.setText("Carregando...");
                         boolean res = gerenciadorDeSom.carregarERodarSetup(cbbSetups.getSelectedItem().toString());
                         btnTocar.setEnabled(true);
-
 
                         if (Info.usarCoresDoSetup && gerenciadorDeSom.temCores) {
 
@@ -283,24 +287,30 @@ public final class Tocar extends javax.swing.JFrame {
                             setTitle("Ambientes - " + gerenciadorDeSom.setup);
                             lblStatus.setText("Tocando agora: " + gerenciadorDeSom.setup);
                             btnOpcoes.setEnabled(podeAbrir);
-                            setarIcones(!play);
+                            setarIcones(status);
                         }
 
                     } else {
-                        play = true;
-                        setarIcones(!play);
+                        btnTocar.setEnabled(false);
+                        setarIcones(status);
                         sistema.Componentes.ratio = 1;
                         lblStatus.setText("Parando...");
                         animacoes.pararAnimacao();
                         gerenciadorDeSom.pararTudo();
                         setTitle("Ambientes " + sistema.Info.VERSAO_ATUAL);
                         lblStatus.setText("Parado...");
+                        btnTocar.setEnabled(true);
                         sistema.Componentes.mudarCor(Color.darkGray, pnlFundo.getkStartColor(), pnlFundo, 0.04f, 10);
                     }
 
                     atualizarRpc();
                 } catch (Exception ex) {
                     ex.printStackTrace();
+                    sistema.Componentes.mudarCor(new Color(207, 17, 17), pnlFundo.getkStartColor(), pnlFundo, 0.04f, 10);
+                    JOptionPane.showConfirmDialog(null, "Um erro ocorreu ao tocar o setup: " + ex.toString(), "Ambientes", JOptionPane.DEFAULT_OPTION, JOptionPane.ERROR_MESSAGE);
+                    logicaToque(false);
+                    play = true;
+                    
                 }
             }
         }, "tocar parar").start();
