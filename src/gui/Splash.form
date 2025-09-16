@@ -82,7 +82,7 @@
               <Font name="Gadugi" size="24" style="1"/>
             </Property>
             <Property name="horizontalAlignment" type="int" value="0"/>
-            <Property name="text" type="java.lang.String" value="O programa est&#xe1; iniciando!"/>
+            <Property name="text" type="java.lang.String" value="Ambientes est&#xe1; iniciando!"/>
           </Properties>
         </Component>
         <Component class="javax.swing.JProgressBar" name="pgbProgresso">
