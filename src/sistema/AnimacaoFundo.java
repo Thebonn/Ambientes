@@ -76,7 +76,6 @@ public class AnimacaoFundo {
         animacoes.put(2, () -> {
             float hue;
             float luz;
-
             float aux = 0;
             boolean subindoluz = false;
 
@@ -94,7 +93,6 @@ public class AnimacaoFundo {
                 }
 
                 luz = 0.7f + (((Generico.random(0, 20)) / 10000f) + aux);
-
                 hue = 0.56f + ((Generico.random(0, 50)) / 10000f);
                 Color ini = new Color(Color.HSBtoRGB(hue, 1f, luz));
                 Color fin = new Color(Color.HSBtoRGB(hue + ((Generico.random(0, 10)) / 100), 1f, luz - (aux * 2)));
@@ -142,7 +140,6 @@ public class AnimacaoFundo {
                 if (!podeAnimar(tocar, true)) {
                     continue;
                 }
-
                 Color ini = new Color(Color.HSBtoRGB(1, 0f, (float) ((foco + 800) / 1600f / 2)));
                 Color fin = Color.lightGray;
                 atualizarFundo(tocar.pnlFundo, ini, fin);

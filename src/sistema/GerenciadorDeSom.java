@@ -90,10 +90,8 @@ public class GerenciadorDeSom {
                                 } else {
                                     Thread.sleep(1);
                                 }
-
                             }
                         }
-
                     } catch (Exception ex) {
                         ex.printStackTrace();
                     }
@@ -233,20 +231,7 @@ public class GerenciadorDeSom {
     }
 
     public boolean estaDesativado(String nome) {
-
         return desativados.contains(nome);
-
-//        if (desativados.contains(nome)) {
-//            return true;
-//        } else {
-    
-
-    ////            return fals
-//        }
-        
-//        for (int i = 0; i < desativados.length; i++) {
-//            if (nome.equals(desativados[i])) {
-
     }
 
     public byte posLivre() {
@@ -258,14 +243,14 @@ public class GerenciadorDeSom {
         return -1;
     }
 
-    public Som encontrarSomPeloNome(String nome) {
+    public Som encontrarSomPeloNome(String nome) throws Exception {
         for (int i = 0; i < sons.length; i++) {
             if (sons[i] != null && sons[i].nome.equals(nome)) {
                 return sons[i];
             }
         }
 
-        return null;
+        throw new Exception("O arquivo " + nome + " não foi encontrado nesse setup!");
     }
 
     public void pararTudo() {

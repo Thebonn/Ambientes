@@ -39,7 +39,7 @@ public final class Tocar extends javax.swing.JFrame {
     public byte setupsInstalados = 0;
 
     public static Color cores[] = new Color[0];
-    public static Color[] coresUsadas = new Color[0];
+    public static Color coresUsadas[] = new Color[0];
 
     public static String coresLegiveis = "";
     public static byte coresEspSel = 0;
@@ -313,7 +313,7 @@ public final class Tocar extends javax.swing.JFrame {
                     
                 }
             }
-        }, "tocar parar").start();
+        }, "LOGICA TOQUE").start();
     }
 
     void abrirConfigs() {
@@ -336,13 +336,12 @@ public final class Tocar extends javax.swing.JFrame {
                             configs.addWindowListener(new java.awt.event.WindowAdapter() {
                                 @Override
                                 public void windowClosed(java.awt.event.WindowEvent e) {
-                                    //outra checagem por que o usuario pode mudar o tamanho da janela enquanto configura
+                                    //outra checagem porque o usuario pode mudar o tamanho da janela enquanto configura
                                     if (t.getSize().height < 500 && t.getSize().width < 500) {
                                         sistema.Componentes.moverJanela(configs, configs.getLocation().x - (configs.getSize().width / 3), configs.getLocation().y, 0.006, sistema.Easings.EASE_OUT_QUART);
                                         sistema.Componentes.moverJanela(t, t.getLocation().x + (t.getSize().width / 2), t.getLocation().y, 0.006, sistema.Easings.EASE_OUT_QUART);
                                     }
                                     atualizarRpc();
-
                                 }
                             });
                         }
@@ -589,7 +588,6 @@ public final class Tocar extends javax.swing.JFrame {
 
         Info.volumeGlobal = sldVolume.getValue();
         lblVolume.setText(sldVolume.getValue() + "%");
-//        setarVolume(volumeGlobal);
         gerenciadorDeSom.setarVolune(Info.volumeGlobal);
     }//GEN-LAST:event_sldVolumeStateChanged
 
@@ -623,7 +621,7 @@ public final class Tocar extends javax.swing.JFrame {
         if (suportaSystemTray) {
             if (avisoFechar == false) {
                 avisoFechar = true;
-                trayIcon.displayMessage("Ambientes", "O programa ainda está rodando! Caso queria fechá-lo totalmente, vá nos seus ícones de bandeja, clique com o botão direito no ícone do Ambientes e clique em fechar.", TrayIcon.MessageType.INFO);
+                trayIcon.displayMessage("Ambientes", "O programa ainda está rodando! Caso queria fechá-lo totalmente, feche pelo seus ícones de bandeja.", TrayIcon.MessageType.INFO);
             }
             this.setVisible(false);
         } else {
