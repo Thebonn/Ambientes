@@ -1,8 +1,6 @@
 package gui;
 
-import java.awt.image.BufferedImage;
 import java.io.File;
-import javax.imageio.ImageIO;
 import javax.swing.ImageIcon;
 import javax.swing.JOptionPane;
 
@@ -15,16 +13,14 @@ public class BaixarSetup extends javax.swing.JFrame {
     String id = "Nenhum";
     String nome = "Nenhum";
 
-    public BaixarSetup(String idt, String nomet, File caminhot) {
+    public BaixarSetup(String id, String nome, ImageIcon imagem) {
         initComponents();
         try {
             this.setTitle("Confirmação de instalação");
-            lblNome.setText(nomet);
-            ImageIcon img = new ImageIcon(ImageIO.read(caminhot).getScaledInstance(150, 150, BufferedImage.SCALE_SMOOTH));
-            icone.setIcon(img);
-            icone.updateUI();
-            id = idt;
-            nome = nomet;
+            lblNome.setText(nome);
+            icone.setIcon(new ImageIcon(imagem.getImage().getScaledInstance(150, 150, java.awt.image.BufferedImage.SCALE_SMOOTH)));
+            this.id = id;
+            this.nome = nome;
             pgbProgresso.setVisible(false);
         } catch (Exception ex) {
             ex.printStackTrace();
@@ -150,13 +146,18 @@ public class BaixarSetup extends javax.swing.JFrame {
 
                     downloader.baixar();
 
+                    System.out.println("Instalando " + nome + "...");
                     while (downloader.baixou == false) {
                         pgbProgresso.setValue((int) downloader.porcentagem);
                         setTitle("Instalando... " + (int) (downloader.porcentagem) + "%");
                         Thread.sleep(50);
+                        if (Math.ceil(downloader.porcentagem) % 5 == 0) {
+                            System.out.println("Instalação em " + downloader.porcentagem + "%");
+                        }
                     }
 
                     if (downloader.baixou == true && downloader.porcentagem >= 100) {
+                        System.out.println("Descompactando arquivos...");
                         jLabel1.setText("Descompactando...");
                         setTitle("Descompactando...");
                         pgbProgresso.setStringPainted(false);
@@ -164,6 +165,7 @@ public class BaixarSetup extends javax.swing.JFrame {
 
                         sistema.Generico.descompactar(new File(saidadownload), new File(saidazip));
                         JOptionPane.showConfirmDialog(null, "Setup instalado com sucesso!", "Ambientes", JOptionPane.DEFAULT_OPTION, JOptionPane.INFORMATION_MESSAGE);
+                        System.out.println("Setup instalado com sucesso!");
                         new File(saidadownload).delete();
                     } else {
                         throw new Exception("Falha no download.");
