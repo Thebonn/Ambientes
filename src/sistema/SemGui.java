@@ -19,11 +19,35 @@ public class SemGui {
                           -v / -volume <float de 0 até 100> .. Muda o volume para o valor inserido.
                           -s / --setup ............................... Mostra a configuração do setup atual.
                           -o / --opcoes <Nome do som> ................ Alterna entre ligar e desligar o som.
+                          -lj / --loja .............. ................ Abre a loja de setups (Com GUI).
                           """;
 
     public void principal() {
+
+        System.out.println(sistema.Info.ABERTURAS[sistema.Generico.random(0, sistema.Info.ABERTURAS.length)] + "\n");
         System.out.println("Bem-vindo ao ambientes sem interface!");
         System.out.println(divisor);
+
+        File configs = new File("Arquivos/configuracoes.txt");
+        File padrao = new File(sistema.Info.localSetups);
+
+        if (configs.exists()) {
+            try {
+                sistema.Configs.carregar();
+            } catch (Exception ex) {
+                System.out.println("Não foi possível carregar as configurações.");
+                System.out.println("   " + ex.toString());
+                System.out.println("      " + ex.getMessage());
+            }
+        } else {
+            System.out.println("ATENÇÃO: Nenhum arquivo de configurações foi encontrado. Setups serão instalados no diretório padrão (" + Info.localSetups + ").");
+        }
+
+        if (!padrao.exists()) {
+            System.out.println("ATENÇÃO: Pasta de setups instalados não foi encontrada. Caso deseja criar, use o comando --criardirs");
+            System.out.println("(Sem a pasta, não será possível instalar setups novos)");
+        }
+
         String saida;
         String extra = "";
         try {
@@ -45,7 +69,7 @@ public class SemGui {
         }
 
         System.out.println("Você está na versão " + sistema.Info.VERSAO_ATUAL + ". " + extra);
-        System.out.println(divisor + "\nDigite --help ou --ajuda para ajuda");
+        System.out.println(divisor + "\nDigite --ajuda ou --help para ajuda");
 
         GerenciadorDeSom gerenciador = new GerenciadorDeSom();
 
@@ -95,7 +119,7 @@ public class SemGui {
                     case "lista":
                         File file = new File("Arquivos/setups");
                         String setups[] = file.list();
-                        System.out.println("Listando os setups");
+                        System.out.println("Listando os seus setups...");
                         boolean temErro = false;
                         for (int i = 0; i < setups.length; i++) {
                             File lugar = new File(file.getAbsolutePath() + "/" + setups[i]);
@@ -150,10 +174,31 @@ public class SemGui {
                         break;
                     case "s":
                     case "setup":
-                        for (int i = 0; i < gerenciador.config.length; i++) {
-                            System.out.println(gerenciador.config[i]);
+                        if (gerenciador.config == null) {
+                            System.out.println("Você não carregou nenhum setup para exibir a configuração do setup.");
+                        } else {
+                            System.out.println("Listando a configuração do setup...");
+                            for (int i = 0; i < gerenciador.config.length; i++) {
+                                System.out.println(gerenciador.config[i]);
+                            }
                         }
 
+                        break;
+
+                    case "lj":
+                    case "loja":
+                        System.out.println("Abrindo a loja de setups...");
+                        new gui.Loja().setVisible(true);
+                        break;
+
+                    case "criardirs":
+                        if (padrao.exists()) {
+                            System.out.println("O diretório já existe.");
+                        } else {
+                            System.out.println("Criando diretórios...");
+                            padrao.mkdirs();
+                            System.out.println("Diretórios criados!");
+                        }
                         break;
 
                     case "ml":
@@ -176,7 +221,7 @@ public class SemGui {
 
                                 }
                             }
-                        }, "Thread").start();
+                        }, "ESTRESSE DE MEMORY LEAK").start();
 
                         break;
                     default:
@@ -184,6 +229,7 @@ public class SemGui {
                         break;
                 }
             }
+            System.out.println(divisor);
         }
     }
 }
