@@ -43,7 +43,7 @@ public class Generico {
             ZipEntry entry = zis.getNextEntry();
 
             while (entry != null) {
-                System.out.println("descompactando: " + entry.getName());
+                System.out.println("Descompactando: " + entry.getName());
                 String caminho = diretorio.getPath() + File.separator + entry.getName();
 
                 if (!entry.isDirectory()) {
