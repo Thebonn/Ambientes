@@ -2,16 +2,19 @@ package gui;
 
 import com.formdev.flatlaf.FlatDarkLaf;
 import com.k33ptoo.components.KButton;
+import com.k33ptoo.components.KGradientPanel;
 import java.awt.Color;
+import java.awt.Image;
 import java.awt.image.BufferedImage;
 import java.io.File;
-import java.io.FileInputStream;
 import javax.swing.ImageIcon;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
-import java.io.InputStream;
+import java.net.URL;
 import javax.imageio.ImageIO;
 import javax.swing.JOptionPane;
+import javax.swing.JTextArea;
+import sistema.especiais.SetupLoja;
 
 /**
  *
@@ -19,14 +22,36 @@ import javax.swing.JOptionPane;
  */
 public class Loja extends javax.swing.JFrame {
 
+    JLabel id[];
+    JLabel au[];
+    JLabel ti[];
+    JLabel ta[];
+    JLabel im[];
+    JTextArea de[];
+    JPanel pa[];
+    KGradientPanel fu[];
+
     public Loja() {
         FlatDarkLaf.install();
         initComponents();
-        descricao1.getCaret().setVisible(false);
-        descricao2.getCaret().setVisible(false);
-        descricao3.getCaret().setVisible(false);
+
+        this.id = new JLabel[]{id1, id2, id3};
+        this.au = new JLabel[]{autor1, autor2, autor3};
+        this.ti = new JLabel[]{titulo1, titulo2, titulo3};
+        this.ta = new JLabel[]{tamanho1, tamanho2, tamanho3};
+        this.im = new JLabel[]{img1, img2, img3};
+        this.de = new JTextArea[]{descricao1, descricao2, descricao3};
+        this.pa = new JPanel[]{painel1, painel2, painel3};
+        this.fu = new KGradientPanel[]{kGradientPanel1, kGradientPanel2, kGradientPanel3};
+
+        for (int i = 0; i < 3; i++) {
+            de[i].getCaret().setVisible(false);
+        }
+        
+        descarregar();
+
         txfProvedor.setText(sistema.Info.provedor);
-        kButton1.requestFocus();
+        btnAvancar.requestFocus();
         atualizarInfo();
 
         this.setTitle("Loja de setups");
@@ -40,31 +65,23 @@ public class Loja extends javax.swing.JFrame {
 
     String links = "";
 
-    String ar[] = null;
-    String linkInfo[] = null;
-    String linhas[][] = null;
-    String info[][] = null;
-    String autor[] = null;
+    String setupsId[] = null;
+
+    SetupLoja setups[] = null;
 
     void descarregar() {
-        descricao1.setText("");
-        descricao2.setText("");
-        descricao3.setText("");
-        img1.setIcon(new ImageIcon(getClass().getResource("/recursos/imagens/carregando.gif")));
-        img2.setIcon(new ImageIcon(getClass().getResource("/recursos/imagens/carregando.gif")));
-        img3.setIcon(new ImageIcon(getClass().getResource("/recursos/imagens/carregando.gif")));
-        titulo1.setText("Carregando...");
-        titulo2.setText("Carregando...");
-        titulo3.setText("Carregando...");
-        tamanho1.setText("Tamanho: 0 MB");
-        tamanho2.setText("Tamanho: 0 MB");
-        tamanho3.setText("Tamanho: 0 MB");
-        autor1.setText("Autor: Nenhum");
-        autor2.setText("Autor: Nenhum");
-        autor3.setText("Autor: Nenhum");
-        id1.setText("ID: Nenhum");
-        id2.setText("ID: Nenhum");
-        id3.setText("ID: Nenhum");
+        for (int i = 0; i < 3; i++) {
+            de[i].setText("");
+            im[i].setIcon(new ImageIcon(getClass().getResource("/recursos/imagens/carregando.gif")));
+            ti[i].setText("Carregando...");
+            ta[i].setText("Tamanho: 0 MB");
+            au[i].setText("Autor: Nenhum");
+            id[i].setText("ID: Nenhum");
+            fu[i].setkFillBackground(false);
+            fu[i].setkStartColor(new Color(0x5e6266));
+            fu[i].setkEndColor(new Color(0x5e6266));
+            fu[i].updateUI();
+        }
     }
 
     public void atualizarInfo() {
@@ -74,70 +91,85 @@ public class Loja extends javax.swing.JFrame {
                 try {
                     links = sistema.Conectar.pegarSimples(sistema.Info.provedor + "/links.txt");
 
-                    ar = new String[links.split(", ").length];
-                    ar = links.split(", ");
+                    setupsId = links.split(", ");
 
-                    if (max > ar.length) {
-                        max = ar.length;
+                    if (max > setupsId.length) {
+                        max = setupsId.length;
                     }
 
-                    linkInfo = new String[ar.length];
-                    autor = new String[ar.length];
-                    info = new String[ar.length][];
+                    //checar se ja existe e se o tamanho foi atualizado
+                    if (setups == null || setups.length != setupsId.length) {
+                        setups = new SetupLoja[setupsId.length];
+                    }
 
-                    /*eu queria q desse para criar o tamanho do segundo coiso dentro do
-                    * for com o coiso.length, mas eu nao achei como, entao vou ter que
-                    * dar um tamanho limite mesmo
-                     */
-                    linhas = new String[ar.length][50];
-                    
                     pgbProgresso.setVisible(true);
                     pgbProgresso.setMaximum(max);
 
-                    for (int i = pag * 3; i < max; i++) {
+                    for (int i = pag * 3; i < (max >= setupsId.length ? setupsId.length : max); i++) {
                         pgbProgresso.setValue(i);
 
-                        if (i >= ar.length) {
-                            break;
+                        //se setups[i] ja ta carreagdo e certo, entao pular o carregamento
+                        if (setups[i] != null && setups[i].id.equals(setupsId[i])) {
+                            continue;
                         }
 
-                        linkInfo[i] = sistema.Info.provedor + "/" + ar[i] + "/info.txt";
-                        String coiso[] = sistema.Conectar.pegarSimples(linkInfo[i]).split("\n");
-                        for (int j = 0; j < coiso.length; j++) {
-                            linhas[i][j] = coiso[j];
-                            info[i] = linhas[i][0].split(", ");
+                        setups[i] = new SetupLoja();
+                        setups[i].id = setupsId[i];
+                        //apenas a string para saber a formatacao geral [que depende inteiramente no ar[i]]
+                        String linkInfo = sistema.Info.provedor + "/" + setupsId[i] + "/info.txt";
+
+                        //usa a string criada para acessar o conteudo de info.txt dependendo do setup [determinada pelo ar[i]]
+                        String coiso[] = sistema.Conectar.pegarSimples(linkInfo).replace("\r", "").split("\n");
+
+                        //sempre formatado em [nome] / [tamanho] / [cores, se houver]
+                        String setupInfo[] = coiso[0].split(" / "); //posicao 0 por que é sempre a primeira linha que contem a info
+                        setups[i].nome = setupInfo[0];
+                        setups[i].tamanho = setupInfo[1];
+
+                        if (setupInfo.length > 2) {
+                            setups[i].temCoresCustomizadas = true;
+                            if (setupInfo[2].split(", ").length > 1) {
+                                setups[i].usaListaDeCores = true;
+                                setups[i].cores = sistema.Generico.converterCor(setupInfo[2]);
+                            } else {
+                                setups[i].tipoAnimacao = Integer.parseInt(setupInfo[2]);
+                            }
+
                         }
 
-                        autor[i] = sistema.Conectar.pegarSimples(sistema.Info.provedor + "/" + ar[i] + "/copyright.txt").split("\n")[0];
+                        if (setups[i].imagem == null) {
+                            Image img = ImageIO.read(new URL(sistema.Info.provedor + "/" + setupsId[i] + "/cover.png"));
+                            setups[i].imagem = new ImageIcon(img.getScaledInstance(150, 150, BufferedImage.SCALE_SMOOTH));
+                        }
+
+                        //j = 1 para pular a primeira linha que é sempre de informacao
+                        for (int j = 1; j < coiso.length; j++) {
+                            setups[i].descricao += coiso[j] + "\n";
+                        }
+
+                        setups[i].autor = sistema.Conectar.pegarSimples(sistema.Info.provedor + "/" + setupsId[i] + "/copyright.txt").split("\n")[0];
 
                     }
-                    
+
                     pgbProgresso.setVisible(false);
 
-                    pegarLinks();
+                    exibirSetups();
 
                 } catch (Exception ex) {
                     JOptionPane.showConfirmDialog(null, "Não foi possível carregar a URL: " + ex.toString() + ".\n\nO site está fora do ar ou o link está errado.", "Ambientes", JOptionPane.DEFAULT_OPTION, JOptionPane.ERROR_MESSAGE);
+                    ex.printStackTrace();
                 }
             }
-        }, "Thread").start();
+        }, "ATUALIZAR INFO").start();
     }
 
-    public void pegarLinks() {
+    public void exibirSetups() {
         new Thread(new Runnable() {
             @Override
             public void run() {
                 try {
-                    jLabel2.setText("Página " + Integer.toString(pag + 1));
-                    JLabel t[] = {id1, id2, id3};
-                    JPanel p[] = {painel1, painel2, painel3};
+                    lblPagina.setText("Página " + (pag + 1));
 
-                    for (int i = 0; i < t.length; i++) {
-                        t[i].setText("ID: Nenhum");
-                        p[i].setVisible(true);
-                    }
-
-//                    String ar[] = links.split(", ");
                     if ((pag * 3) - max >= 0) {
                         max += 12;
                         atualizarInfo();
@@ -147,108 +179,65 @@ public class Loja extends javax.swing.JFrame {
                     pgbProgresso.setVisible(true);
                     pgbProgresso.setMaximum(3);
 
-                    if (info[pag * 3] == null) {
-
+                    if (setups[pag * 3] == null) {
                         atualizarInfo();
                     }
 
-                    kButton1.setEnabled(true);
+                    btnAvancar.setEnabled(true);
 
-                    if (pag * 3 + 4 > ar.length) {
-                        kButton1.setEnabled(false);
+                    if (pag * 3 + 4 > setupsId.length) {
+                        btnAvancar.setEnabled(false);
                     }
 
                     for (int i = pag * 3; i < max; i++) {
 
                         pgbProgresso.setValue(i + 1 - (pag * 3));
 
-                        if (info[i] == null) {
+                        if (setups[i] == null) {
                             continue;
                         }
 
-                        String caminho = System.getProperty("java.io.tmpdir") + info[i][0] + ".png";
-                        if (!new File(caminho).exists()) {
-                            ImageIO.write(ImageIO.read(sistema.Conectar.pegarInputStream(sistema.Info.provedor + "/" + ar[i] + "/cover.png")), "png", new File(caminho));
-                        }
-
-                        InputStream is = new FileInputStream(caminho);
-                        ImageIcon imagem = new ImageIcon(ImageIO.read(is).getScaledInstance(150, 150, BufferedImage.SCALE_SMOOTH));
-
-                        switch (i - (pag * 3)) {
-                            case 0:
-                                titulo1.setText(info[i][0]);
-                                tamanho1.setText("Tamanho: " + info[i][1]);
-                                descricao1.setText("");
-                                id1.setText("ID: " + ar[i]);
-                                for (int j = 1; j < linhas.length; j++) {
-                                    if (linhas[i][j] != null) {
-                                        descricao1.setText(descricao1.getText() + linhas[i][j] + "\n");
-                                    }
-                                }
-                                img1.setIcon(imagem);
-                                img1.repaint();
-                                autor1.setText("Autor: " + autor[i]);
-
-                                break;
-                            case 1:
-
-                                titulo2.setText(info[i][0]);
-                                tamanho2.setText("Tamanho: " + info[i][1]);
-                                descricao2.setText("");
-                                id2.setText("ID: " + ar[i]);
-                                for (int j = 1; j < linhas.length; j++) {
-                                    if (linhas[i][j] != null) {
-                                        descricao2.setText(descricao2.getText() + linhas[i][j] + "\n");
-                                    }
-                                }
-                                img2.setIcon(imagem);
-                                img2.repaint();
-                                autor2.setText("Autor: " + autor[i]);
-
-                                break;
-                            case 2:
-                                titulo3.setText(info[i][0]);
-                                tamanho3.setText("Tamanho: " + info[i][1]);
-                                descricao3.setText("");
-                                id3.setText("ID: " + ar[i]);
-                                for (int j = 1; j < linhas.length; j++) {
-                                    if (linhas[i][j] != null) {
-                                        descricao3.setText(descricao3.getText() + linhas[i][j] + "\n");
-                                    }
-
-                                }
-//                                img3.setIcon(new ImageIcon(aux));
-                                img3.setIcon(imagem);
-                                img3.repaint();
-                                autor3.setText("Autor: " + autor[i]);
-
-                                break;
-                            default:
-                                break;
-                        }
-
-                        is.close();
-                    }
-
-                    kButton2.setEnabled(pag != 0);
-
-                    for (int i = 0; i < t.length; i++) {
-                        if (t[i].getText().equals("ID: Nenhum")) {
-                            p[i].setVisible(false);
+                        //atualizar informacoes na janela
+                        int qual = i - (pag * 3);
+                        if (qual < 3) {
+                            fu[qual].setVisible(true);
+                            ti[qual].setText(setups[i].nome);
+                            ta[qual].setText("Tamanho: " + setups[i].tamanho);
+                            de[qual].setText(setups[i].descricao);
+                            id[qual].setText("ID: " + setupsId[i]);
+                            im[qual].setIcon(setups[i].imagem);
+                            im[qual].repaint();
+                            au[qual].setText("Autor: " + setups[i].autor);
+                            if (setups[i].usaListaDeCores && setups[i].cores.length > 1) {
+                                fu[qual].setkFillBackground(true);
+                                fu[qual].setkStartColor(setups[i].cores[0]);
+                                fu[qual].setkEndColor(setups[i].cores[1]);
+                                fu[qual].updateUI();
+                            }
 
                         }
                     }
 
-                    mudarCor(kButton1);
-                    mudarCor(kButton2);
+                    btnVoltar.setEnabled(pag != 0);
+
+                    for (int i = 0; i < id.length; i++) {
+                        if (id[i].getText().equals("ID: Nenhum")) {
+                            fu[i].setVisible(false);
+
+                        }
+                    }
+
+                    mudarCor(btnAvancar);
+                    mudarCor(btnVoltar);
 
                     pgbProgresso.setVisible(false);
                     Thread.currentThread().interrupt();
                 } catch (Exception ex) {
+                    JOptionPane.showConfirmDialog(null, "Um erro ocorreu ao atualizar os elementos da loja: " + ex.toString() + ".\n\nReporte esse erro!", "Ambientes", JOptionPane.DEFAULT_OPTION, JOptionPane.ERROR_MESSAGE);
                     ex.printStackTrace();
                 }
             }
-        }, "TAD").start();
+        }, "EXIBIR SETUPS").start();
     }
 
     public void mudarCor(KButton botao) {
@@ -273,6 +262,15 @@ public class Loja extends javax.swing.JFrame {
 
         jPanel1 = new javax.swing.JPanel();
         jLabel1 = new javax.swing.JLabel();
+        jPanel3 = new javax.swing.JPanel();
+        pgbProgresso = new javax.swing.JProgressBar();
+        btnAvancar = new com.k33ptoo.components.KButton();
+        btnVoltar = new com.k33ptoo.components.KButton();
+        lblPagina = new javax.swing.JLabel();
+        txfProvedor = new javax.swing.JTextField();
+        jLabel3 = new javax.swing.JLabel();
+        jButton1 = new javax.swing.JButton();
+        kGradientPanel1 = new com.k33ptoo.components.KGradientPanel();
         painel1 = new javax.swing.JPanel();
         img1 = new javax.swing.JLabel();
         titulo1 = new javax.swing.JLabel();
@@ -282,6 +280,7 @@ public class Loja extends javax.swing.JFrame {
         autor1 = new javax.swing.JLabel();
         baixar1 = new javax.swing.JButton();
         id1 = new javax.swing.JLabel();
+        kGradientPanel2 = new com.k33ptoo.components.KGradientPanel();
         painel2 = new javax.swing.JPanel();
         img2 = new javax.swing.JLabel();
         titulo2 = new javax.swing.JLabel();
@@ -291,6 +290,7 @@ public class Loja extends javax.swing.JFrame {
         autor2 = new javax.swing.JLabel();
         baixar2 = new javax.swing.JButton();
         id2 = new javax.swing.JLabel();
+        kGradientPanel3 = new com.k33ptoo.components.KGradientPanel();
         painel3 = new javax.swing.JPanel();
         img3 = new javax.swing.JLabel();
         titulo3 = new javax.swing.JLabel();
@@ -300,14 +300,6 @@ public class Loja extends javax.swing.JFrame {
         autor3 = new javax.swing.JLabel();
         baixar3 = new javax.swing.JButton();
         id3 = new javax.swing.JLabel();
-        jPanel3 = new javax.swing.JPanel();
-        pgbProgresso = new javax.swing.JProgressBar();
-        kButton1 = new com.k33ptoo.components.KButton();
-        kButton2 = new com.k33ptoo.components.KButton();
-        jLabel2 = new javax.swing.JLabel();
-        txfProvedor = new javax.swing.JTextField();
-        jLabel3 = new javax.swing.JLabel();
-        jButton1 = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setResizable(false);
@@ -321,17 +313,79 @@ public class Loja extends javax.swing.JFrame {
         jLabel1.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         jLabel1.setText("Loja de setups");
 
+        jPanel3.setMinimumSize(new java.awt.Dimension(729, 20));
+
+        javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
+        jPanel3.setLayout(jPanel3Layout);
+        jPanel3Layout.setHorizontalGroup(
+            jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addComponent(pgbProgresso, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+        );
+        jPanel3Layout.setVerticalGroup(
+            jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel3Layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(pgbProgresso, javax.swing.GroupLayout.PREFERRED_SIZE, 6, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(8, 8, 8))
+        );
+
+        btnAvancar.setText(">");
+        btnAvancar.setkBorderRadius(250);
+        btnAvancar.setkEndColor(new java.awt.Color(153, 153, 153));
+        btnAvancar.setkHoverEndColor(new java.awt.Color(102, 102, 102));
+        btnAvancar.setkHoverForeGround(new java.awt.Color(255, 255, 255));
+        btnAvancar.setkHoverStartColor(new java.awt.Color(153, 153, 153));
+        btnAvancar.setkStartColor(new java.awt.Color(102, 102, 102));
+        btnAvancar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnAvancarActionPerformed(evt);
+            }
+        });
+
+        btnVoltar.setText("<");
+        btnVoltar.setkBorderRadius(250);
+        btnVoltar.setkEndColor(new java.awt.Color(153, 153, 153));
+        btnVoltar.setkHoverEndColor(new java.awt.Color(102, 102, 102));
+        btnVoltar.setkHoverForeGround(new java.awt.Color(255, 255, 255));
+        btnVoltar.setkHoverStartColor(new java.awt.Color(153, 153, 153));
+        btnVoltar.setkStartColor(new java.awt.Color(102, 102, 102));
+        btnVoltar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnVoltarActionPerformed(evt);
+            }
+        });
+
+        lblPagina.setFont(new java.awt.Font("Open Sauce One", 0, 18)); // NOI18N
+        lblPagina.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        lblPagina.setText("Página 0");
+
+        txfProvedor.setFont(new java.awt.Font("Open Sauce One", 0, 12)); // NOI18N
+        txfProvedor.setText("https://de-bonn.netlify.app/arquivos/ambientes");
+
+        jLabel3.setFont(new java.awt.Font("Open Sauce One", 0, 12)); // NOI18N
+        jLabel3.setText("Provedor de setups:");
+
+        jButton1.setFont(new java.awt.Font("Open Sauce One", 0, 12)); // NOI18N
+        jButton1.setText("Atualizar provedor");
+        jButton1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton1ActionPerformed(evt);
+            }
+        });
+
         painel1.setPreferredSize(new java.awt.Dimension(150, 150));
 
         img1.setFont(new java.awt.Font("Open Sauce One", 0, 12)); // NOI18N
         img1.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         img1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/recursos/imagens/carregando.gif"))); // NOI18N
 
-        titulo1.setFont(new java.awt.Font("Open Sauce One", 0, 18)); // NOI18N
+        titulo1.setFont(new java.awt.Font("Open Sauce One", 1, 18)); // NOI18N
         titulo1.setText("Carregando...");
 
         tamanho1.setFont(new java.awt.Font("Open Sauce One", 0, 12)); // NOI18N
         tamanho1.setText("Tamanho: 0 MB");
+
+        jScrollPane1.setBorder(null);
 
         descricao1.setEditable(false);
         descricao1.setColumns(20);
@@ -392,17 +446,36 @@ public class Loja extends javax.swing.JFrame {
                 .addContainerGap())
         );
 
+        javax.swing.GroupLayout kGradientPanel1Layout = new javax.swing.GroupLayout(kGradientPanel1);
+        kGradientPanel1.setLayout(kGradientPanel1Layout);
+        kGradientPanel1Layout.setHorizontalGroup(
+            kGradientPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(kGradientPanel1Layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(painel1, javax.swing.GroupLayout.DEFAULT_SIZE, 837, Short.MAX_VALUE)
+                .addContainerGap())
+        );
+        kGradientPanel1Layout.setVerticalGroup(
+            kGradientPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(kGradientPanel1Layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(painel1, javax.swing.GroupLayout.PREFERRED_SIZE, 154, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap())
+        );
+
         painel2.setPreferredSize(new java.awt.Dimension(150, 150));
 
         img2.setFont(new java.awt.Font("Open Sauce One", 0, 12)); // NOI18N
         img2.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         img2.setIcon(new javax.swing.ImageIcon(getClass().getResource("/recursos/imagens/carregando.gif"))); // NOI18N
 
-        titulo2.setFont(new java.awt.Font("Open Sauce One", 0, 18)); // NOI18N
+        titulo2.setFont(new java.awt.Font("Open Sauce One", 1, 18)); // NOI18N
         titulo2.setText("Carregando...");
 
         tamanho2.setFont(new java.awt.Font("Open Sauce One", 0, 12)); // NOI18N
         tamanho2.setText("Tamanho: 0 MB");
+
+        jScrollPane2.setBorder(null);
 
         descricao2.setEditable(false);
         descricao2.setColumns(20);
@@ -463,17 +536,36 @@ public class Loja extends javax.swing.JFrame {
                 .addContainerGap())
         );
 
+        javax.swing.GroupLayout kGradientPanel2Layout = new javax.swing.GroupLayout(kGradientPanel2);
+        kGradientPanel2.setLayout(kGradientPanel2Layout);
+        kGradientPanel2Layout.setHorizontalGroup(
+            kGradientPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(kGradientPanel2Layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(painel2, javax.swing.GroupLayout.DEFAULT_SIZE, 837, Short.MAX_VALUE)
+                .addContainerGap())
+        );
+        kGradientPanel2Layout.setVerticalGroup(
+            kGradientPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(kGradientPanel2Layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(painel2, javax.swing.GroupLayout.PREFERRED_SIZE, 154, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap())
+        );
+
         painel3.setPreferredSize(new java.awt.Dimension(150, 150));
 
         img3.setFont(new java.awt.Font("Open Sauce One", 0, 12)); // NOI18N
         img3.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         img3.setIcon(new javax.swing.ImageIcon(getClass().getResource("/recursos/imagens/carregando.gif"))); // NOI18N
 
-        titulo3.setFont(new java.awt.Font("Open Sauce One", 0, 18)); // NOI18N
+        titulo3.setFont(new java.awt.Font("Open Sauce One", 1, 18)); // NOI18N
         titulo3.setText("Carregando...");
 
         tamanho3.setFont(new java.awt.Font("Open Sauce One", 0, 12)); // NOI18N
         tamanho3.setText("Tamanho: 0 MB");
+
+        jScrollPane3.setBorder(null);
 
         descricao3.setEditable(false);
         descricao3.setColumns(20);
@@ -534,91 +626,48 @@ public class Loja extends javax.swing.JFrame {
                 .addContainerGap())
         );
 
-        jPanel3.setMinimumSize(new java.awt.Dimension(729, 20));
-
-        javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
-        jPanel3.setLayout(jPanel3Layout);
-        jPanel3Layout.setHorizontalGroup(
-            jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(pgbProgresso, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-        );
-        jPanel3Layout.setVerticalGroup(
-            jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel3Layout.createSequentialGroup()
+        javax.swing.GroupLayout kGradientPanel3Layout = new javax.swing.GroupLayout(kGradientPanel3);
+        kGradientPanel3.setLayout(kGradientPanel3Layout);
+        kGradientPanel3Layout.setHorizontalGroup(
+            kGradientPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(kGradientPanel3Layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(pgbProgresso, javax.swing.GroupLayout.PREFERRED_SIZE, 6, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(8, 8, 8))
+                .addComponent(painel3, javax.swing.GroupLayout.DEFAULT_SIZE, 837, Short.MAX_VALUE)
+                .addContainerGap())
         );
-
-        kButton1.setText(">");
-        kButton1.setkBorderRadius(250);
-        kButton1.setkEndColor(new java.awt.Color(153, 153, 153));
-        kButton1.setkHoverEndColor(new java.awt.Color(102, 102, 102));
-        kButton1.setkHoverForeGround(new java.awt.Color(255, 255, 255));
-        kButton1.setkHoverStartColor(new java.awt.Color(153, 153, 153));
-        kButton1.setkStartColor(new java.awt.Color(102, 102, 102));
-        kButton1.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                kButton1ActionPerformed(evt);
-            }
-        });
-
-        kButton2.setText("<");
-        kButton2.setkBorderRadius(250);
-        kButton2.setkEndColor(new java.awt.Color(153, 153, 153));
-        kButton2.setkHoverEndColor(new java.awt.Color(102, 102, 102));
-        kButton2.setkHoverForeGround(new java.awt.Color(255, 255, 255));
-        kButton2.setkHoverStartColor(new java.awt.Color(153, 153, 153));
-        kButton2.setkStartColor(new java.awt.Color(102, 102, 102));
-        kButton2.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                kButton2ActionPerformed(evt);
-            }
-        });
-
-        jLabel2.setFont(new java.awt.Font("Open Sauce One", 0, 18)); // NOI18N
-        jLabel2.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        jLabel2.setText("Página 0");
-
-        txfProvedor.setFont(new java.awt.Font("Open Sauce One", 0, 12)); // NOI18N
-        txfProvedor.setText("https://de-bonn.netlify.app/arquivos/ambientes");
-
-        jLabel3.setFont(new java.awt.Font("Open Sauce One", 0, 12)); // NOI18N
-        jLabel3.setText("Provedor de setups:");
-
-        jButton1.setFont(new java.awt.Font("Open Sauce One", 0, 12)); // NOI18N
-        jButton1.setText("Atualizar provedor");
-        jButton1.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton1ActionPerformed(evt);
-            }
-        });
+        kGradientPanel3Layout.setVerticalGroup(
+            kGradientPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(kGradientPanel3Layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(painel3, javax.swing.GroupLayout.PREFERRED_SIZE, 154, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap())
+        );
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
+            .addGroup(jPanel1Layout.createSequentialGroup()
                 .addContainerGap()
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(jPanel3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addComponent(kButton2, javax.swing.GroupLayout.PREFERRED_SIZE, 45, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jPanel3, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
+                        .addComponent(btnVoltar, javax.swing.GroupLayout.PREFERRED_SIZE, 45, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 687, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(lblPagina, javax.swing.GroupLayout.PREFERRED_SIZE, 687, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(kButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 45, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addComponent(jLabel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(painel1, javax.swing.GroupLayout.DEFAULT_SIZE, 849, Short.MAX_VALUE)
-                    .addComponent(painel2, javax.swing.GroupLayout.DEFAULT_SIZE, 849, Short.MAX_VALUE)
-                    .addComponent(painel3, javax.swing.GroupLayout.DEFAULT_SIZE, 849, Short.MAX_VALUE)
-                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addComponent(btnAvancar, javax.swing.GroupLayout.PREFERRED_SIZE, 45, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(jLabel1, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
                         .addComponent(jLabel3)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(txfProvedor, javax.swing.GroupLayout.PREFERRED_SIZE, 577, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(jButton1)
-                        .addGap(0, 0, Short.MAX_VALUE)))
+                        .addGap(0, 0, Short.MAX_VALUE))
+                    .addComponent(kGradientPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(kGradientPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(kGradientPanel3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addContainerGap())
         );
         jPanel1Layout.setVerticalGroup(
@@ -632,16 +681,16 @@ public class Loja extends javax.swing.JFrame {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 51, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(painel1, javax.swing.GroupLayout.PREFERRED_SIZE, 154, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(kGradientPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(painel2, javax.swing.GroupLayout.PREFERRED_SIZE, 154, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(kGradientPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(painel3, javax.swing.GroupLayout.PREFERRED_SIZE, 154, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(kGradientPanel3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(kButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 45, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(kButton2, javax.swing.GroupLayout.PREFERRED_SIZE, 45, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 45, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(btnAvancar, javax.swing.GroupLayout.PREFERRED_SIZE, 45, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(btnVoltar, javax.swing.GroupLayout.PREFERRED_SIZE, 45, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(lblPagina, javax.swing.GroupLayout.PREFERRED_SIZE, 45, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jPanel3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
         );
@@ -665,21 +714,21 @@ public class Loja extends javax.swing.JFrame {
         Tocar.lojaaberta = false;
     }//GEN-LAST:event_formWindowClosing
 
-    private void kButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_kButton2ActionPerformed
-        kButton2.setEnabled(false);
+    private void btnVoltarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnVoltarActionPerformed
+        btnVoltar.setEnabled(false);
         descarregar();
         pag--;
-        pegarLinks();
-        kButton2.setEnabled(true);
-    }//GEN-LAST:event_kButton2ActionPerformed
+        exibirSetups();
+        btnVoltar.setEnabled(true);
+    }//GEN-LAST:event_btnVoltarActionPerformed
 
-    private void kButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_kButton1ActionPerformed
-        kButton1.setEnabled(false);
+    private void btnAvancarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAvancarActionPerformed
+        btnAvancar.setEnabled(false);
         descarregar();
         pag++;
-        pegarLinks();
-        kButton1.setEnabled(true);
-    }//GEN-LAST:event_kButton1ActionPerformed
+        exibirSetups();
+        btnAvancar.setEnabled(true);
+    }//GEN-LAST:event_btnAvancarActionPerformed
 
     private void baixar3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_baixar3ActionPerformed
         new BaixarSetup(id3.getText().substring(4), titulo3.getText(), new File(System.getProperty("java.io.tmpdir") + titulo3.getText() + ".png")).setVisible(true);
@@ -742,6 +791,8 @@ public class Loja extends javax.swing.JFrame {
     private javax.swing.JButton baixar1;
     private javax.swing.JButton baixar2;
     private javax.swing.JButton baixar3;
+    private com.k33ptoo.components.KButton btnAvancar;
+    private com.k33ptoo.components.KButton btnVoltar;
     private javax.swing.JTextArea descricao1;
     private javax.swing.JTextArea descricao2;
     private javax.swing.JTextArea descricao3;
@@ -753,15 +804,16 @@ public class Loja extends javax.swing.JFrame {
     private javax.swing.JLabel img3;
     private javax.swing.JButton jButton1;
     private javax.swing.JLabel jLabel1;
-    private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel3;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JScrollPane jScrollPane3;
-    private com.k33ptoo.components.KButton kButton1;
-    private com.k33ptoo.components.KButton kButton2;
+    private com.k33ptoo.components.KGradientPanel kGradientPanel1;
+    private com.k33ptoo.components.KGradientPanel kGradientPanel2;
+    private com.k33ptoo.components.KGradientPanel kGradientPanel3;
+    private javax.swing.JLabel lblPagina;
     private javax.swing.JPanel painel1;
     private javax.swing.JPanel painel2;
     private javax.swing.JPanel painel3;
