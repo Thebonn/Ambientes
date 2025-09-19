@@ -59,7 +59,7 @@ public class Splash extends javax.swing.JFrame {
                     pgbProgresso.setString("Carregando fontes...");
                     boolean res = recursos.fontes.Fonte.carregarFontes();
                     if (res) {
-                        lblNegocio.setFont(new Font("Open Sauce One Black", 0, 25));
+                        lblNegocio.setFont(new Font("Open Sauce One Black", 0, lblNegocio.getFont().getSize()));
                         pgbProgresso.setFont(new Font("Open Sauce One", 0, 13));
                     } else {
                         JOptionPane.showConfirmDialog(null, "Não foi possível carregar as fontes, o programa funcionará usando a fonte de fallback.", "Ambientes", JOptionPane.DEFAULT_OPTION, JOptionPane.ERROR_MESSAGE);
