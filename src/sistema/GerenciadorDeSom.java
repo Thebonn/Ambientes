@@ -1,5 +1,6 @@
 package sistema;
 
+import sistema.especiais.Som;
 import static gui.Tocar.desativados;
 import java.awt.Color;
 import java.io.File;
