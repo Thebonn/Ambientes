@@ -6,7 +6,6 @@ import com.k33ptoo.components.KGradientPanel;
 import java.awt.Color;
 import java.awt.Image;
 import java.awt.image.BufferedImage;
-import java.io.File;
 import javax.swing.ImageIcon;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
@@ -249,6 +248,22 @@ public class Loja extends javax.swing.JFrame {
             botao.setkEndColor(new Color(0x333333));
         }
         botao.updateUI();
+    }
+    
+    public void cliqueInstalar(String id) {
+        SetupLoja s = encontrarSetupPeloId(id);
+        new BaixarSetup(s.id, s.nome, s.imagem).setVisible(true);
+    }
+    
+    
+    public SetupLoja encontrarSetupPeloId(String id) {
+        for (int i = 0; i < setups.length; i++) {
+            if (setups[i] != null && setups[i].id.equals(id)) {
+                return setups[i];
+            }
+        }
+        
+        return null;
     }
 
     /**
@@ -731,15 +746,15 @@ public class Loja extends javax.swing.JFrame {
     }//GEN-LAST:event_btnAvancarActionPerformed
 
     private void baixar3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_baixar3ActionPerformed
-        new BaixarSetup(id3.getText().substring(4), titulo3.getText(), new File(System.getProperty("java.io.tmpdir") + titulo3.getText() + ".png")).setVisible(true);
+        cliqueInstalar(id3.getText().substring(4));
     }//GEN-LAST:event_baixar3ActionPerformed
 
     private void baixar2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_baixar2ActionPerformed
-        new BaixarSetup(id2.getText().substring(4), titulo2.getText(), new File(System.getProperty("java.io.tmpdir") + titulo2.getText() + ".png")).setVisible(true);
+        cliqueInstalar(id2.getText().substring(4));
     }//GEN-LAST:event_baixar2ActionPerformed
 
     private void baixar1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_baixar1ActionPerformed
-        new BaixarSetup(id1.getText().substring(4), titulo1.getText(), new File(System.getProperty("java.io.tmpdir") + titulo1.getText() + ".png")).setVisible(true);
+        cliqueInstalar(id1.getText().substring(4));
     }//GEN-LAST:event_baixar1ActionPerformed
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
