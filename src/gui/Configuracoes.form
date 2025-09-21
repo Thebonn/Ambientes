@@ -1021,7 +1021,7 @@
                           <Font name="Open Sauce One" size="12" style="0"/>
                         </Property>
                         <Property name="rows" type="int" value="5"/>
-                        <Property name="text" type="java.lang.String" value="Changelog&#xa;&#xa;- Sistema de carregamento reescrito&#xa;- Melhorado o reprodutor de &#xe1;udio&#xa;- Modo sem gui adicionado&#xa;- Reescrito o sistema de anima&#xe7;&#xe3;o de fundo&#xa;- Introdu&#xe7;&#xe3;o de primeira vez&#xa;- Fonte embutida&#xa;- Pasta de setups ser alter&#xe1;vel&#xa;- Setups podem ter cores&#xa;&#xa;Obrigado por usar esse programa! &lt;3&#xa;&#x9;- Thebonn"/>
+                        <Property name="text" type="java.lang.String" value="Changelog&#xa;&#xa;- Sistema de carregamento reescrito&#xa;- Melhorado o reprodutor de &#xe1;udio&#xa;- Modo sem gui adicionado&#xa;- Reescrito o sistema de anima&#xe7;&#xe3;o de fundo&#xa;- Introdu&#xe7;&#xe3;o de primeira vez&#xa;- Fonte customizada embutida na interface&#xa;- Pasta de setups ser alter&#xe1;vel&#xa;- Setups podem ter cores&#xa;- Loja melhorada&#xa;&#xa;Obrigado por usar esse programa! &lt;3&#xa;&#x9;- Thebonn"/>
                       </Properties>
                     </Component>
                   </SubComponents>
@@ -1031,7 +1031,7 @@
                     <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
                       <Font name="Open Sauce One" size="12" style="0"/>
                     </Property>
-                    <Property name="text" type="java.lang.String" value="Ambientes vers&#xe3;o 1.2 [06/03/2025]"/>
+                    <Property name="text" type="java.lang.String" value="Ambientes vers&#xe3;o 1.2 [20/09/2025]"/>
                   </Properties>
                 </Component>
                 <Component class="javax.swing.JButton" name="jButton4">

@@ -713,11 +713,11 @@ public class Configuracoes extends javax.swing.JFrame {
         jTextArea1.setColumns(20);
         jTextArea1.setFont(new java.awt.Font("Open Sauce One", 0, 12)); // NOI18N
         jTextArea1.setRows(5);
-        jTextArea1.setText("Changelog\n\n- Sistema de carregamento reescrito\n- Melhorado o reprodutor de áudio\n- Modo sem gui adicionado\n- Reescrito o sistema de animação de fundo\n- Introdução de primeira vez\n- Fonte embutida\n- Pasta de setups ser alterável\n- Setups podem ter cores\n\nObrigado por usar esse programa! <3\n\t- Thebonn");
+        jTextArea1.setText("Changelog\n\n- Sistema de carregamento reescrito\n- Melhorado o reprodutor de áudio\n- Modo sem gui adicionado\n- Reescrito o sistema de animação de fundo\n- Introdução de primeira vez\n- Fonte customizada embutida na interface\n- Pasta de setups ser alterável\n- Setups podem ter cores\n- Loja melhorada\n\nObrigado por usar esse programa! <3\n\t- Thebonn");
         jScrollPane1.setViewportView(jTextArea1);
 
         jLabel13.setFont(new java.awt.Font("Open Sauce One", 0, 12)); // NOI18N
-        jLabel13.setText("Ambientes versão 1.2 [06/03/2025]");
+        jLabel13.setText("Ambientes versão 1.2 [20/09/2025]");
 
         jButton4.setFont(new java.awt.Font("Open Sauce One", 0, 12)); // NOI18N
         jButton4.setText("Informações técnicas");
