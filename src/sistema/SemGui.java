@@ -260,7 +260,7 @@ public class SemGui {
                         p("\tSistema Operacional: " + System.getProperty("os.name"));
                         p("\tNome do runtime: " + System.getProperty("java.runtime.name"));
                         p("\tVersão do runtime: " + System.getProperty("java.runtime.version"));
-                        p("\tVersão do java: " + System.getProperty("java.version"));
+                        p("\tVersão do Java: " + System.getProperty("java.version"));
                         p("\tSistema suporta ícones de bandeja: " + Tocar.suportaSystemTray);
                         p("\nInfos do programa");
                         p("\tSetup: " + gerenciador.setup);
