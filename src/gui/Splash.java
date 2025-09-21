@@ -25,7 +25,6 @@ public class Splash extends javax.swing.JFrame {
 
         this.setIconImage(new ImageIcon(getClass().getResource("/recursos/imagens/ambientes logo 2.png")).getImage());
         funcionar();
-
     }
 
 //    void ficarMudandoTexto() {
@@ -50,8 +49,6 @@ public class Splash extends javax.swing.JFrame {
             @Override
             public void run() {
                 try {
-//                    Thread.sleep(100);
-
                     pgbProgresso.setString("Verificando atualizações...");
                     selecionarTexto();
                     Componentes.mudarTexto(textoSplash.equals("") ? textos[sistema.Generico.random(0, textos.length)] : textoSplash, lblNegocio, 40);
@@ -151,13 +148,10 @@ public class Splash extends javax.swing.JFrame {
                     } catch (Exception ex) {
                         JOptionPane.showConfirmDialog(null, "Não foi possível abrir o seu navegador padrão. Você terá que instalar na página https://github.com/Thebonn/Ambientes/releases manualmente.", "Ambientes", JOptionPane.YES_NO_OPTION, JOptionPane.ERROR_MESSAGE);
                     }
-
                 }
             }
-
             textoSplash = ar[sistema.Generico.random(1, ar.length)];
         }
-
     }
 
     public void cair() {
@@ -193,13 +187,10 @@ public class Splash extends javax.swing.JFrame {
                     } else {
                         new Tocar(sistema.Info.animacaoIntroducao).setVisible(true);
                     }
-
                     dispose();
-
                 } catch (Exception ex) {
                     ex.printStackTrace();
                 }
-
             }
         }, "TAD").start();
     }
