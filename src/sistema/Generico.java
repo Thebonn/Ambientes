@@ -104,8 +104,6 @@ public class Generico {
             }
 
         }
-
-//        float divisao = new Float(div.length) / resultado;
         int saida = (int) (tamDefault * 10 / resultado);
 
         if (saida < 10) {
@@ -155,37 +153,4 @@ public class Generico {
         Color[] saida = {cor1, cor2};
         return saida;
     }
-
-    //movido para conectar > pegarTextoAvancado/pegarTextoSimples
-//    public String pegarTexto(String link) throws Exception {
-//        String tempDir = System.getProperty("java.io.tmpdir");
-
-////        try {
-//        URL url = new URL(link);
-//        InputStream inputStream = (url).openStream();
-//        Files.copy(inputStream, Paths.get(String.format("%s%s%s", new Object[]{tempDir, File.separator, "cone.txt"}), new String[0]), new CopyOption[]{StandardCopyOption.REPLACE_EXISTING});
-//
-//        String path = String.format("%s%s%s", new Object[]{tempDir, File.separator, "cone.txt"});
-//        File arquivo = new File(path);
-//
-//        BufferedReader ler = new BufferedReader(new InputStreamReader(new FileInputStream(arquivo.toString()), "UTF-8"));
-//
-//        String saida = ler.readLine();
-//        String volta = "";
-//
-//        while (saida != null) {
-//            volta += saida + "\n";
-//            saida = ler.readLine();
-//        }
-//        volta = volta.substring(0, volta.length() - 1);
-//        ler.close();
-//        arquivo.delete();
-//        return volta;
-//
-////        } catch (Exception ex) {
-////            ex.printStackTrace();
-////        }
-////        return null;
-//    }
-
 }
