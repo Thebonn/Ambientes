@@ -46,7 +46,7 @@ public class Loja extends javax.swing.JFrame {
         for (int i = 0; i < 3; i++) {
             de[i].getCaret().setVisible(false);
         }
-        
+
         descarregar();
 
         txfProvedor.setText(sistema.Info.provedor);
@@ -102,11 +102,11 @@ public class Loja extends javax.swing.JFrame {
                     }
 
                     pgbProgresso.setVisible(true);
-                    pgbProgresso.setMaximum(max);
+                    int escolhido = (max == setupsId.length? setupsId.length - 12 : 12);
+                    pgbProgresso.setMaximum(max - (max - escolhido));
 
                     for (int i = pag * 3; i < (max >= setupsId.length ? setupsId.length : max); i++) {
-                        pgbProgresso.setValue(i);
-
+                        pgbProgresso.setValue(i - (max - escolhido));
                         //se setups[i] ja ta carreagdo e certo, entao pular o carregamento
                         if (setups[i] != null && setups[i].id.equals(setupsId[i])) {
                             continue;
@@ -249,20 +249,19 @@ public class Loja extends javax.swing.JFrame {
         }
         botao.updateUI();
     }
-    
+
     public void cliqueInstalar(String id) {
         SetupLoja s = encontrarSetupPeloId(id);
         new BaixarSetup(s.id, s.nome, s.imagem).setVisible(true);
     }
-    
-    
+
     public SetupLoja encontrarSetupPeloId(String id) {
         for (int i = 0; i < setups.length; i++) {
             if (setups[i] != null && setups[i].id.equals(id)) {
                 return setups[i];
             }
         }
-        
+
         return null;
     }
 
