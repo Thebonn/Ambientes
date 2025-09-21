@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package gui;
 
 import com.formdev.flatlaf.FlatDarkLaf;
@@ -12,13 +7,10 @@ import sistema.Info;
 
 /**
  *
- * @author Thebonn
+ * @author Bonn
  */
 public class Infos extends javax.swing.JFrame {
 
-    /**
-     * Creates new form Infos
-     */
     public Infos() {
         FlatDarkLaf.install();
         initComponents();
@@ -68,7 +60,7 @@ public class Infos extends javax.swing.JFrame {
                     addTexto("\tSistema Operacional: " + System.getProperty("os.name"), txtDetalhes);
                     addTexto("\tNome do runtime: " + System.getProperty("java.runtime.name"), txtDetalhes);
                     addTexto("\tVersão do runtime: " + System.getProperty("java.runtime.version"), txtDetalhes);
-                    addTexto("\tVersão do java: " + System.getProperty("java.version"), txtDetalhes);
+                    addTexto("\tVersão do Java: " + System.getProperty("java.version"), txtDetalhes);
                     addTexto("\tSistema suporta ícones de bandeja: " + Tocar.suportaSystemTray, txtDetalhes);
                     addTexto("\nInfos do programa", txtDetalhes);
                     addTexto("\tSetup: " + Tocar.gerenciadorDeSom.setup, txtDetalhes);
