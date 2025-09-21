@@ -5,7 +5,7 @@ import javax.swing.DefaultListModel;
 
 /**
  *
- * @author Thebonn
+ * @author Bonn
  */
 public class Opcoes extends javax.swing.JFrame {
 
@@ -22,7 +22,7 @@ public class Opcoes extends javax.swing.JFrame {
         model.removeAllElements();
         for (int i = 0; i < Tocar.gerenciadorDeSom.config.length; i++) {
             String a = Tocar.gerenciadorDeSom.config[i];
-            
+
             if (Tocar.gerenciadorDeSom.config[i] != null) {
                 if (!a.startsWith("p - ") && !a.startsWith("c - ") && !a.startsWith("#")) {
                     model.addElement(a.split(", ")[0]);
@@ -33,7 +33,7 @@ public class Opcoes extends javax.swing.JFrame {
 
     public boolean taBloqueado(String nome) {
         return desativados.contains(nome);
-        
+
 //        for (int i = 0; i < desativados.length; i++) {
 //            if (nome.equals(desativados[i])) {
 //                return true;
@@ -54,7 +54,7 @@ public class Opcoes extends javax.swing.JFrame {
         jPanel1 = new javax.swing.JPanel();
         jScrollPane1 = new javax.swing.JScrollPane();
         jList1 = new javax.swing.JList<>();
-        jCheckBox1 = new javax.swing.JCheckBox();
+        chkDesativado = new javax.swing.JCheckBox();
         jLabel1 = new javax.swing.JLabel();
         jLabel2 = new javax.swing.JLabel();
         jButton1 = new javax.swing.JButton();
@@ -82,8 +82,8 @@ public class Opcoes extends javax.swing.JFrame {
         });
         jScrollPane1.setViewportView(jList1);
 
-        jCheckBox1.setText("Desativado");
-        jCheckBox1.setEnabled(false);
+        chkDesativado.setText("Desativado");
+        chkDesativado.setEnabled(false);
 
         jLabel1.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         jLabel1.setText("Sons");
@@ -113,14 +113,14 @@ public class Opcoes extends javax.swing.JFrame {
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                    .addComponent(txfDesativados)
-                    .addComponent(jButton2, javax.swing.GroupLayout.DEFAULT_SIZE, 138, Short.MAX_VALUE)
+                    .addComponent(jButton2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(jScrollPane1)
-                    .addComponent(jLabel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addComponent(jLabel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(txfDesativados, javax.swing.GroupLayout.PREFERRED_SIZE, 138, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addComponent(jCheckBox1)
+                        .addComponent(chkDesativado)
                         .addGap(0, 65, Short.MAX_VALUE))
                     .addComponent(jLabel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
@@ -138,7 +138,7 @@ public class Opcoes extends javax.swing.JFrame {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jCheckBox1))
+                    .addComponent(chkDesativado))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(txfDesativados, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
@@ -170,39 +170,24 @@ public class Opcoes extends javax.swing.JFrame {
     private void jList1ValueChanged(javax.swing.event.ListSelectionEvent evt) {//GEN-FIRST:event_jList1ValueChanged
 
         jButton1.setEnabled(true);
-        jCheckBox1.setEnabled(true);
-        jCheckBox1.setSelected(taBloqueado(jList1.getSelectedValue()));
+        chkDesativado.setEnabled(true);
+        chkDesativado.setSelected(taBloqueado(jList1.getSelectedValue()));
     }//GEN-LAST:event_jList1ValueChanged
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
         jButton1.setEnabled(false);
 
-        Tocar.desativados.add(jList1.getSelectedValue());
-
-//        for (int i = 0; i < desativados.length; i++) {
-//            if (jCheckBox1.isSelected()) {
-//                if (desativados[i] == null) {
-//                    desativados[i] = jList1.getSelectedValue();
-//                    break;
-//                }
-//            } else {
-//                if (desativados[i] != null && desativados[i].equals(jList1.getSelectedValue())) {
-//                    desativados[i] = null;
-//                }
-//            }
-//
-//        }
+        if (chkDesativado.isSelected()) {
+            Tocar.desativados.add(jList1.getSelectedValue());
+        } else {
+            Tocar.desativados.remove(jList1.getSelectedValue());
+        }
         txfDesativados.setText(Tocar.desativados.toString());
 
 //        txfDesativados.setText(Arrays.toString(desativados).replace(", null", "").replace("[", "").replace("]", "").replace("null", ""));
     }//GEN-LAST:event_jButton1ActionPerformed
 
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
-//        for (int i = 0; i < desativados.length; i++) {
-//            desativados[i] = null;
-//            txfDesativados.setText("");
-//        }
-
         desativados.clear();
     }//GEN-LAST:event_jButton2ActionPerformed
 
@@ -242,9 +227,9 @@ public class Opcoes extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JCheckBox chkDesativado;
     private javax.swing.JButton jButton1;
     private javax.swing.JButton jButton2;
-    private javax.swing.JCheckBox jCheckBox1;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JList<String> jList1;
