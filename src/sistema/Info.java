@@ -34,6 +34,7 @@ public class Info {
     //diversos
     public static boolean animacaoIntroducao = true;
     public static boolean iconeInterativo = true;
+    public static boolean usarBandeja = true;
     public static String localSetups = "Arquivos/setups";
     public static String provedor = "https://de-bonn.netlify.app/arquivos/ambientes";
 

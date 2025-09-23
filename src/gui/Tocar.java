@@ -69,13 +69,17 @@ public final class Tocar extends javax.swing.JFrame {
         this.setIconImage(new ImageIcon(getClass().getResource("/recursos/imagens/ambientes logo 2.png")).getImage());
 
         contagemInatividade();
-        bandeja();
+
+        suportaSystemTray = SystemTray.isSupported();
+        if (sistema.Info.usarBandeja && suportaSystemTray) {
+            bandeja();
+        }
+
         cores = Generico.converterCor("ABDEE6, CBAACB, FFFFB5, FFCCB6, F3B0C3");
         escolherCor();
 
         pnlFundo.requestFocus();
 
-        //meu deus isso é mt complexo, aprendi isso hoje
         ActionMap actionMap = pnlFundo.getActionMap();
         BotaoNumericoAction ngc = new BotaoNumericoAction();
         actionMap.put("mudar", ngc);
@@ -107,10 +111,6 @@ public final class Tocar extends javax.swing.JFrame {
     }
 
     public void bandeja() {
-        if (!SystemTray.isSupported()) {
-            System.out.println("Sem suporte para SystemTray");
-            return;
-        }
 
         try {
             suportaSystemTray = true;
@@ -131,6 +131,8 @@ public final class Tocar extends javax.swing.JFrame {
             popup.addSeparator();
             popup.add(sairItem);
 
+            popup.setFont(new java.awt.Font("Open Sauce One", 0, 13));
+
             trayIcon.setPopupMenu(popup);
 
             sairItem.addActionListener((e) -> {
@@ -150,6 +152,7 @@ public final class Tocar extends javax.swing.JFrame {
             tray.add(trayIcon);
 
         } catch (Exception ex) {
+            JOptionPane.showConfirmDialog(null, "Não foi possível configurar o ícone de bandeja: " + ex.toString(), "Ambientes", JOptionPane.DEFAULT_OPTION, JOptionPane.ERROR_MESSAGE);
             ex.printStackTrace();
         }
 
@@ -258,30 +261,38 @@ public final class Tocar extends javax.swing.JFrame {
         play = !play;
     }
 
+    public void logicaAnimacao(boolean status) {
+        if (status) {
+            if (Info.usarCoresDoSetup && gerenciadorDeSom.temCores) {
+
+                if (gerenciadorDeSom.fundoPredefinido == -1) {
+                    coresUsadas = gerenciadorDeSom.cores;
+                }
+
+                byte escolhido = gerenciadorDeSom.fundoPredefinido == -1 ? 5 : gerenciadorDeSom.fundoPredefinido;
+                animacoes.animarFundo(escolhido);
+            } else {
+                coresUsadas = cores;
+                animacoes.animarFundo(sistema.Info.animTipo);
+            }
+        } else {
+            animacoes.pararAnimacao();
+        }
+    }
+
     public void logicaToque(boolean status) {
         new Thread(new Runnable() {
             @Override
             public void run() {
                 try {
+
+                    logicaAnimacao(status);
+
                     if (status) {
                         btnTocar.setEnabled(false);
                         lblStatus.setText("Carregando...");
                         boolean res = gerenciadorDeSom.carregarERodarSetup(cbbSetups.getSelectedItem().toString());
                         btnTocar.setEnabled(true);
-
-                        if (Info.usarCoresDoSetup && gerenciadorDeSom.temCores) {
-
-                            if (gerenciadorDeSom.fundoPredefinido == -1) {
-                                coresUsadas = gerenciadorDeSom.cores;
-                            }
-
-                            byte escolhido = gerenciadorDeSom.fundoPredefinido == -1 ? 5 : gerenciadorDeSom.fundoPredefinido;
-                            animacoes.animarFundo(escolhido);
-
-                        } else {
-                            coresUsadas = cores;
-                            animacoes.animarFundo(sistema.Info.animTipo);
-                        }
 
                         if (res) {
                             setTitle("Ambientes - " + gerenciadorDeSom.setup);
@@ -295,7 +306,6 @@ public final class Tocar extends javax.swing.JFrame {
                         setarIcones(status);
                         sistema.Componentes.ratio = 1;
                         lblStatus.setText("Parando...");
-                        animacoes.pararAnimacao();
                         gerenciadorDeSom.pararTudo();
                         setTitle("Ambientes " + sistema.Info.VERSAO_ATUAL);
                         lblStatus.setText("Parado...");
@@ -310,7 +320,7 @@ public final class Tocar extends javax.swing.JFrame {
                     JOptionPane.showConfirmDialog(null, "Um erro ocorreu ao tocar o setup: " + ex.toString(), "Ambientes", JOptionPane.DEFAULT_OPTION, JOptionPane.ERROR_MESSAGE);
                     logicaToque(false);
                     play = true;
-                    
+
                 }
             }
         }, "LOGICA TOQUE").start();
@@ -333,18 +343,24 @@ public final class Tocar extends javax.swing.JFrame {
                             configs.setLocation(t.getLocation().x, t.getLocation().y + (t.getSize().height / 2) - (configs.getSize().height / 2));
                             sistema.Componentes.moverJanela(configs, configs.getLocation().x + (configs.getSize().width / 3), configs.getLocation().y, 0.006, sistema.Easings.EASE_OUT_QUART);
                             sistema.Componentes.moverJanela(t, t.getLocation().x - (t.getSize().width / 2), Tocar.this.getLocation().y, 0.006, sistema.Easings.EASE_OUT_QUART);
-                            configs.addWindowListener(new java.awt.event.WindowAdapter() {
-                                @Override
-                                public void windowClosed(java.awt.event.WindowEvent e) {
-                                    //outra checagem porque o usuario pode mudar o tamanho da janela enquanto configura
-                                    if (t.getSize().height < 500 && t.getSize().width < 500) {
-                                        sistema.Componentes.moverJanela(configs, configs.getLocation().x - (configs.getSize().width / 3), configs.getLocation().y, 0.006, sistema.Easings.EASE_OUT_QUART);
-                                        sistema.Componentes.moverJanela(t, t.getLocation().x + (t.getSize().width / 2), t.getLocation().y, 0.006, sistema.Easings.EASE_OUT_QUART);
-                                    }
-                                    atualizarRpc();
-                                }
-                            });
                         }
+
+                        configs.addWindowListener(new java.awt.event.WindowAdapter() {
+                            @Override
+                            public void windowClosed(java.awt.event.WindowEvent e) {
+                                //outra checagem porque o usuario pode mudar o tamanho da janela enquanto configura
+                                if (t.getSize().height < 500 && t.getSize().width < 500) {
+                                    sistema.Componentes.moverJanela(configs, configs.getLocation().x - (configs.getSize().width / 3), configs.getLocation().y, 0.006, sistema.Easings.EASE_OUT_QUART);
+                                    sistema.Componentes.moverJanela(t, t.getLocation().x + (t.getSize().width / 2), t.getLocation().y, 0.006, sistema.Easings.EASE_OUT_QUART);
+                                }
+                                atualizarRpc();
+                                if (!play) { //reiniciar para aplicar mudancas, caso haja
+                                    logicaAnimacao(false);
+                                    logicaAnimacao(true);
+                                }
+
+                            }
+                        });
 
                         jButton3.setText("Configurações");
                         jButton3.setEnabled(true);
@@ -618,7 +634,7 @@ public final class Tocar extends javax.swing.JFrame {
     }//GEN-LAST:event_cbbSetupsMouseEntered
 
     private void formWindowClosing(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowClosing
-        if (suportaSystemTray) {
+        if (suportaSystemTray && trayIcon != null) {
             if (avisoFechar == false) {
                 avisoFechar = true;
                 trayIcon.displayMessage("Ambientes", "O programa ainda está rodando! Caso queria fechá-lo totalmente, feche pelo seus ícones de bandeja.", TrayIcon.MessageType.INFO);
