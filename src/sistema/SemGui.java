@@ -10,6 +10,9 @@ import java.util.Scanner;
  */
 public class SemGui {
 
+    boolean suportaAnsi = true;
+    boolean usarAnsi = true;
+
     String divisor = "-------------------------------------";
     String textoDeAjuda = """
                           Utilização: <COMANDO> <ARGUMENTO(S)>/[ARGUMENTO(S)
@@ -30,6 +33,14 @@ public class SemGui {
                           """;
 
     public void principal() {
+
+        suportaAnsi = System.getenv().get("TERM") != null;
+
+        if (!suportaAnsi) {
+            System.out.println("ATENÇÃO: Não foi detectado suporte para códigos ANSI no seu sistema, isso quer dizer\n"
+                    + "que não será exibido cores nesse console e que poderá aparecer caracteres\n"
+                    + "extras no meio de frases. Você pode desativar usando o comando --ansi se isso for o caso.");
+        }
 
         pl(sistema.Info.ABERTURAS[sistema.Generico.random(0, sistema.Info.ABERTURAS.length)], VERDE);
         p("Bem-vindo ao ambientes sem interface!");
@@ -122,12 +133,12 @@ public class SemGui {
                         break;
                     case "l":
                     case "lista":
-                        
+
                         if (!padrao.exists()) {
                             System.out.println("A pasta de setups não foi encontrada. Você pode criar a pasta usando o comando --criardirs.");
                             break;
                         }
-                        
+
                         String setups[] = padrao.list();
 
                         p("Listando os seus setups...");
@@ -297,6 +308,17 @@ public class SemGui {
                         }
                         break;
 
+                    case "ansi":
+                        if (usarAnsi) {
+                            p("Os caracteres ANSI serão ignorados a partir de agora.");
+                        } else {
+                            p("Os caracteres ANSI serão usados a partir de agora.");
+                        }
+
+                        usarAnsi = !usarAnsi;
+
+                        break;
+
                     case "ml":
 
                         new Thread(new Runnable() {
@@ -330,10 +352,18 @@ public class SemGui {
     }
 
     void pl(String texto, String COR) {
-        System.out.println(COR + texto.replace("\n", "\n" + COR) + REINICIAR);
+        if (!usarAnsi) {
+            p(texto);
+        } else {
+            System.out.println(COR + texto.replace("\n", "\n" + COR) + REINICIAR);
+        }
+
     }
 
     void p(String texto) {
+        if (!usarAnsi) {
+            texto = texto.replaceAll("\u001B\\[[;\\d]*m", ""); //remover todos os ansi
+        }
         System.out.println(texto + REINICIAR);
     }
 
