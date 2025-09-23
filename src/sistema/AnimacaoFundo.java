@@ -20,6 +20,7 @@ public class AnimacaoFundo {
     //primeira vez usando um map :3
     Map<Integer, Runnable> animacoes = new HashMap<>();
     Thread animacaoAtual;
+    Thread animarFoco;
     Tocar tocar;
 
     int ms = 16;
@@ -204,7 +205,12 @@ public class AnimacaoFundo {
     }
 
     public void animarFoco() {
-        new Thread(new Runnable() {
+        //caso ele já esteja animando e animarFoco seja chamado, ignorar solicitacao
+        if ((animarFoco != null && animarFoco.isAlive())) {
+            return;
+        }
+
+        animarFoco = new Thread(new Runnable() {
             @Override
             public void run() {
                 try {
@@ -231,7 +237,10 @@ public class AnimacaoFundo {
                     ex.printStackTrace();
                 }
             }
-        }, "ANIMAR FOCO").start();
+        }, "ANIMAR FOCO");
+
+        animarFoco.start();
+
     }
 
     public void atualizarFundo(KGradientPanel painel, Color ini, Color fin) {
@@ -263,7 +272,12 @@ public class AnimacaoFundo {
         tocando = false;
         if (animacaoAtual != null) {
             animacaoAtual.interrupt();
-        }
+            try {
+                animacaoAtual.join();
+            } catch (InterruptedException ex) {
+                ex.printStackTrace();
+            }
 
+        }
     }
 }
