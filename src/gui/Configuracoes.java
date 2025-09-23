@@ -86,6 +86,13 @@ public class Configuracoes extends javax.swing.JFrame {
                 jCheckBox2.setSelected(sistema.Info.mostrarSetups);
                 jCheckBox3.setSelected(sistema.Info.animacaoIntroducao);
                 jCheckBox4.setSelected(sistema.Info.iconeInterativo);
+                chkBandeja.setSelected(sistema.Info.usarBandeja);
+
+                if (!Tocar.suportaSystemTray) {
+                    chkBandeja.setEnabled(false);
+                    chkBandeja.setToolTipText("Seu sistema não suporta ícones de bandeja");
+                }
+
                 txfLocal.setCaretPosition(txfLocal.getText().length());
                 for (int i = 0; i < 4; i++) {
                     if (jComboBox6.getItemAt(i).split(": ")[1].contains(Float.toString(Tocar.mudancaVel))) {
@@ -133,6 +140,7 @@ public class Configuracoes extends javax.swing.JFrame {
         sistema.Info.iconeInterativo = jCheckBox4.isSelected();
         Tocar.mudancaVel = Float.parseFloat(jComboBox6.getSelectedItem().toString().split(": ")[1]);
         sistema.Info.usarCoresDoSetup = jCheckBox5.isSelected();
+        sistema.Info.usarBandeja = chkBandeja.isSelected();
     }
 
     void atualizarSelecionados() {
@@ -140,7 +148,7 @@ public class Configuracoes extends javax.swing.JFrame {
         jLabel6.setEnabled(jComboBox1.getSelectedItem().toString().equals("Cores especiais"));
         jComboBox3.setEnabled(jComboBox1.getSelectedItem().toString().equals("Cores especiais"));
         jTextField1.setEnabled(jComboBox1.getSelectedItem().toString().equals("Cores especiais") && jComboBox3.getSelectedItem().toString().equals("Outro"));
-        
+
         jComboBox2.setEnabled(jComboBox1.getSelectedIndex() != 6);
         lblAviso.setText(jComboBox1.getSelectedIndex() != 5 ? "Aviso: \"Cores especiais\" não está selecionado" : " ");
     }
@@ -199,7 +207,8 @@ public class Configuracoes extends javax.swing.JFrame {
         jCheckBox3 = new javax.swing.JCheckBox();
         jButton3 = new javax.swing.JButton();
         jCheckBox4 = new javax.swing.JCheckBox();
-        jSeparator1 = new javax.swing.JSeparator();
+        chkBandeja = new javax.swing.JCheckBox();
+        jButton5 = new javax.swing.JButton();
         jPanel7 = new javax.swing.JPanel();
         jScrollPane1 = new javax.swing.JScrollPane();
         jTextArea1 = new javax.swing.JTextArea();
@@ -272,7 +281,7 @@ public class Configuracoes extends javax.swing.JFrame {
         jPanel3Layout.setHorizontalGroup(
             jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel3Layout.createSequentialGroup()
-                .addContainerGap(32, Short.MAX_VALUE)
+                .addContainerGap(33, Short.MAX_VALUE)
                 .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jComboBox2, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 169, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -389,7 +398,7 @@ public class Configuracoes extends javax.swing.JFrame {
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                 .addComponent(btnMudarLocal))
                             .addComponent(jLabel15, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 57, Short.MAX_VALUE))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 58, Short.MAX_VALUE))
                     .addComponent(jSlider1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addContainerGap())
         );
@@ -591,7 +600,7 @@ public class Configuracoes extends javax.swing.JFrame {
                     .addGroup(jPanel6Layout.createSequentialGroup()
                         .addContainerGap()
                         .addComponent(lblAviso)))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 19, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 20, Short.MAX_VALUE)
                 .addGroup(jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addComponent(jSlider3, javax.swing.GroupLayout.PREFERRED_SIZE, 1, Short.MAX_VALUE)
                     .addComponent(painelExemplo, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
@@ -659,6 +668,7 @@ public class Configuracoes extends javax.swing.JFrame {
         jCheckBox3.setFont(new java.awt.Font("Open Sauce One", 0, 12)); // NOI18N
         jCheckBox3.setSelected(true);
         jCheckBox3.setText("Animação de introdução");
+        jCheckBox3.setToolTipText("Opção que define se a animação da janela cair e esmaecer ao abrir será exibida");
 
         jButton3.setFont(new java.awt.Font("Open Sauce One", 0, 12)); // NOI18N
         jButton3.setText("Fechar programa");
@@ -673,6 +683,18 @@ public class Configuracoes extends javax.swing.JFrame {
         jCheckBox4.setText("Ícone interativo");
         jCheckBox4.setToolTipText("O ícone que itera dependendo se algo está sendo tocado");
 
+        chkBandeja.setFont(new java.awt.Font("Open Sauce One", 0, 12)); // NOI18N
+        chkBandeja.setSelected(true);
+        chkBandeja.setText("Usar ícone de bandeja (req. reinc.)");
+
+        jButton5.setFont(new java.awt.Font("Open Sauce One", 0, 12)); // NOI18N
+        jButton5.setText("Reabrir sem interface");
+        jButton5.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton5ActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout jPanel8Layout = new javax.swing.GroupLayout(jPanel8);
         jPanel8.setLayout(jPanel8Layout);
         jPanel8Layout.setHorizontalGroup(
@@ -680,13 +702,18 @@ public class Configuracoes extends javax.swing.JFrame {
             .addGroup(jPanel8Layout.createSequentialGroup()
                 .addContainerGap()
                 .addComponent(jPanel9, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 33, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addGroup(jPanel8Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(jButton3, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(jCheckBox3, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(jCheckBox4, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(jSeparator1))
-                .addContainerGap(37, Short.MAX_VALUE))
+                    .addComponent(chkBandeja, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+            .addGroup(jPanel8Layout.createSequentialGroup()
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(jButton3, javax.swing.GroupLayout.PREFERRED_SIZE, 168, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(jButton5, javax.swing.GroupLayout.PREFERRED_SIZE, 168, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         jPanel8Layout.setVerticalGroup(
             jPanel8Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -698,11 +725,14 @@ public class Configuracoes extends javax.swing.JFrame {
                         .addGap(5, 5, 5)
                         .addComponent(jCheckBox4)
                         .addGap(5, 5, 5)
-                        .addComponent(jSeparator1, javax.swing.GroupLayout.PREFERRED_SIZE, 10, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(3, 3, 3)
-                        .addComponent(jButton3))
+                        .addComponent(chkBandeja)
+                        .addGap(18, 18, 18))
                     .addComponent(jPanel9, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(42, Short.MAX_VALUE))
+                .addGap(18, 18, 18)
+                .addGroup(jPanel8Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jButton3)
+                    .addComponent(jButton5))
+                .addContainerGap(24, Short.MAX_VALUE))
         );
 
         jTabbedPane1.addTab("Outros", jPanel8);
@@ -734,10 +764,10 @@ public class Configuracoes extends javax.swing.JFrame {
             .addGroup(jPanel7Layout.createSequentialGroup()
                 .addContainerGap()
                 .addComponent(jLabel13)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 117, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 118, Short.MAX_VALUE)
                 .addComponent(jButton4)
                 .addContainerGap())
-            .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 504, Short.MAX_VALUE)
+            .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 505, Short.MAX_VALUE)
         );
         jPanel7Layout.setVerticalGroup(
             jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -775,7 +805,7 @@ public class Configuracoes extends javax.swing.JFrame {
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(btnSalvar)
                         .addGap(0, 0, Short.MAX_VALUE))
-                    .addComponent(jTabbedPane1))
+                    .addComponent(jTabbedPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 505, Short.MAX_VALUE))
                 .addContainerGap())
         );
         jPanel1Layout.setVerticalGroup(
@@ -866,7 +896,7 @@ public class Configuracoes extends javax.swing.JFrame {
 
     private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
         if (jButton3.getText().equals("Fechar programa")) {
-            jButton3.setText("Pressione mais uma vez");
+            jButton3.setText("Pressione novamente");
         } else {
             System.exit(0);
             sistema.Rpc.pararRPC();
@@ -895,7 +925,7 @@ public class Configuracoes extends javax.swing.JFrame {
                     sistema.Generico.moverPasta(new File(sistema.Info.localSetups), jfc.getSelectedFile());
                     new File(sistema.Info.localSetups).delete();
                 }
-                
+
                 sistema.Info.localSetups = jfc.getSelectedFile().getAbsolutePath();
                 txfLocal.setText(sistema.Info.localSetups);
             }
@@ -908,6 +938,19 @@ public class Configuracoes extends javax.swing.JFrame {
     private void bntAplicarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bntAplicarActionPerformed
         aplicar();
     }//GEN-LAST:event_bntAplicarActionPerformed
+
+    private void jButton5ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton5ActionPerformed
+        try {
+            //quem sabe um dia: suporte para linux
+            Runtime.getRuntime().exec("cmd /c start cmd.exe /K \""
+                    + "java -jar \"" + new File(Configuracoes.class.getProtectionDomain().getCodeSource().getLocation().toURI()).getAbsolutePath() + "\" semgui"
+                    + "\"");
+        } catch (Exception ex) {
+            JOptionPane.showConfirmDialog(null, "Não foi possível iniciar Ambientes sem interface: " + ex.toString() + "/nVocê pode tentar rodar o .jar do Ambientes com o argumento 'semgui' manualmente", "Ambientes", JOptionPane.DEFAULT_OPTION, JOptionPane.ERROR_MESSAGE);
+            ex.printStackTrace();
+        }
+
+    }//GEN-LAST:event_jButton5ActionPerformed
 
     /**
      * @param args the command line arguments
@@ -948,9 +991,11 @@ public class Configuracoes extends javax.swing.JFrame {
     private javax.swing.JToggleButton bntAplicar;
     private javax.swing.JToggleButton btnMudarLocal;
     private javax.swing.JButton btnSalvar;
+    private javax.swing.JCheckBox chkBandeja;
     private javax.swing.JButton jButton2;
     private javax.swing.JButton jButton3;
     private javax.swing.JButton jButton4;
+    private javax.swing.JButton jButton5;
     private javax.swing.JCheckBox jCheckBox1;
     private javax.swing.JCheckBox jCheckBox2;
     private javax.swing.JCheckBox jCheckBox3;
@@ -988,7 +1033,6 @@ public class Configuracoes extends javax.swing.JFrame {
     private javax.swing.JPanel jPanel8;
     private javax.swing.JPanel jPanel9;
     private javax.swing.JScrollPane jScrollPane1;
-    private javax.swing.JSeparator jSeparator1;
     private javax.swing.JSlider jSlider1;
     private javax.swing.JSlider jSlider2;
     private javax.swing.JSlider jSlider3;
