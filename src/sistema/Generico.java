@@ -153,4 +153,13 @@ public class Generico {
         Color[] saida = {cor1, cor2};
         return saida;
     }
+
+    //usar quando um sleep é utilizado dentro de uma thread que pode ser interrompido
+    public static void dormir(long tempo) {
+        try {
+            Thread.sleep(tempo);
+        } catch (InterruptedException ex) {
+            Thread.currentThread().interrupt();
+        }
+    }
 }
