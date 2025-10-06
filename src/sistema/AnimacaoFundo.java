@@ -184,19 +184,12 @@ public class AnimacaoFundo {
         });
     }
 
-    private void dormir(long tempo) {
-        try {
-            Thread.sleep(tempo);
-        } catch (InterruptedException ex) {
-            Thread.currentThread().interrupt();
-        }
-    }
 
     public boolean podeAnimar(JFrame jframe, boolean eEsperar) {
         boolean pode = (tocando) && jframe.isActive() && jframe.isFocused();
 
         if (eEsperar) {
-            dormir(ms);
+            Generico.dormir(ms);
             return pode;
         } else {
             return pode;
@@ -231,7 +224,7 @@ public class AnimacaoFundo {
                         } else if (negocio <= 0) {
                             descendo = false;
                         }
-                        dormir(30);
+                        Generico.dormir(30);
                     }
                 } catch (Exception ex) {
                     ex.printStackTrace();
