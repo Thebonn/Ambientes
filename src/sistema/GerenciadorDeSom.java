@@ -16,6 +16,8 @@ public class GerenciadorDeSom {
     public Som sons[] = new Som[0];
     public Som[] pl = new Som[0];
 
+    Thread execucao;
+
     public String setup = "Nenhum";
     public String config[];
 
@@ -44,7 +46,7 @@ public class GerenciadorDeSom {
                 pl[i].carregarSom(arquivos[i], arquivos[i].getName(), Info.volumeGlobal);
             }
 
-            new Thread(new Runnable() {
+            execucao = new Thread(new Runnable() {
                 @Override
                 public void run() {
 
@@ -73,7 +75,7 @@ public class GerenciadorDeSom {
                             //normalmente esse sleep fica no final da thread, mas colocar ele no inicio ou no final
                             //pode acabar dando algum atraso no som, então o melhor lugar para colocar ele é aqui,
                             //logo antes da espera do som acabar para se mesclar com ela                            
-                            Thread.sleep(500);
+                            Generico.dormir(500);
 
                             if (tocouPrimeira && cortouPrimeira == false && pl[0].info == GerenciadorDeSom.LIVRE) {
                                 cortouPrimeira = true;
@@ -86,10 +88,10 @@ public class GerenciadorDeSom {
                                 if ((double) (pl[sel].posDoSomMS()) / (double) (pl[sel].tamDoSomMS) < 0.9d) {
                                     //pequeno calculo que faz o sleep ser menor quanto mais perto o som está de acabar
                                     long valor = Math.min(Math.max((pl[sel].tamDoSomMS - pl[sel].posDoSomMS() + 5) / 5, 10), 25000);
-                                    Thread.sleep(valor);
+                                    Generico.dormir(valor);
 
                                 } else {
-                                    Thread.sleep(1);
+                                    Generico.dormir(1);
                                 }
                             }
                         }
@@ -98,7 +100,8 @@ public class GerenciadorDeSom {
                     }
 
                 }
-            }, "TOCAR").start();
+            }, "TOCAR");
+            execucao.start();
         } catch (Exception ex) {
             ex.printStackTrace();
         }
@@ -268,6 +271,11 @@ public class GerenciadorDeSom {
                     pl[i].finalizar();
                 }
             }
+            if (execucao != null && execucao.isAlive()) {
+                execucao.interrupt();
+                execucao.join();
+            }
+
         } catch (Exception ex) {
             ex.printStackTrace();
         }
