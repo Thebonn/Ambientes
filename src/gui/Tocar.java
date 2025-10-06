@@ -7,6 +7,8 @@ import java.awt.PopupMenu;
 import java.awt.SystemTray;
 import java.awt.TrayIcon;
 import java.awt.event.ActionEvent;
+import java.awt.event.WindowEvent;
+import java.awt.event.WindowListener;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.net.URL;
@@ -268,7 +270,7 @@ public final class Tocar extends javax.swing.JFrame {
                 if (gerenciadorDeSom.fundoPredefinido == -1) {
                     coresUsadas = gerenciadorDeSom.cores;
                 }
-
+                
                 byte escolhido = gerenciadorDeSom.fundoPredefinido == -1 ? 5 : gerenciadorDeSom.fundoPredefinido;
                 animacoes.animarFundo(escolhido);
             } else {
@@ -286,12 +288,11 @@ public final class Tocar extends javax.swing.JFrame {
             public void run() {
                 try {
 
-                    logicaAnimacao(status);
-
                     if (status) {
                         btnTocar.setEnabled(false);
                         lblStatus.setText("Carregando...");
                         boolean res = gerenciadorDeSom.carregarERodarSetup(cbbSetups.getSelectedItem().toString());
+                        logicaAnimacao(status);
                         btnTocar.setEnabled(true);
 
                         if (res) {
@@ -303,6 +304,7 @@ public final class Tocar extends javax.swing.JFrame {
 
                     } else {
                         btnTocar.setEnabled(false);
+                        logicaAnimacao(status);
                         setarIcones(status);
                         sistema.Componentes.ratio = 1;
                         lblStatus.setText("Parando...");
@@ -649,8 +651,19 @@ public final class Tocar extends javax.swing.JFrame {
     private void cbbSetupsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cbbSetupsActionPerformed
         if (cbbSetups.getSelectedItem() != null && cbbSetups.getSelectedItem().equals("Obter mais setups") && lojaaberta == false && sistema.Info.primeiraVez == false) {
             lojaaberta = true;
-            new Loja().setVisible(true);
             atualizarRpc();
+            Loja loja = new Loja();
+            loja.setVisible(true);
+            
+            loja.addWindowListener(new java.awt.event.WindowAdapter() {
+            
+                @Override
+                public void windowClosed(java.awt.event.WindowEvent e) {
+                    atualizarRpc();
+                }
+                
+            });
+            
         }
     }//GEN-LAST:event_cbbSetupsActionPerformed
 
