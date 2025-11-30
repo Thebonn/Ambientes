@@ -7,25 +7,25 @@
 
 
 ---
+<img width="30%" height="30%" alt="Tela de principal do Ambientes" src="https://github.com/user-attachments/assets/2f7566e2-9404-4e1c-8c6a-475c61945cbb" /> <img width="40%" height="40%" alt="Tela da loja do Ambientes" src="https://github.com/user-attachments/assets/4aca2ea9-b42c-43d9-8e31-e718ccaa2511" />
 
 Caso apenas queira baixar logo:
 [DOWNLOAD](https://github.com/Thebonn/Ambientes/releases/download/v1.1/Ambientes.jar)
 
 
-
-# **PT/BR**
+# **PT-BR**
 
 OLÁ!
-Esse é um programa focado em relaxar ouvindo sons em loops que podem ter toques adicionais dependendo do setup.
+Esse é um programa focado em relaxar ouvindo sons em loops que podem ter toques adicionais dependendo do que quiser ouvir.
 
 Leve, rápido e extremamente customizável com uma simples loja de setups embutida.
 
 Esse projeto aceita alguns argumentos e comportará diferente dependendo do que passar:
 
-`semgui/nogui`: Inicia o programa sem uma interface e você poderá controlar ele apenas pelo terminal  
+`semgui/nogui`: Inicia o programa sem uma interface, podendo ser controlado pelo terminal  
 `semsplash/nosplash`: Pula a etapa de splash do programa (Requer que você tenha aberto o programa pelo menos uma vez)
 
-Há interação com o Discord RPC com ícone interativo (para o desktop também)
+Há interação com o RPC do Discord que pode ser configurado dependendo das suas preferências de privacidade.
 
 ### BIBLIOTECAS
 
@@ -35,22 +35,40 @@ Ambientes usa 4 bibliotecas externas para funcionar:
 - [discord-rpc](https://github.com/firstdarkdev/discord-rpc/) (Biblioteca para o RPC)
 - [jsoup](https://jsoup.org/) (Biblioteca de conexão)
 
-Mais updates em breve!
+Tenha em mente que esse projeto foi feito apenas para uso pessoal que decidi compartilhar no github, nada extraordinário ou complexo, apenas simplicidade e praticidade.
+
+### LINUX
+
+Esse projeto pode funcionar em sistemas Linux, mas espere bugs ou mau-funcionamento. Até o momento, não há suporte oficial para Linux, mas é algo que poderá ser realizado no futuro
 
 ---
 
-# **EN** (Outdated)
+# **EN**
+
+**NOTICE: There is no english translation yet. The application is all and only in Portuguese Brazil**
 
 HELLO!
-This is a program focused in relax listening to looping sounds that can have additional touches depending on the setup
+This is a program focused on relax by listening to looping sounds that can include additional touches depending on what you want to hear.
 
-When you open the program for the first time, it will immediately open the Setups Store, where you can download, install and unzip the setups of your choice.
-When installing, you will be able to select the setup that you just downloaded and play it. You can either leave it in the background, or use it as a screen saver by making it full screen.
+Lightweight, Fast and highly customizable with a simple built-in setup store.
 
-You can change background colors in the "Fundo" tab. And if you select the special colors [cores especiais], you can configure them in the "Cores especiais" tab.
+This project accepts certain arguments and will behave differently depending on what argument you'll pass:
 
-There is interaction with the Discord RPC with an interactive icon [for desktop too]
+`semgui/nogui`: Starts the program without an interface, allowing it to be controlled via the terminal
+`semsplash/nosplash`: Skips the program's splash step (Requires you to have opened the program at least once)
 
-More updates soon!
+There is interaction with Discord's RPC, that can be configured according to your privacity preferences.
 
-NOTICE: There is no english translation yet. The application is all and only in Portuguese Brasil
+### LIBRARIES
+
+Ambientes uses 4 libs to work:
+- [Flatlaf](https://www.formdev.com/flatlaf/) (LAF)
+- [KControls](https://k33ptoo.github.io/KControls/) (UI lib)
+- [discord-rpc](https://github.com/firstdarkdev/discord-rpc/) (RPC lib)
+- [jsoup](https://jsoup.org/) (Web connections lib)
+
+Keep in mind that this project was made only for personal use only, and i decided to share it on Github. It's nothing extraordinary or complex, just simple and pratical.
+
+### LINUX
+
+This project may work in Linux systems, but expect bugs or malfunctions. Currently, there's no official support for Linux, but this is something that may happen in the future.
