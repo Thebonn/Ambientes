@@ -20,7 +20,7 @@ Esse é um programa focado em relaxar ouvindo sons em loops que podem ter toques
 
 Leve, rápido e extremamente customizável com uma simples loja de setups embutida.
 
-Esse projeto aceita alguns argumentos e comportará diferente dependendo do que passar:
+Esse projeto aceita alguns argumentos e terá comportamentos diferentes dependendo do que passar:
 
 `semgui/nogui`: Inicia o programa sem uma interface, podendo ser controlado pelo terminal  
 `semsplash/nosplash`: Pula a etapa de splash do programa (Requer que você tenha aberto o programa pelo menos uma vez)
@@ -35,7 +35,7 @@ Ambientes usa 4 bibliotecas externas para funcionar:
 - [discord-rpc](https://github.com/firstdarkdev/discord-rpc/) (Biblioteca para o RPC)
 - [jsoup](https://jsoup.org/) (Biblioteca de conexão)
 
-Tenha em mente que esse projeto foi feito apenas para uso pessoal que decidi compartilhar no github, nada extraordinário ou complexo, apenas simplicidade e praticidade.
+Tenha em mente que esse projeto foi feito apenas para uso pessoal, que decidi compartilhar no Github, nada extraordinário ou complexo, apenas simplicidade e praticidade.
 
 ### LINUX
 
@@ -48,16 +48,16 @@ Esse projeto pode funcionar em sistemas Linux, mas espere bugs ou mau-funcioname
 **NOTICE: There is no english translation yet. The application is all and only in Portuguese Brazil**
 
 HELLO!
-This is a program focused on relax by listening to looping sounds that can include additional touches depending on what you want to hear.
+This is a program focused on relaxing by listening to looping sounds that can include additional touches depending on what you want to hear.
 
 Lightweight, Fast and highly customizable with a simple built-in setup store.
 
-This project accepts certain arguments and will behave differently depending on what argument you'll pass:
+This project accepts certain arguments and will behave differently depending on which argument you'll pass:
 
 `semgui/nogui`: Starts the program without an interface, allowing it to be controlled via the terminal
 `semsplash/nosplash`: Skips the program's splash step (Requires you to have opened the program at least once)
 
-There is interaction with Discord's RPC, that can be configured according to your privacity preferences.
+There is interaction with Discord's RPC, that can be configured according to your privacy preferences.
 
 ### LIBRARIES
 
@@ -67,8 +67,8 @@ Ambientes uses 4 libs to work:
 - [discord-rpc](https://github.com/firstdarkdev/discord-rpc/) (RPC lib)
 - [jsoup](https://jsoup.org/) (Web connections lib)
 
-Keep in mind that this project was made only for personal use only, and i decided to share it on Github. It's nothing extraordinary or complex, just simple and pratical.
+Keep in mind that this project was made only for personal use only, and I decided to share it on Github. It's nothing extraordinary or complex, just simple and practical.
 
 ### LINUX
 
-This project may work in Linux systems, but expect bugs or malfunctions. Currently, there's no official support for Linux, but this is something that may happen in the future.
+This project may work in Linux systems, but expect bugs or malfunction. Currently, there's no official support for Linux, but this is something that may happen in the future.
