@@ -10,7 +10,7 @@
 <img width="30%" height="30%" alt="Tela de principal do Ambientes" src="https://github.com/user-attachments/assets/2f7566e2-9404-4e1c-8c6a-475c61945cbb" /> <img width="40%" height="40%" alt="Tela da loja do Ambientes" src="https://github.com/user-attachments/assets/4aca2ea9-b42c-43d9-8e31-e718ccaa2511" />
 
 Caso apenas queira baixar logo:
-[DOWNLOAD](https://github.com/Thebonn/Ambientes/releases/download/v1.1/Ambientes.jar)
+[DOWNLOAD](https://github.com/Thebonn/Ambientes/releases/download/v1.2/Ambientes.jar)
 
 
 # **PT-BR**
